@@ -281,4 +281,4 @@ $RECYCLE.BIN/
 
 
 # application.yml
-application.yml
+*.yml
