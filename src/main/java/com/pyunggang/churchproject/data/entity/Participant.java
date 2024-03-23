@@ -4,19 +4,22 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
-@Table(name = "TBL_CHURCH")
-@Getter
-@Setter
-public class Church {
+@Table(name = "TBL_PARTICIPANT")
+public class Participant {
     @Id
+    private int participantNo;
+
+    @Column
     private String church;
 
-    @NotNull
     @Column
-    private String password;
+    private String event;
+
+    @Column
+    private String name;
+
+    @Column
+    private int age;
 }
