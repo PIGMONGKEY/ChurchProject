@@ -22,7 +22,7 @@ public class ChurchServiceImpl implements ChurchService {
      * @return ArrayList<String> - 교회 이름들
      */
     @Override
-    public List<String> getAllChurchName() {
+    public List<String> findAllChurches() {
         List<String> churches = new ArrayList<>();
         for (Church church : churchRepository.findAll()) {
             churches.add(church.getName());
