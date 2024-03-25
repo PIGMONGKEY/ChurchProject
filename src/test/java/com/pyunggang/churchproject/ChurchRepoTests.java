@@ -16,15 +16,20 @@ public class ChurchRepoTests {
     @Autowired
     ChurchRepository churchRepository;
 
-    @Test
-    public void findAllTest() {
-        List<Church> churches = churchRepository.findAll();
+//    @Test
+//    public void findAllTest() {
+//        List<Church> churches = churchRepository.findAll();
+//
+//        churches.forEach(church -> log.info(church.getChurch()));
+//    }
+//
+//    @Test
+//    public void getAllChurchesTest() {
+//        churchRepository.findAllBy().forEach(church -> log.info(church.getChurch()));
+//    }
 
-        churches.forEach(church -> log.info(church.getChurch()));
-    }
-
     @Test
-    public void getAllChurchesTest() {
-        churchRepository.findAllBy().forEach(church -> log.info(church.getChurch()));
+    public void getChurchByNameIsTest() {
+        log.info(churchRepository.findChurchByNameIs("평강").getPassword());
     }
 }
