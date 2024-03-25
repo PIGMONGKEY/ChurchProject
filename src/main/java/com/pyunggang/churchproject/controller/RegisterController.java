@@ -15,7 +15,7 @@ public class RegisterController {
 
     @GetMapping("/")
     public String registerHome(Model model) {
-        model.addAttribute(churchService.findAllChurches());
+        model.addAttribute("churches", churchService.findAllChurches());
 
         return "/register/home";
     }

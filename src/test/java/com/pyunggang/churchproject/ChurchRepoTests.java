@@ -38,6 +38,10 @@ public class ChurchRepoTests {
 
     @Test
     public void saveChurchTest() {
-        log.info(churchService.saveChurch("새소망교회") + "");
+        String[] churches = {"평강교회", "동도교회", "순복음교회", "영훈오륜교회", "새소망교회", "뉴비젼교회", "광명교회", "빛과소금교회", "사랑의교회"};
+
+        for (String church : churches) {
+            churchService.saveChurch(church);
+        }
     }
 }

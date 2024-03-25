@@ -41,7 +41,7 @@ public class ChurchServiceImpl implements ChurchService {
         String password;
 
         random.setSeed(System.currentTimeMillis());
-        password = Integer.toString(random.nextInt(10000));
+        password = Integer.toString(random.nextInt(1000, 10000));
 
         Church returnChurch = churchRepository.saveAndFlush(Church
                 .builder()
