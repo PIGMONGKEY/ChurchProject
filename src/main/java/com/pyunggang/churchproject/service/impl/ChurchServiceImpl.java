@@ -6,13 +6,16 @@ import com.pyunggang.churchproject.service.ChurchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class ChurchServiceImpl implements ChurchService {
     final ChurchRepository churchRepository;
+    final Random random = new Random();
 
     /**
      * 저장된 모든 교회 이름을 ArrayList로 반환
@@ -31,5 +34,21 @@ public class ChurchServiceImpl implements ChurchService {
     @Override
     public boolean verifyPassword(String password) {
         return false;
+    }
+
+    @Override
+    public boolean saveChurch(String name) {
+        String password;
+
+        random.setSeed(System.currentTimeMillis());
+        password = Integer.toString(random.nextInt(10000));
+
+        Church returnChurch = churchRepository.saveAndFlush(Church
+                .builder()
+                .name(name)
+                .password(password)
+                .build());
+
+        return returnChurch.getName().equals(name) ? true : false;
     }
 }
