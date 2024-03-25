@@ -1,12 +1,11 @@
 package com.pyunggang.churchproject.data.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "TBL_CHURCH")
@@ -16,7 +15,6 @@ public class Church {
     @Id
     private String church;
 
-    @NotNull
-    @Column
+    @Column(nullable = false)
     private String password;
 }
