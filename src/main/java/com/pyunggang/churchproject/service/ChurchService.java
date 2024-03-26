@@ -5,7 +5,7 @@ import java.util.List;
 public interface ChurchService {
     public List<String> findAllChurchNames();
 
-    public boolean verifyPassword(String password);
+    public boolean verifyPassword(String name, String password);
 
     public boolean saveChurch(String name);
 }

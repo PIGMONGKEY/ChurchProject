@@ -32,8 +32,8 @@ public class ChurchServiceImpl implements ChurchService {
     }
 
     @Override
-    public boolean verifyPassword(String password) {
-        return false;
+    public boolean verifyPassword(String name, String password) {
+        return churchRepository.findChurchByNameIs(name).getPassword().equals(password);
     }
 
     @Override
