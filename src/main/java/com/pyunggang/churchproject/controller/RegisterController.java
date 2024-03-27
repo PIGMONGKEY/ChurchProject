@@ -1,8 +1,10 @@
 package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.data.dto.LoginParam;
+import com.pyunggang.churchproject.data.entity.Event;
 import com.pyunggang.churchproject.data.repository.EventRepository;
 import com.pyunggang.churchproject.service.ChurchService;
+import com.pyunggang.churchproject.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,21 +19,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/register/*")
 public class RegisterController {
     final ChurchService churchService;
-    final EventRepository eventRepository;
+    final EventService eventService;
 
-    @GetMapping("/home")
+    @GetMapping("/start")
     public String registerHome(Model model) {
         model.addAttribute("churches", churchService.findAllChurchNames());
-        model.addAttribute("events", eventRepository.findAll());
         model.addAttribute("loginParam", new LoginParam());
 
-        return "register/home";
+        return "/register/start";
     }
 
     @GetMapping("/list")
-    public String registerHome(@RequestParam("church") String church, @RequestParam("event") String event, Model model) {
-//        TODO: 참가자 테이블 생성 후 불러와서 뿌려주기
-        log.info(church + event);
-        return "register/list";
+    public String registerHome(@RequestParam("church") String church, Model model) {
+        model.addAttribute("events", eventService.findAllEventNames());
+        return "/register/home";
     }
 }

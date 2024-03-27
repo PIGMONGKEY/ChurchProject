@@ -20,7 +20,7 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody LoginParam loginParam) {
         String url;
         if (churchService.verifyPassword(loginParam.getChurchName(), loginParam.getPassword())) {
-            url = "/register/list?church=" + loginParam.getChurchName() + "&event=" + loginParam.getEventName();
+            url = "/register/list?church=" + loginParam.getChurchName();
             return new ResponseEntity<>(url, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
