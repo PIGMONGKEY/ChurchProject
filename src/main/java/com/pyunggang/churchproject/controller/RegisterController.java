@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -25,12 +26,12 @@ public class RegisterController {
         model.addAttribute("events", eventRepository.findAll());
         model.addAttribute("loginParam", new LoginParam());
 
-        return "/register/home";
+        return "register/home";
     }
 
-    @PostMapping("/list")
-    public String registerHome(LoginParam loginParam, Model model) {
-
-        return "/register/home";
+    @GetMapping("/list")
+    public String registerHome(@RequestParam("church") String church, @RequestParam("event") String event, Model model) {
+        log.info(church + event);
+        return "register/list";
     }
 }

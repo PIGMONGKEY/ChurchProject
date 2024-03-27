@@ -17,14 +17,13 @@ public class AuthController {
 
     @PostMapping("login")
     @ResponseBody
-    public ResponseEntity login(@RequestBody LoginParam loginParam) {
-        log.info(loginParam.getChurchName());
-        log.info(loginParam.getEventName());
-        log.info(loginParam.getPassword());
+    public ResponseEntity<String> login(@RequestBody LoginParam loginParam) {
+        String url;
         if (churchService.verifyPassword(loginParam.getChurchName(), loginParam.getPassword())) {
-            return new ResponseEntity(HttpStatus.OK);
+            url = "/register/list?church=" + loginParam.getChurchName() + "&event=" + loginParam.getEventName();
+            return new ResponseEntity<>(url, HttpStatus.OK);
         } else {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }
