@@ -3,6 +3,9 @@ package com.pyunggang.churchproject.data.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Table(name = "TBL_PARTICIPANT")
@@ -18,9 +21,8 @@ public class Participant {
     @JoinColumn(name = "church_id", referencedColumnName = "church_id", nullable = false)
     private Church church;
 
-    @ManyToOne
-    @JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false)
-    private Event event;
+    @OneToMany(mappedBy = "participant")
+    private List<Applyment> events = new ArrayList<>();
 
     @Column(nullable = false)
     private String name;
@@ -39,9 +41,8 @@ public class Participant {
     private String gender;
 
     @Builder
-    public Participant(Church church, Event event, String name, int age, int grade, Department department, String gender) {
+    public Participant(Church church, String name, int age, int grade, Department department, String gender) {
         this.church = church;
-        this.event = event;
         this.name = name;
         this.age = age;
         this.grade = grade;

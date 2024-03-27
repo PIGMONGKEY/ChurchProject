@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Table(name = "TBL_EVENT")
 @Getter
 @Setter
@@ -19,6 +22,9 @@ public class Event {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "event")
+    private List<Applyment> participants = new ArrayList<>();
 
     @Builder
     public Event(String name) {
