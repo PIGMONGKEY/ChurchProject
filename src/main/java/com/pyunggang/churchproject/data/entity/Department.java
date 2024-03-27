@@ -7,25 +7,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "TBL_CHURCH")
 @Getter
 @Setter
+@Table(name = "TBL_DEPARTMENT")
 @NoArgsConstructor
-public class Church {
+public class Department {
     @Id
+    @Column(name = "department_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "church_id")
-    private int churchId;
+    private int departmentId;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "min_age", nullable = false)
+    private int minAge;
+
+    @Column(name = "max_age", nullable = false)
+    private int maxAge;
 
     @Builder
-    public Church(String name, String password) {
+    public Department(String name, int minAge, int maxAge) {
         this.name = name;
-        this.password = password;
+        this.minAge = minAge;
+        this.maxAge = maxAge;
     }
 }
