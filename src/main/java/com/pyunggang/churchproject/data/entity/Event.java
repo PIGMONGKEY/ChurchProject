@@ -20,11 +20,11 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int eventId;
 
-    @Column(nullable = false)
-    private String name;
-
     @OneToMany(mappedBy = "event")
     private List<Applyment> participants = new ArrayList<>();
+
+    @Column(nullable = false)
+    private String name;
 
     @Builder
     public Event(String name) {

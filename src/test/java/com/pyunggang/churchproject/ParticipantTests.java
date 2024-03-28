@@ -21,23 +21,46 @@ public class ParticipantTests {
     @Autowired
     private ApplymentRepository applymentRepository;
 
-    @Test
-    public void saveTest() {
-        Participant participant = Participant
-                .builder()
-                .name("이원희")
-                .age(15)
-                .grade(2)
-                .gender("male")
-                .church(churchRepository.findChurchByNameIs("평강교회"))
-                .department(departmentRepository.findDepartmentByNameIs("중등부"))
-                .build();
-        participantRepository.save(participant);
+//    @Test
+//    public void saveTest() {
+//        Participant participant = Participant
+//                .builder()
+//                .name("이원희")
+//                .age(15)
+//                .grade(2)
+//                .gender("male")
+//                .church(churchRepository.findChurchByNameIs("평강교회"))
+//                .department(departmentRepository.findDepartmentByNameIs("중등부"))
+//                .build();
+//        participantRepository.save(participant);
+//
+//        applymentRepository.save(Applyment
+//                .builder()
+//                .participant(participant)
+//                .event(eventRepository.findEventByNameIs("글짓기"))
+//                .build());
+//    }
 
-        applymentRepository.save(Applyment
-                .builder()
-                .participant(participant)
-                .event(eventRepository.findEventByNameIs("글짓기"))
-                .build());
+    @Test
+    public void findTest() {
+//        log.info(participantRepository.findParticipantByName("이원희").getEvents().get(0).getEvent().getName());
+//        applymentRepository.findApplymentByParticipantName("이원희");
+        Participant participant = Participant
+                                            .builder()
+                                            .name("이원희")
+                                            .age(15)
+                                            .grade(2)
+                                            .gender("male")
+                                            .church(churchRepository.findChurchByNameIs("평강교회"))
+                                            .department(departmentRepository.findDepartmentByNameIs("중등부"))
+                                            .build();
+//        log.info(applymentRepository.existsByEventNameAndParticipantNameAndParticipantAgeAndParticipantGradeAndParticipantGenderAndParticipantChurchName(
+//                "글짓기",
+//                "이원희",
+//                15,
+//                2,
+//                "male",
+//                "평강교회"
+//        ) + "");
     }
 }

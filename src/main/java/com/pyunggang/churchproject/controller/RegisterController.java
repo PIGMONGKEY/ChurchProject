@@ -2,6 +2,7 @@ package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.data.dto.LoginParam;
 import com.pyunggang.churchproject.data.dto.ParticipantRegisterParam;
+import com.pyunggang.churchproject.service.ApplymentService;
 import com.pyunggang.churchproject.service.ChurchService;
 import com.pyunggang.churchproject.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
 public class RegisterController {
     final ChurchService churchService;
     final EventService eventService;
+    final ApplymentService applymentService;
 
     /**
      * 로그인 페이지로 이동
@@ -68,7 +70,10 @@ public class RegisterController {
     @ResponseBody
     public ResponseEntity registerParticipant(@RequestBody List<ParticipantRegisterParam> participantRegisterParams) {
         participantRegisterParams.forEach(participantRegisterParam -> log.info(participantRegisterParam.getName()));
-//        TODO: DB에 삽입 과정 필요
-        return new ResponseEntity(HttpStatus.OK);
+
+        if(applymentService.saveApplyment(participantRegisterParams))
+            return new ResponseEntity(HttpStatus.OK);
+        else
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
