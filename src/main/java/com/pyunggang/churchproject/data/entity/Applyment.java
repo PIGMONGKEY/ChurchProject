@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "TBL_EVENT_PARTICIPANT")
+@Table(name = "TBL_APPLYMENT")
 @Entity
 public class Applyment {
     @Id
