@@ -1,17 +1,18 @@
 package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.data.dto.LoginParam;
-import com.pyunggang.churchproject.data.entity.Event;
-import com.pyunggang.churchproject.data.repository.EventRepository;
+import com.pyunggang.churchproject.data.dto.ParticipantRegisterParam;
 import com.pyunggang.churchproject.service.ChurchService;
 import com.pyunggang.churchproject.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -29,9 +30,27 @@ public class RegisterController {
         return "/register/start";
     }
 
-    @GetMapping("/list")
-    public String registerHome(@RequestParam("church") String church, Model model) {
+    @GetMapping("/home")
+    public String registerHome(@RequestParam("churchName") String churchName, Model model) {
         model.addAttribute("events", eventService.findAllEventNames());
+        model.addAttribute("churchName", churchName);
+
         return "/register/home";
+    }
+
+    @GetMapping("/register")
+    public String registerParticipant(@RequestParam("churchName") String churchName, @RequestParam("eventName") String eventName, Model model) {
+        model.addAttribute("church", churchName);
+        model.addAttribute("event", eventName);
+
+        return "/register/register";
+    }
+
+    @PostMapping("/register")
+    @ResponseBody
+    public ResponseEntity registerParticipant(@RequestBody List<ParticipantRegisterParam> participants) {
+        participants.forEach(participantRegisterParam -> log.info(participantRegisterParam.getName()));
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
