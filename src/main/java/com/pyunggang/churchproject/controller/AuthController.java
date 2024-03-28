@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     final ChurchService churchService;
 
+    /**
+     * 교회 로그인 RestApi
+     * @param loginParam LoginParam 형태로 데이터를 받아서 비밀번호 확인 후 결과를 리턴함
+     * @return
+     */
     @PostMapping("login")
     @ResponseBody
     public ResponseEntity<String> login(@RequestBody LoginParam loginParam) {

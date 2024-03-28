@@ -22,6 +22,9 @@ public class RegisterController {
     final ChurchService churchService;
     final EventService eventService;
 
+    /**
+     * 로그인 페이지로 이동
+     */
     @GetMapping("/start")
     public String registerHome(Model model) {
         model.addAttribute("churches", churchService.findAllChurchNames());
@@ -30,6 +33,10 @@ public class RegisterController {
         return "/register/start";
     }
 
+    /**
+     * 신청 홈으로 이동
+     * @param churchName 교회 이름을 받아, 교회 홈으로 이동시킴
+     */
     @GetMapping("/home")
     public String registerHome(@RequestParam("churchName") String churchName, Model model) {
         model.addAttribute("events", eventService.findAllEventNames());
@@ -38,6 +45,12 @@ public class RegisterController {
         return "/register/home";
     }
 
+    /**
+     * 참가자 신청 페이지로 이동
+     * 교회명과 종목명을 넘겨줌
+     * @param churchName 교회 이름
+     * @param eventName 종목 이름
+     */
     @GetMapping("/register")
     public String registerParticipant(@RequestParam("churchName") String churchName, @RequestParam("eventName") String eventName, Model model) {
         model.addAttribute("church", churchName);
@@ -46,11 +59,16 @@ public class RegisterController {
         return "/register/register";
     }
 
+    /**
+     * 참가지 신청 RestApi
+     * @param participantRegisterParams ParticipantRegisterParam list 형태로 받음
+     * @return
+     */
     @PostMapping("/register")
     @ResponseBody
-    public ResponseEntity registerParticipant(@RequestBody List<ParticipantRegisterParam> participants) {
-        participants.forEach(participantRegisterParam -> log.info(participantRegisterParam.getName()));
-
+    public ResponseEntity registerParticipant(@RequestBody List<ParticipantRegisterParam> participantRegisterParams) {
+        participantRegisterParams.forEach(participantRegisterParam -> log.info(participantRegisterParam.getName()));
+//        TODO: DB에 삽입 과정 필요
         return new ResponseEntity(HttpStatus.OK);
     }
 }
