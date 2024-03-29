@@ -13,10 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Department {
     @Id
-    @Column(name = "department_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int departmentId;
-
     @Column(nullable = false)
     private String name;
 

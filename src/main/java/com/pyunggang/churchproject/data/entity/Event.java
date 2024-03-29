@@ -16,15 +16,11 @@ import java.util.List;
 @Entity
 public class Event {
     @Id
-    @Column(name = "event_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int eventId;
+    @Column(nullable = false)
+    private String name;
 
     @OneToMany(mappedBy = "event")
     private List<Applyment> participants = new ArrayList<>();
-
-    @Column(nullable = false)
-    private String name;
 
     @Builder
     public Event(String name) {

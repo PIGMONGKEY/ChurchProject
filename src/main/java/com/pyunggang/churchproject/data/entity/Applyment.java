@@ -19,7 +19,7 @@ public class Applyment {
     private Participant participant;
 
     @ManyToOne
-    @JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false)
+    @JoinColumn(name = "event_name", referencedColumnName = "name", nullable = false)
     private Event event;
 
     @Builder

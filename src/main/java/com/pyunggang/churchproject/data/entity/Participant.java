@@ -18,8 +18,12 @@ public class Participant {
     private int participantId;
 
     @ManyToOne
-    @JoinColumn(name = "church_id", referencedColumnName = "church_id", nullable = false)
+    @JoinColumn(name = "church_name", referencedColumnName = "name", nullable = false)
     private Church church;
+
+    @ManyToOne
+    @JoinColumn(name = "department_name", referencedColumnName = "name", nullable = false)
+    private Department department;
 
     @OneToMany(mappedBy = "participant")
     private List<Applyment> events = new ArrayList<>();
@@ -32,10 +36,6 @@ public class Participant {
 
     @Column(nullable = false)
     private int grade;
-
-    @ManyToOne
-    @JoinColumn(name = "department_id", referencedColumnName = "department_id", nullable = false)
-    private Department department;
 
     @Column(nullable = false)
     private String gender;
