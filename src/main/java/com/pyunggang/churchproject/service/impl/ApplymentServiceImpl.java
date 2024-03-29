@@ -71,4 +71,10 @@ public class ApplymentServiceImpl implements ApplymentService {
 
         return true;
     }
+
+    @Override
+    public List<ParticipantRegisterParam> findApplymentList(String churchName, String eventName) {
+//        TODO: 신청 내역 불러오기
+        return null;
+    }
 }
