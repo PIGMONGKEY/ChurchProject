@@ -12,8 +12,20 @@ public class ApplymentTests {
     @Autowired
     ApplymentRepository applymentRepository;
 
+//    @Test
+//    public void findAllTest() {
+//        applymentRepository.findAll().forEach(applyment -> log.info(applyment.getParticipant().getName()));
+//    }
+
     @Test
-    public void findAllTest() {
-        applymentRepository.findAll().forEach(applyment -> log.info(applyment.getParticipant().getName()));
+    public void findOneTest() {
+//        log.info(applymentRepository.findApplymentByEventNameAndParticipantNameAndParticipantAgeAndParticipantGradeAndParticipantGenderAndParticipantChurchName(
+//                "글짓기",
+//                "김기리",
+//                12,
+//                5,
+//                "male",
+//                "평강교회"
+//        ).getParticipant().getName());
     }
 }
