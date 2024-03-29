@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -76,7 +77,12 @@ public class ApplymentServiceImpl implements ApplymentService {
 
     @Override
     public List<ParticipantRegisterParam> findApplymentList(String churchName, String eventName) {
-//        TODO: 신청 내역 불러오기
-        return null;
+        // 빈 linked list 생성
+        List<ParticipantRegisterParam> params = new LinkedList<>();
+        // 교회명과 종목명으로 불러온 applyment를 하나하나 ParticipantRegisterParam으로 변경
+        for (Applyment applyment : applyRepo.findAllByEventNameAndParticipantChurchName(eventName, churchName)) {
+            params.add(new ParticipantRegisterParam(applyment));
+        }
+        return params;
     }
 }

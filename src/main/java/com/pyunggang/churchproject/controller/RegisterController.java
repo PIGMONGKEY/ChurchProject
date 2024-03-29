@@ -75,11 +75,10 @@ public class RegisterController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @ResponseBody
     public ResponseEntity<List<ParticipantRegisterParam>> applymentList(@RequestParam("churchName") String churchName,
                                                                         @RequestParam("eventName") String eventName) {
-//        TODO: 신청내역 불러와서 뿌려주기
-        return null;
+        return new ResponseEntity<>(applymentService.findApplymentList(churchName, eventName), HttpStatus.OK);
     }
 }
