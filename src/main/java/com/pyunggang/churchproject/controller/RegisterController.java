@@ -69,8 +69,6 @@ public class RegisterController {
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity registerParticipant(@RequestBody List<ParticipantRegisterParam> participantRegisterParams) {
-        participantRegisterParams.forEach(participantRegisterParam -> log.info(participantRegisterParam.getName()));
-
         if(applymentService.saveApplyment(participantRegisterParams))
             return new ResponseEntity(HttpStatus.OK);
         else
