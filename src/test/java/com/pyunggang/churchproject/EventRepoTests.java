@@ -17,7 +17,7 @@ public class EventRepoTests {
 
     @Test
     public void saveTest() {
-        String[] events = {"글짓기", "그림그리기", "독창", "합창", "율동", "암송"};
+        String[] events = {"글짓기", "그림그리기"};
 
         for (String event : events) {
             eventRepository.save(Event.builder().name(event).build());

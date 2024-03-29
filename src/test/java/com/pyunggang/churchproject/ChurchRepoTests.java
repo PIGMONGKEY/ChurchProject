@@ -38,10 +38,9 @@ public class ChurchRepoTests {
 
     @Test
     public void saveChurchTest() {
-        String[] churches = {"평강교회", "동도교회", "순복음교회", "영훈오륜교회", "새소망교회", "뉴비젼교회", "광명교회", "빛과소금교회", "사랑의교회"};
-
-        for (String church : churches) {
-            churchService.saveChurch(church);
+        String churches = "평강, 동도, 성현, 은석, 송우, 삼일, 광성, 영성, 제자들, 목동열방, 주님의, 장월, 늘품, 중앙단대, 참행복한, 가산제일, 분당중앙, 원당서문, 기쁨의, 꿈이있는, 시민의, 빛과소금, 금일";
+        for (String church : churches.split(", ")) {
+            churchService.saveChurch(church + "교회");
         }
     }
 }

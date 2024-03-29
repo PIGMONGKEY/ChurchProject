@@ -3,6 +3,8 @@ package com.pyunggang.churchproject.data.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,9 +24,17 @@ public class Applyment {
     @JoinColumn(name = "event_name", referencedColumnName = "name", nullable = false)
     private Event event;
 
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime createTime;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime updateTime;
+
     @Builder
-    public Applyment(Participant participant, Event event) {
+    public Applyment(Participant participant, Event event, LocalDateTime createTime, LocalDateTime updateTime) {
         this.participant = participant;
         this.event = event;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
     }
 }

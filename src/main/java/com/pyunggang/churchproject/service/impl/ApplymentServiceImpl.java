@@ -8,8 +8,8 @@ import com.pyunggang.churchproject.service.ApplymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -61,6 +61,8 @@ public class ApplymentServiceImpl implements ApplymentService {
                 applyment = Applyment.builder()
                         .event(eventRepo.findEventByNameIs(param.getEventName()))
                         .participant(participant)
+                        .createTime(LocalDateTime.now())
+                        .updateTime(LocalDateTime.now())
                         .build();
 
                 // DB 삽입 실패하면 false 리턴
