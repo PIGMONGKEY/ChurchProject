@@ -9,8 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ApplymentRepository extends JpaRepository<Applyment, Integer> {
-    Applyment findApplymentByParticipantName(String name);
-
     /**
      * 중복 신청 확인
      * 모든 테이블 다 조인해서 확인함
@@ -40,4 +38,6 @@ public interface ApplymentRepository extends JpaRepository<Applyment, Integer> {
      * @return Participant - List
      */
     List<Applyment> findAllByEventNameAndParticipantChurchName(String eventName, String churchName);
+
+    Applyment findApplymentByParticipant(Participant participant);
 }
