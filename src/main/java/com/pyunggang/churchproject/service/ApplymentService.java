@@ -8,4 +8,5 @@ import java.util.List;
 public interface ApplymentService {
     public boolean saveApplyment(List<ParticipantRegisterParam> params);
     public List<ParticipantRegisterParam> findApplymentList(String churchName, String eventName);
+    public boolean deleteApplyment(String eventName, int participantId);
 }

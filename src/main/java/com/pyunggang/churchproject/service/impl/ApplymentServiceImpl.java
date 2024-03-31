@@ -94,4 +94,16 @@ public class ApplymentServiceImpl implements ApplymentService {
         }
         return params;
     }
+
+    @Override
+    public boolean deleteApplyment(String eventName, int participantId) {
+        Participant participant = partiRepo.findById(participantId).get();
+        applyRepo.delete(applyRepo.findApplymentByParticipant(participant));
+
+        if (!applyRepo.existsByParticipant(eventName, participant)) {
+            partiRepo.delete(participant);
+        }
+
+        return true;
+    }
 }

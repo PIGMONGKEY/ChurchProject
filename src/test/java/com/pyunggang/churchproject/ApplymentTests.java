@@ -1,6 +1,7 @@
 package com.pyunggang.churchproject;
 
 import com.pyunggang.churchproject.data.repository.ApplymentRepository;
+import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.service.ApplymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,8 @@ public class ApplymentTests {
     ApplymentRepository applymentRepository;
     @Autowired
     ApplymentService applymentService;
+    @Autowired
+    ParticipantRepository participantRepository;
 
 //    @Test
 //    public void findAllTest() {
@@ -30,10 +33,16 @@ public class ApplymentTests {
 //                "male",
 //                "평강교회"
 //        ).getParticipant().getName());
+        log.info(applymentRepository.findApplymentByParticipant(participantRepository.findById(1).get()).getEpNo() + "");
     }
 
     @Test
     public void findAllTest() {
         applymentService.findApplymentList("평강교회", "글짓기");
+    }
+
+    @Test
+    public void deleteTest() {
+        applymentService.deleteApplyment("글짓기", 4);
     }
 }
