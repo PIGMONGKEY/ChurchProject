@@ -1,5 +1,6 @@
 package com.pyunggang.churchproject.controller;
 
+import com.pyunggang.churchproject.data.dto.DeleteParam;
 import com.pyunggang.churchproject.data.dto.LoginParam;
 import com.pyunggang.churchproject.data.dto.ParticipantRegisterParam;
 import com.pyunggang.churchproject.service.ApplymentService;
@@ -80,5 +81,13 @@ public class RegisterController {
     public ResponseEntity<List<ParticipantRegisterParam>> applymentList(@RequestParam("churchName") String churchName,
                                                                         @RequestParam("eventName") String eventName) {
         return new ResponseEntity<>(applymentService.findApplymentList(churchName, eventName), HttpStatus.OK);
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResponseEntity deleteApplyment(@RequestBody DeleteParam deleteParam) {
+        applymentService.deleteApplyment(deleteParam.getEventName(), deleteParam.getParticipantId());
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
