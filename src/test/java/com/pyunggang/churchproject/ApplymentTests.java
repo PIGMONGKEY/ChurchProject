@@ -33,7 +33,7 @@ public class ApplymentTests {
 //                "male",
 //                "평강교회"
 //        ).getParticipant().getName());
-        log.info(applymentRepository.findApplymentByParticipant(participantRepository.findById(1).get()).getEpNo() + "");
+//        log.info(applymentRepository.findApplymentByParticipant(participantRepository.findById(1).get()).getEpNo() + "");
     }
 
     @Test
@@ -43,6 +43,6 @@ public class ApplymentTests {
 
     @Test
     public void deleteTest() {
-        applymentService.deleteApplyment("글짓기", 4);
+        applymentService.deleteApplyment("글짓기", 2);
     }
 }

@@ -8,6 +8,7 @@ import com.pyunggang.churchproject.service.ApplymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -60,7 +61,7 @@ public class ApplymentServiceImpl implements ApplymentService {
                 // 이미 등록된 참가자라면,
                 // 중복 신청인지, 다른 종목에 참여하는 같은 참가자인지 확인
                 // 중복 신청이라면, return false
-                if (applyRepo.existsByParticipant(param.getEventName(), participant)) {
+                if (applyRepo.existsByEventNameAndParticipant(param.getEventName(), participant)) {
                     return false;
                 }
 
@@ -84,6 +85,12 @@ public class ApplymentServiceImpl implements ApplymentService {
         return true;
     }
 
+    /**
+     * 교회명과 종목명으로 신청목록 전부 불러오기
+     * @param churchName 교회명
+     * @param eventName 종목명
+     * @return ParticipantRegisterParam - List 형태로 리턴
+     */
     @Override
     public List<ParticipantRegisterParam> findApplymentList(String churchName, String eventName) {
         // 빈 linked list 생성
@@ -95,12 +102,26 @@ public class ApplymentServiceImpl implements ApplymentService {
         return params;
     }
 
+    /**
+     * 종목명과 참가자 id로 신청 내역 삭제
+     * 2종목 이상 참여할 경우, 신청 내역만 삭제
+     * 1종목만 참여할 경우, 참가자 정보까지 삭제
+     * @param eventName 종목명
+     * @param participantId 참가자id
+     * @return
+     */
     @Override
+    @Transactional
     public boolean deleteApplyment(String eventName, int participantId) {
+        // id로 참가자 정보 불러오기
         Participant participant = partiRepo.findById(participantId).get();
-        applyRepo.delete(applyRepo.findApplymentByParticipant(participant));
+        // applyment 정보 불러오기
+        Applyment applyment = applyRepo.findByParticipantAndEventName(participant, eventName);
+        // 신청정보 삭제
+        applyRepo.delete(applyment);
 
-        if (!applyRepo.existsByParticipant(eventName, participant)) {
+        // 같은 참가자가 다른 종목을 신청하지 않았으면, 참가자 정보 삭제
+        if (!applyRepo.existsByParticipant(participant)) {
             partiRepo.delete(participant);
         }
 
