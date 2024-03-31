@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ParticipantRegisterParam {
+    private int id;
     private String churchName;
     private String eventName;
     private String department;
@@ -18,7 +19,8 @@ public class ParticipantRegisterParam {
     private String gender;
 
     @Builder
-    public ParticipantRegisterParam(String churchName, String eventName, String department, String name, int age, int grade, String gender) {
+    public ParticipantRegisterParam(int id, String churchName, String eventName, String department, String name, int age, int grade, String gender) {
+        this.id = id;
         this.churchName = churchName;
         this.eventName = eventName;
         this.department = department;
@@ -29,6 +31,7 @@ public class ParticipantRegisterParam {
     }
 
     public ParticipantRegisterParam(Applyment applyment) {
+        this.id = applyment.getParticipant().getParticipantId();
         this.churchName = applyment.getParticipant().getChurch().getName();
         this.eventName = applyment.getEvent().getName();
         this.department = applyment.getParticipant().getDepartment().getName();
