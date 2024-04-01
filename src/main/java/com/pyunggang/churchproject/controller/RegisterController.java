@@ -2,7 +2,7 @@ package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.data.dto.DeleteParam;
 import com.pyunggang.churchproject.data.dto.LoginParam;
-import com.pyunggang.churchproject.data.dto.ParticipantRegisterParam;
+import com.pyunggang.churchproject.data.dto.ApplymentParam;
 import com.pyunggang.churchproject.service.ApplymentService;
 import com.pyunggang.churchproject.service.ChurchService;
 import com.pyunggang.churchproject.service.EventService;
@@ -64,13 +64,13 @@ public class RegisterController {
 
     /**
      * 참가지 신청 RestApi
-     * @param participantRegisterParams ParticipantRegisterParam list 형태로 받음
+     * @param applymentParams ParticipantRegisterParam list 형태로 받음
      * @return
      */
     @PostMapping("/register")
     @ResponseBody
-    public ResponseEntity registerParticipant(@RequestBody List<ParticipantRegisterParam> participantRegisterParams) {
-        if(applymentService.saveApplyment(participantRegisterParams))
+    public ResponseEntity registerParticipant(@RequestBody List<ApplymentParam> applymentParams) {
+        if(applymentService.saveApplyment(applymentParams))
             return new ResponseEntity(HttpStatus.OK);
         else
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -78,8 +78,8 @@ public class RegisterController {
 
     @PostMapping("/list")
     @ResponseBody
-    public ResponseEntity<List<ParticipantRegisterParam>> applymentList(@RequestParam("churchName") String churchName,
-                                                                        @RequestParam("eventName") String eventName) {
+    public ResponseEntity<List<ApplymentParam>> applymentList(@RequestParam("churchName") String churchName,
+                                                              @RequestParam("eventName") String eventName) {
         return new ResponseEntity<>(applymentService.findApplymentList(churchName, eventName), HttpStatus.OK);
     }
 
@@ -87,6 +87,14 @@ public class RegisterController {
     @ResponseBody
     public ResponseEntity deleteApplyment(@RequestBody DeleteParam deleteParam) {
         applymentService.deleteApplyment(deleteParam.getEventName(), deleteParam.getParticipantId());
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/modify")
+    @ResponseBody
+    public ResponseEntity modifyApplyment(@RequestBody ApplymentParam applymentParam) {
+        applymentService.updateApplyment(applymentParam);
 
         return new ResponseEntity(HttpStatus.OK);
     }

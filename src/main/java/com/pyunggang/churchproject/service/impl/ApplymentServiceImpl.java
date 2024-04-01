@@ -1,7 +1,8 @@
 package com.pyunggang.churchproject.service.impl;
 
-import com.pyunggang.churchproject.data.dto.ParticipantRegisterParam;
+import com.pyunggang.churchproject.data.dto.ApplymentParam;
 import com.pyunggang.churchproject.data.entity.Applyment;
+import com.pyunggang.churchproject.data.entity.Event;
 import com.pyunggang.churchproject.data.entity.Participant;
 import com.pyunggang.churchproject.data.repository.*;
 import com.pyunggang.churchproject.service.ApplymentService;
@@ -32,11 +33,11 @@ public class ApplymentServiceImpl implements ApplymentService {
 //    TODO: 동명이인 어떡할지 고민 필요
 //    TODO: 런타임 에러 발생시켜서 롤백 시킬 방법 찾기
     @Override
-    public boolean saveApplyment(List<ParticipantRegisterParam> params) {
+    public boolean saveApplyment(List<ApplymentParam> params) {
         Participant participant;
         Applyment applyment;
 
-        for (ParticipantRegisterParam param : params) {
+        for (ApplymentParam param : params) {
             // 빈 데이터가 있는 참가자 정보 건너뛰기
             if (param.getName().equals("") || param.getGender().equals("") || param.getDepartment().equals("")
                     || param.getGrade() == 0 || param.getAge() == 0) {
@@ -92,12 +93,12 @@ public class ApplymentServiceImpl implements ApplymentService {
      * @return ParticipantRegisterParam - List 형태로 리턴
      */
     @Override
-    public List<ParticipantRegisterParam> findApplymentList(String churchName, String eventName) {
+    public List<ApplymentParam> findApplymentList(String churchName, String eventName) {
         // 빈 linked list 생성
-        List<ParticipantRegisterParam> params = new LinkedList<>();
+        List<ApplymentParam> params = new LinkedList<>();
         // 교회명과 종목명으로 불러온 applyment를 하나하나 ParticipantRegisterParam으로 변경
         for (Applyment applyment : applyRepo.findAllByEventNameAndParticipantChurchName(eventName, churchName)) {
-            params.add(new ParticipantRegisterParam(applyment));
+            params.add(new ApplymentParam(applyment));
         }
         return params;
     }
@@ -124,6 +125,22 @@ public class ApplymentServiceImpl implements ApplymentService {
         if (!applyRepo.existsByParticipant(participant)) {
             partiRepo.delete(participant);
         }
+
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean updateApplyment(ApplymentParam applymentParam) {
+        Participant participant = partiRepo.findById(applymentParam.getId()).get();
+
+        participant.setAge(applymentParam.getAge());
+        participant.setName(applymentParam.getName());
+        participant.setGender(applymentParam.getGender());
+        participant.setGrade(applymentParam.getGrade());
+        participant.setDepartment(departRepo.findDepartmentByNameIs(applymentParam.getDepartment()));
+
+        partiRepo.save(participant);
 
         return true;
     }

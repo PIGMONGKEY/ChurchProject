@@ -1,14 +1,13 @@
 package com.pyunggang.churchproject.data.dto;
 
 import com.pyunggang.churchproject.data.entity.Applyment;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ParticipantRegisterParam {
+public class ApplymentParam {
     private int id;
     private String churchName;
     private String eventName;
@@ -19,7 +18,7 @@ public class ParticipantRegisterParam {
     private String gender;
 
     @Builder
-    public ParticipantRegisterParam(int id, String churchName, String eventName, String department, String name, int age, int grade, String gender) {
+    public ApplymentParam(int id, String churchName, String eventName, String department, String name, int age, int grade, String gender) {
         this.id = id;
         this.churchName = churchName;
         this.eventName = eventName;
@@ -30,7 +29,7 @@ public class ParticipantRegisterParam {
         this.gender = gender;
     }
 
-    public ParticipantRegisterParam(Applyment applyment) {
+    public ApplymentParam(Applyment applyment) {
         this.id = applyment.getParticipant().getParticipantId();
         this.churchName = applyment.getParticipant().getChurch().getName();
         this.eventName = applyment.getEvent().getName();

@@ -57,4 +57,12 @@ public class ParticipantTests {
 //                                            .department(departmentRepository.findDepartmentByNameIs("중등부"))
 //                                            .build();
 //    }
+
+    @Test
+    public void updateTest() {
+        Participant participant = participantRepository.findById(2).get();
+
+        participant.setAge(33);
+        participantRepository.save(participant);
+    }
 }
