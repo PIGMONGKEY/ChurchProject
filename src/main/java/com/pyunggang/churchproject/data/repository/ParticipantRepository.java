@@ -46,4 +46,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Intege
                                                                                            String departmentName);
 
     List<Participant> findAllByChurchName(String churchName);
+
+    List<Participant> findAllByDepartmentName(String departmentName);
 }

@@ -2,6 +2,7 @@ package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.service.AdminService;
 import com.pyunggang.churchproject.service.ChurchService;
+import com.pyunggang.churchproject.service.DepartmentService;
 import com.pyunggang.churchproject.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ public class AdminController {
     final private AdminService adminService;
     final private ChurchService churchService;
     final private EventService eventService;
+    final private DepartmentService departmentService;
 
 
     @GetMapping("/")
@@ -64,6 +66,22 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity deleteEvent(@RequestParam("deleteEvent") String eventName) {
         eventService.removeEvent(eventName);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/newDepartment")
+    @ResponseBody
+    public ResponseEntity addNewDepartment(@RequestParam("newDepartment") String departmentName) {
+        departmentService.addDepartment(departmentName);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteDepartment")
+    @ResponseBody
+    public ResponseEntity deleteDepartment(@RequestParam("deleteDepartment") String departmentName) {
+        departmentService.deleteDepartment(departmentName);
 
         return new ResponseEntity(HttpStatus.OK);
     }

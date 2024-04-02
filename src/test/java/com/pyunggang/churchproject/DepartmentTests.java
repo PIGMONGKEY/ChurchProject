@@ -16,14 +16,10 @@ public class DepartmentTests {
     @Test
     public void saveTest() {
         String[] names = {"유치부", "유년부", "초등부", "중등부", "고등부"};
-        int[] mins = {5, 8, 11, 14, 17};
-        int[] maxes = {7, 10, 13, 16, 19};
 
         for (int i=0; i<names.length; i++) {
             departmentRepository.save(Department.builder()
                             .name(names[i])
-                            .minAge(mins[i])
-                            .maxAge(maxes[i])
                             .build());
         }
     }
