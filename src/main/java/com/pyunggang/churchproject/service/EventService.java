@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface EventService {
     List<String> findAllEventNames();
+
+    boolean saveEvent(String eventName);
 }

@@ -44,6 +44,10 @@ public class ChurchServiceImpl implements ChurchService {
 
     @Override
     public boolean saveChurch(String name) {
+        if (churchRepository.existsById(name)) {
+            return false;
+        }
+
         String password;
 
         random.setSeed(System.currentTimeMillis());

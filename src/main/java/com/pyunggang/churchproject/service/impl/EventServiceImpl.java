@@ -24,4 +24,14 @@ public class EventServiceImpl implements EventService {
 
         return events;
     }
+
+    @Override
+    public boolean saveEvent(String eventName) {
+        if (eventRepository.existsById(eventName))
+            return false;
+
+        eventRepository.save(Event.builder().name(eventName).build());
+
+        return true;
+    }
 }

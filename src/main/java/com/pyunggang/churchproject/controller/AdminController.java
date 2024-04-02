@@ -2,6 +2,7 @@ package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.service.AdminService;
 import com.pyunggang.churchproject.service.ChurchService;
+import com.pyunggang.churchproject.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     final private AdminService adminService;
     final private ChurchService churchService;
+    final private EventService eventService;
 
 
     @GetMapping("/")
@@ -46,5 +48,15 @@ public class AdminController {
         churchService.deleteChurch(churchName);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/newEvent")
+    @ResponseBody
+    public ResponseEntity addNewEvent(@RequestParam("newEvent") String eventName) {
+        if (eventService.saveEvent(eventName)) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
