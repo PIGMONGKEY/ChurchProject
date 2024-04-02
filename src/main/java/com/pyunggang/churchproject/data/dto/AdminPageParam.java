@@ -1,5 +1,8 @@
 package com.pyunggang.churchproject.data.dto;
 
+import com.pyunggang.churchproject.data.entity.Church;
+import com.pyunggang.churchproject.data.entity.Department;
+import com.pyunggang.churchproject.data.entity.Event;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class AdminPageParam {
-    private List<String> churchNames;
-    private List<String> departmentNames;
-    private List<String> eventNames;
+    private List<Church> churches;
+    private List<Department> departments;
+    private List<Event> events;
 }
