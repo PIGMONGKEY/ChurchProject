@@ -42,9 +42,9 @@ public class AdminController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete-church")
+    @DeleteMapping("/deleteChurch")
     @ResponseBody
-    public ResponseEntity deleteChurch(@RequestParam("churchName") String churchName) {
+    public ResponseEntity deleteChurch(@RequestParam("deleteChurch") String churchName) {
         churchService.deleteChurch(churchName);
 
         return new ResponseEntity(HttpStatus.OK);
@@ -58,5 +58,13 @@ public class AdminController {
         } else {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @DeleteMapping("/deleteEvent")
+    @ResponseBody
+    public ResponseEntity deleteEvent(@RequestParam("deleteEvent") String eventName) {
+        eventService.removeEvent(eventName);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

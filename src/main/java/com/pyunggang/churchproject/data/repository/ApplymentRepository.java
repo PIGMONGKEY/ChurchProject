@@ -55,4 +55,6 @@ public interface ApplymentRepository extends JpaRepository<Applyment, Integer> {
     boolean existsByParticipant(Participant participant);
 
     List<Applyment> findAllByParticipantChurchName(String churchName);
+
+    List<Applyment> findAllByEventName(String eventName);
 }
