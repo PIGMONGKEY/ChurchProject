@@ -8,4 +8,6 @@ public interface ChurchService {
     public boolean verifyPassword(String name, String password);
 
     public boolean saveChurch(String name);
+
+    public String findChurchPassword(String churchName);
 }

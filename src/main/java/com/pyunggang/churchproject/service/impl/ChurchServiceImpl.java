@@ -51,4 +51,9 @@ public class ChurchServiceImpl implements ChurchService {
 
         return returnChurch.getName().equals(name) ? true : false;
     }
+
+    @Override
+    public String findChurchPassword(String churchName) {
+        return churchRepository.findChurchByNameIs(churchName).getPassword();
+    }
 }
