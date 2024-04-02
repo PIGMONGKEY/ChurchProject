@@ -10,4 +10,6 @@ public interface ChurchService {
     public boolean saveChurch(String name);
 
     public String findChurchPassword(String churchName);
+
+    public void deleteChurch(String churchName);
 }

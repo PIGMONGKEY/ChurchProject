@@ -1,7 +1,11 @@
 package com.pyunggang.churchproject.service.impl;
 
+import com.pyunggang.churchproject.data.entity.Applyment;
 import com.pyunggang.churchproject.data.entity.Church;
+import com.pyunggang.churchproject.data.entity.Participant;
+import com.pyunggang.churchproject.data.repository.ApplymentRepository;
 import com.pyunggang.churchproject.data.repository.ChurchRepository;
+import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.service.ChurchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,8 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class ChurchServiceImpl implements ChurchService {
     final ChurchRepository churchRepository;
+    final ParticipantRepository participantRepository;
+    final ApplymentRepository applymentRepository;
     final Random random = new Random();
 
     /**
@@ -55,5 +61,19 @@ public class ChurchServiceImpl implements ChurchService {
     @Override
     public String findChurchPassword(String churchName) {
         return churchRepository.findChurchByNameIs(churchName).getPassword();
+    }
+
+    @Override
+    public void deleteChurch(String churchName) {
+        Church church = churchRepository.findChurchByNameIs(churchName);
+        List<Applyment> applyments = applymentRepository.findAllByParticipantChurchName(churchName);
+        List<Participant> participants = participantRepository.findAllByChurchName(churchName);
+
+        if (!applyments.isEmpty()) {
+            applymentRepository.deleteAll(applyments);
+            participantRepository.deleteAll(participants);
+        }
+
+        churchRepository.delete(church);
     }
 }

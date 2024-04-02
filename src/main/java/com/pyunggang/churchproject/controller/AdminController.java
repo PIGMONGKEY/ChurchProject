@@ -32,10 +32,18 @@ public class AdminController {
         return new ResponseEntity<>(password, HttpStatus.OK);
     }
 
-    @PostMapping("/new-church")
+    @PostMapping("/newChurch")
     @ResponseBody
-    public ResponseEntity addNewChurch(@RequestParam("churchName") String churchName) {
+    public ResponseEntity addNewChurch(@RequestParam("newChurch") String churchName) {
         churchService.saveChurch(churchName);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete-church")
+    @ResponseBody
+    public ResponseEntity deleteChurch(@RequestParam("churchName") String churchName) {
+        churchService.deleteChurch(churchName);
 
         return new ResponseEntity(HttpStatus.OK);
     }

@@ -43,4 +43,9 @@ public class ChurchRepoTests {
 //            churchService.saveChurch(church + "교회");
 //        }
 //    }
+
+    @Test
+    public void deleteChurchTest() {
+        churchService.deleteChurch("평강교회");
+    }
 }

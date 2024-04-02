@@ -4,6 +4,8 @@ import com.pyunggang.churchproject.data.entity.Participant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ParticipantRepository extends JpaRepository<Participant, Integer> {
 
@@ -42,4 +44,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Intege
                                                                                            int grade,
                                                                                            String churchName,
                                                                                            String departmentName);
+
+    List<Participant> findAllByChurchName(String churchName);
 }
