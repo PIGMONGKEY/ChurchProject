@@ -1,5 +1,6 @@
 package com.pyunggang.churchproject.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class Church {
     private String name;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Builder
