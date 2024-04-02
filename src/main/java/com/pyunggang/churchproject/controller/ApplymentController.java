@@ -3,6 +3,7 @@ package com.pyunggang.churchproject.controller;
 import com.pyunggang.churchproject.data.dto.DeleteParam;
 import com.pyunggang.churchproject.data.dto.LoginParam;
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
+import com.pyunggang.churchproject.data.dto.RequestApplymentListParam;
 import com.pyunggang.churchproject.service.ApplymentService;
 import com.pyunggang.churchproject.service.ChurchService;
 import com.pyunggang.churchproject.service.EventService;
@@ -20,7 +21,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/register/*")
-public class RegisterController {
+public class ApplymentController {
     final ChurchService churchService;
     final EventService eventService;
     final ApplymentService applymentService;
@@ -33,7 +34,7 @@ public class RegisterController {
         model.addAttribute("churches", churchService.findAllChurchNames());
         model.addAttribute("loginParam", new LoginParam());
 
-        return "/register/start";
+        return "/login";
     }
 
     /**
@@ -45,7 +46,7 @@ public class RegisterController {
         model.addAttribute("events", eventService.findAllEventNames());
         model.addAttribute("churchName", churchName);
 
-        return "/register/home";
+        return "/applyment/home";
     }
 
     /**
@@ -59,7 +60,7 @@ public class RegisterController {
         model.addAttribute("church", churchName);
         model.addAttribute("event", eventName);
 
-        return "/register/register";
+        return "/applyment/register";
     }
 
     /**
@@ -76,13 +77,22 @@ public class RegisterController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * 신청 정보 리스트 요청 API
+     * @param param RequestApplymentListParam - eventName / churchName
+     * @return ApplymentParam - List 형태로 반환
+     */
     @PostMapping("/list")
     @ResponseBody
-    public ResponseEntity<List<ApplymentParam>> applymentList(@RequestParam("churchName") String churchName,
-                                                              @RequestParam("eventName") String eventName) {
-        return new ResponseEntity<>(applymentService.findApplymentList(churchName, eventName), HttpStatus.OK);
+    public ResponseEntity<List<ApplymentParam>> applymentList(@RequestBody RequestApplymentListParam param) {
+        return new ResponseEntity<>(applymentService.findApplymentList(param.getChurchName(), param.getEventName()), HttpStatus.OK);
     }
 
+    /**
+     * 신청 정보 삭제 API
+     * @param deleteParam eventName, participantId
+     * @return
+     */
     @PostMapping("/delete")
     @ResponseBody
     public ResponseEntity deleteApplyment(@RequestBody DeleteParam deleteParam) {
@@ -91,6 +101,11 @@ public class RegisterController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    /**
+     * 신청 정보 수정 API
+     * @param applymentParam
+     * @return
+     */
     @PostMapping("/modify")
     @ResponseBody
     public ResponseEntity modifyApplyment(@RequestBody ApplymentParam applymentParam) {
