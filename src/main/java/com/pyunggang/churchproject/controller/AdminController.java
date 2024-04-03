@@ -4,12 +4,15 @@ import com.pyunggang.churchproject.service.AdminService;
 import com.pyunggang.churchproject.service.ChurchService;
 import com.pyunggang.churchproject.service.DepartmentService;
 import com.pyunggang.churchproject.service.EventService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -84,5 +87,11 @@ public class AdminController {
         departmentService.deleteDepartment(departmentName);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/excel")
+    @ResponseBody
+    public void getAllInfoAsExcel(HttpServletResponse response) throws IOException {
+        adminService.getAllInfoAsExcel(response);
     }
 }
