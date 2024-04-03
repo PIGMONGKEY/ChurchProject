@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class TokenProvider {
+public class JwtTokenProvider {
     private final Key key;
 
-    public TokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         // HMAC-SHA 알고리즘으로 새로운 비밀키 생성
         this.key = Keys.hmacShaKeyFor(keyBytes);
