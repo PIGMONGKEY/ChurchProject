@@ -1,6 +1,7 @@
 package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.data.dto.LoginParam;
+import com.pyunggang.churchproject.data.dto.TokenInfoParam;
 import com.pyunggang.churchproject.service.ChurchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +23,16 @@ public class AuthController {
      */
     @PostMapping("login")
     @ResponseBody
-    public ResponseEntity<String> login(@RequestBody LoginParam loginParam) {
-        String url;
-        if (churchService.verifyPassword(loginParam.getChurchName(), loginParam.getPassword())) {
-            url = "/register/home?churchName=" + loginParam.getChurchName();
+    public ResponseEntity<TokenInfoParam> login(@RequestBody LoginParam loginParam) {
+//        String url;
+//        if (churchService.verifyPassword(loginParam.getChurchName(), loginParam.getPassword())) {
+//            url = "/register/home?churchName=" + loginParam.getChurchName();
+//
+//            return new ResponseEntity<>(url, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
 
-            return new ResponseEntity<>(url, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity(churchService.login(loginParam), HttpStatus.OK);
     }
 }

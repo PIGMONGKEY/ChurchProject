@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "TBL_CHURCH")
 @Getter
@@ -21,9 +24,13 @@ public class Church {
     @JsonIgnore
     private String password;
 
+    @JsonIgnore
+    private String role;
+
     @Builder
-    public Church(String name, String password) {
+    public Church(String name, String role, String password) {
         this.name = name;
+        this.role = role;
         this.password = password;
     }
 }

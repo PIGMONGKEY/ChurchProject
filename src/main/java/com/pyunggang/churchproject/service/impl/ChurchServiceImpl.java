@@ -1,13 +1,19 @@
 package com.pyunggang.churchproject.service.impl;
 
+import com.pyunggang.churchproject.data.dto.LoginParam;
+import com.pyunggang.churchproject.data.dto.TokenInfoParam;
 import com.pyunggang.churchproject.data.entity.Applyment;
 import com.pyunggang.churchproject.data.entity.Church;
 import com.pyunggang.churchproject.data.entity.Participant;
 import com.pyunggang.churchproject.data.repository.ApplymentRepository;
 import com.pyunggang.churchproject.data.repository.ChurchRepository;
 import com.pyunggang.churchproject.data.repository.ParticipantRepository;
+import com.pyunggang.churchproject.jwt.JwtTokenProvider;
 import com.pyunggang.churchproject.service.ChurchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -18,9 +24,12 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class ChurchServiceImpl implements ChurchService {
-    final ChurchRepository churchRepository;
-    final ParticipantRepository participantRepository;
-    final ApplymentRepository applymentRepository;
+    final private ChurchRepository churchRepository;
+    final private ParticipantRepository participantRepository;
+    final private ApplymentRepository applymentRepository;
+    final private JwtTokenProvider jwtTokenProvider;
+    final private AuthenticationManagerBuilder authenticationManagerBuilder;
+
     final Random random = new Random();
 
     /**
@@ -57,6 +66,7 @@ public class ChurchServiceImpl implements ChurchService {
                 .builder()
                 .name(name)
                 .password(password)
+                .role("USER")
                 .build());
 
         return returnChurch.getName().equals(name) ? true : false;
@@ -79,5 +89,17 @@ public class ChurchServiceImpl implements ChurchService {
         }
 
         churchRepository.delete(church);
+    }
+
+    @Override
+    public TokenInfoParam login(LoginParam loginParam) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginParam.getChurchName(), loginParam.getPassword());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        TokenInfoParam tokenInfoParam = jwtTokenProvider.generateToken(authentication);
+
+        return tokenInfoParam;
     }
 }
