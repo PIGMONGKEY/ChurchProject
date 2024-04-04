@@ -5,6 +5,7 @@ import com.pyunggang.churchproject.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -27,10 +28,8 @@ public class SecurityConfig {
                 .sessionManagement((sessionManager) -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeRequest) -> {
                     authorizeRequest.requestMatchers("/login").permitAll();
-                    authorizeRequest.requestMatchers("/register/start").permitAll();
-                    authorizeRequest.requestMatchers("/auth/login").permitAll();
-                    authorizeRequest.requestMatchers("/register/*").hasRole("USER");
-                    authorizeRequest.requestMatchers("/admin/*").hasRole("ADMIN");
+                    authorizeRequest.requestMatchers("/register/home").permitAll();
+                    authorizeRequest.anyRequest().authenticated();
                 })
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
