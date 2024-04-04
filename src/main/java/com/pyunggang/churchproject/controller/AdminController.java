@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,13 @@ public class AdminController {
     final private DepartmentService departmentService;
 
 
+    @GetMapping("/login")
+    public String adminLogin() {
+        return "/admin/admin-login";
+    }
+
     @GetMapping("/")
-    public String admin(Model model) {
+    public String adminPage(Model model) {
         model.addAttribute(adminService.getAdminPageInfo());
 
         return "/admin/admin";
@@ -33,6 +39,7 @@ public class AdminController {
 
     @GetMapping("/church-password")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> getChurchPassword(@RequestParam("churchName") String churchName) {
         String password = churchService.findChurchPassword(churchName);
 
@@ -41,6 +48,7 @@ public class AdminController {
 
     @PostMapping("/newChurch")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewChurch(@RequestParam("newChurch") String churchName) {
         churchService.saveChurch(churchName);
 
@@ -49,6 +57,7 @@ public class AdminController {
 
     @DeleteMapping("/deleteChurch")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteChurch(@RequestParam("deleteChurch") String churchName) {
         churchService.deleteChurch(churchName);
 
@@ -57,6 +66,7 @@ public class AdminController {
 
     @PostMapping("/newEvent")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewEvent(@RequestParam("newEvent") String eventName) {
         if (eventService.saveEvent(eventName)) {
             return new ResponseEntity(HttpStatus.OK);
@@ -67,6 +77,7 @@ public class AdminController {
 
     @DeleteMapping("/deleteEvent")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteEvent(@RequestParam("deleteEvent") String eventName) {
         eventService.removeEvent(eventName);
 
@@ -75,6 +86,7 @@ public class AdminController {
 
     @PostMapping("/newDepartment")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewDepartment(@RequestParam("newDepartment") String departmentName) {
         departmentService.addDepartment(departmentName);
 
@@ -83,6 +95,7 @@ public class AdminController {
 
     @DeleteMapping("/deleteDepartment")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteDepartment(@RequestParam("deleteDepartment") String departmentName) {
         departmentService.deleteDepartment(departmentName);
 
@@ -91,7 +104,13 @@ public class AdminController {
 
     @GetMapping("/excel")
     @ResponseBody
-    public void getAllInfoAsExcel(HttpServletResponse response) throws IOException {
+    public String getAllInfoAsExcel(HttpServletResponse response) throws IOException {
+        return "/admin/excel-download";
+    }
+
+    @GetMapping("/excel-download")
+    @ResponseBody
+    public void download(HttpServletResponse response) throws IOException {
         adminService.getAllInfoAsExcel(response);
     }
 }
