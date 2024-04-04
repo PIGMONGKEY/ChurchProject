@@ -27,8 +27,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement((sessionManager) -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeRequest) -> {
-                    authorizeRequest.requestMatchers("/login").permitAll();
                     authorizeRequest.requestMatchers("/register/home").permitAll();
+                    authorizeRequest.requestMatchers("/register/register").permitAll();
+                    authorizeRequest.requestMatchers("/login").permitAll();
+                    authorizeRequest.requestMatchers("/admin/login").permitAll();
+                    authorizeRequest.requestMatchers("/admin/").permitAll();
+                    authorizeRequest.requestMatchers("/admin/excel-download").permitAll();
                     authorizeRequest.anyRequest().authenticated();
                 })
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
