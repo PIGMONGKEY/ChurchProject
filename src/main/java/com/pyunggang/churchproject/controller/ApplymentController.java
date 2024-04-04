@@ -7,10 +7,12 @@ import com.pyunggang.churchproject.data.dto.RequestApplymentListParam;
 import com.pyunggang.churchproject.service.ApplymentService;
 import com.pyunggang.churchproject.service.ChurchService;
 import com.pyunggang.churchproject.service.EventService;
+import com.pyunggang.churchproject.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,27 +28,17 @@ public class ApplymentController {
     final EventService eventService;
     final ApplymentService applymentService;
 
-    /**
-     * 로그인 페이지로 이동
-     */
-    @GetMapping("/start")
+    @GetMapping("/home")
     public String registerHome(Model model) {
-        model.addAttribute("churches", churchService.findAllChurchNames());
-        model.addAttribute("loginParam", new LoginParam());
-
-        return "/login";
+        model.addAttribute("events", eventService.findAllEventNames());
+        return "/applyment/home";
     }
 
-    /**
-     * 신청 홈으로 이동
-     * @param churchName 교회 이름을 받아, 교회 홈으로 이동시킴
-     */
-    @GetMapping("/home")
-    public String registerHome(@RequestParam("churchName") String churchName, Model model) {
-        model.addAttribute("events", eventService.findAllEventNames());
-        model.addAttribute("churchName", churchName);
-
-        return "/applyment/home";
+    @GetMapping("/church")
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> getChurchName() {
+        return new ResponseEntity<>(SecurityUtil.getCurrentChurchName(), HttpStatus.OK);
     }
 
     /**
