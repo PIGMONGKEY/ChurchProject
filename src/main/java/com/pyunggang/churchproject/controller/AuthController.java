@@ -25,10 +25,10 @@ public class AuthController {
      */
     @PostMapping("login")
     @ResponseBody
-    public ResponseEntity<TokenInfoParam> login(@RequestBody LoginParam loginParam, Model model) {
-        TokenInfoParam tokenINfoParam = churchService.login(loginParam);
+    public ResponseEntity<TokenInfoParam> login(@RequestBody LoginParam loginParam) {
+        TokenInfoParam tokenInfoParam = churchService.login(loginParam);
 
-        return new ResponseEntity<>(tokenINfoParam, HttpStatus.OK);
+        return new ResponseEntity<>(tokenInfoParam, HttpStatus.OK);
     }
 
     /**
