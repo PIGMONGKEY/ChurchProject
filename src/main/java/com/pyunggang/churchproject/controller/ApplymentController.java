@@ -48,6 +48,7 @@ public class ApplymentController {
      * @param eventName 종목 이름
      */
     @GetMapping("/register")
+    @PreAuthorize("hasRole('USER')")
     public String registerParticipant(@RequestParam("churchName") String churchName, @RequestParam("eventName") String eventName, Model model) {
         model.addAttribute("church", churchName);
         model.addAttribute("event", eventName);
@@ -62,6 +63,7 @@ public class ApplymentController {
      */
     @PostMapping("/register")
     @ResponseBody
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity registerParticipant(@RequestBody List<ApplymentParam> applymentParams) {
         if(applymentService.saveApplyment(applymentParams))
             return new ResponseEntity(HttpStatus.OK);
@@ -76,6 +78,7 @@ public class ApplymentController {
      */
     @PostMapping("/list")
     @ResponseBody
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<ApplymentParam>> applymentList(@RequestBody RequestApplymentListParam param) {
         return new ResponseEntity<>(applymentService.findApplymentList(param.getChurchName(), param.getEventName()), HttpStatus.OK);
     }
@@ -87,6 +90,7 @@ public class ApplymentController {
      */
     @PostMapping("/delete")
     @ResponseBody
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity deleteApplyment(@RequestBody DeleteParam deleteParam) {
         applymentService.deleteApplyment(deleteParam.getEventName(), deleteParam.getParticipantId());
 
@@ -100,6 +104,7 @@ public class ApplymentController {
      */
     @PostMapping("/modify")
     @ResponseBody
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity modifyApplyment(@RequestBody ApplymentParam applymentParam) {
         applymentService.updateApplyment(applymentParam);
 
