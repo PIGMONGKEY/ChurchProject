@@ -104,7 +104,7 @@ public class AdminController {
 
     @GetMapping("/excel")
     @ResponseBody
-    public String getAllInfoAsExcel(HttpServletResponse response) throws IOException {
+    public String getAllInfoAsExcel() {
         return "/admin/excel-download";
     }
 
