@@ -1,12 +1,13 @@
 package com.pyunggang.churchproject.service;
 
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface ApplymentService {
-    public boolean saveApplyment(List<ApplymentParam> params);
-    public List<ApplymentParam> findApplymentList(String churchName, String eventName);
-    public boolean deleteApplyment(String eventName, int participantId);
-    public boolean updateApplyment(ApplymentParam applymentParam);
+    public ResponseEntity saveApplyment(List<ApplymentParam> params);
+    public ResponseEntity<List<ApplymentParam>> findApplymentList(String churchName, String eventName);
+    public ResponseEntity deleteApplyment(String eventName, int participantId);
+    public ResponseEntity updateApplyment(ApplymentParam applymentParam);
 }
