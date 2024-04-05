@@ -47,50 +47,50 @@ public class AdminController {
     }
 
     // 새로운 교회 추가 API
-    @PostMapping("/newChurch")
+    @PostMapping("/church")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity addNewChurch(@RequestParam("newChurch") String churchName) {
+    public ResponseEntity addNewChurch(@RequestParam("church") String churchName) {
         return churchService.saveChurch(churchName);
     }
 
     // 교회 삭제 API
-    @DeleteMapping("/deleteChurch")
+    @DeleteMapping("/church")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity deleteChurch(@RequestParam("deleteChurch") String churchName) {
+    public ResponseEntity deleteChurch(@RequestParam("church") String churchName) {
         return churchService.deleteChurch(churchName);
     }
 
     // 새로운 종목 추가 API
-    @PostMapping("/newEvent")
+    @PostMapping("/event")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity addNewEvent(@RequestParam("newEvent") String eventName) {
+    public ResponseEntity addNewEvent(@RequestParam("event") String eventName) {
         return eventService.saveEvent(eventName);
     }
 
     // 종목 제거 API
-    @DeleteMapping("/deleteEvent")
+    @DeleteMapping("/event")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity deleteEvent(@RequestParam("deleteEvent") String eventName) {
+    public ResponseEntity deleteEvent(@RequestParam("event") String eventName) {
         return eventService.removeEvent(eventName);
     }
 
     // 새로운 부서 추가 API
-    @PostMapping("/newDepartment")
+    @PostMapping("/department")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity addNewDepartment(@RequestParam("newDepartment") String departmentName) {
+    public ResponseEntity addNewDepartment(@RequestParam("department") String departmentName) {
         return departmentService.addDepartment(departmentName);
     }
 
     // 부서 제거 API
-    @DeleteMapping("/deleteDepartment")
+    @DeleteMapping("/department")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity deleteDepartment(@RequestParam("deleteDepartment") String departmentName) {
+    public ResponseEntity deleteDepartment(@RequestParam("department") String departmentName) {
         return departmentService.deleteDepartment(departmentName);
     }
 
