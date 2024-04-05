@@ -75,7 +75,7 @@ public class ApplymentController {
      * 교회명과 종목명 받음
      * @return ApplymentParam - List 형태로 반환
      */
-    @GetMapping("/list")
+    @GetMapping("/applyment")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<ApplymentParam>> applymentList(@RequestParam("churchName") String churchName, @RequestParam("eventName") String eventName) {
@@ -87,7 +87,7 @@ public class ApplymentController {
      * @param deleteParam eventName, participantId
      * @return
      */
-    @DeleteMapping("/delete")
+    @DeleteMapping("/applyment")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity deleteApplyment(@RequestBody DeleteParam deleteParam) {
@@ -100,10 +100,13 @@ public class ApplymentController {
      * @return
      */
     // TODO: 수정하여 다른 참가자와 정보가 모두 같고 ID만 다른 상태가 되는 현상 해결 필요
-    @PutMapping("/modify")
+    @PutMapping("/applyment")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity modifyApplyment(@RequestBody ApplymentParam applymentParam) {
         return applymentService.updateApplyment(applymentParam);
     }
+
+    // TODO: 회원 로그아웃 구현
+    // TODO: 신청 내역 엑셀 파일로 다운받기 구현
 }
