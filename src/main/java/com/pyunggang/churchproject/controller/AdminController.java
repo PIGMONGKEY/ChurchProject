@@ -24,12 +24,13 @@ public class AdminController {
     final private EventService eventService;
     final private DepartmentService departmentService;
 
-
+    // 관리자 로그인 페이지 접근
     @GetMapping("/login")
     public String adminLogin() {
         return "/admin/admin-login";
     }
 
+    // 관리자 페이지 접근
     @GetMapping("/")
     public String adminPage(Model model) {
         model.addAttribute(adminService.getAdminPageInfo());
@@ -37,6 +38,7 @@ public class AdminController {
         return "/admin/admin";
     }
 
+    // 교회 비밀번호 확인 API
     @GetMapping("/church-password")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -46,6 +48,7 @@ public class AdminController {
         return new ResponseEntity<>(password, HttpStatus.OK);
     }
 
+    // 새로운 교회 추가 API
     @PostMapping("/newChurch")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -55,6 +58,7 @@ public class AdminController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 교회 삭제 API
     @DeleteMapping("/deleteChurch")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -64,6 +68,7 @@ public class AdminController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 새로운 종목 추가 API
     @PostMapping("/newEvent")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -75,6 +80,7 @@ public class AdminController {
         }
     }
 
+    // 종목 제거 API
     @DeleteMapping("/deleteEvent")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -84,6 +90,7 @@ public class AdminController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 새로운 부서 추가 API
     @PostMapping("/newDepartment")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -93,6 +100,7 @@ public class AdminController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 부서 제거 API
     @DeleteMapping("/deleteDepartment")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -102,12 +110,14 @@ public class AdminController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 엑셀 다운로드 링크 반환 API
     @GetMapping("/excel")
     @ResponseBody
     public String getAllInfoAsExcel() {
         return "/admin/excel-download";
     }
 
+    // 다운로드 API
     @GetMapping("/excel-download")
     @ResponseBody
     public void download(HttpServletResponse response) throws IOException {
