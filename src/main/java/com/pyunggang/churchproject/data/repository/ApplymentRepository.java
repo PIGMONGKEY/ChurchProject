@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ApplymentRepository extends JpaRepository<Applyment, Integer> {
@@ -37,7 +38,7 @@ public interface ApplymentRepository extends JpaRepository<Applyment, Integer> {
      * @param churchName 교회명
      * @return Participant - List
      */
-    List<Applyment> findAllByEventNameAndParticipantChurchName(String eventName, String churchName);
+    Optional<List<Applyment>> findAllByEventNameAndParticipantChurchName(String eventName, String churchName);
 
     /**
      * 종목명과 참가자 정보로 신청 정보 조회
@@ -45,7 +46,7 @@ public interface ApplymentRepository extends JpaRepository<Applyment, Integer> {
      * @param eventName 종목명
      * @return 신청 정보
      */
-    Applyment findByParticipantAndEventName(Participant participant, String eventName);
+    Optional<Applyment> findByParticipantAndEventName(Participant participant, String eventName);
 
     /**
      * 참가자 정보로 신청 정보 유무 확인
