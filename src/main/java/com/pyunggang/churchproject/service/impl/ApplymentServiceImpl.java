@@ -115,6 +115,28 @@ public class ApplymentServiceImpl implements ApplymentService {
         return new ResponseEntity<>(params, status);
     }
 
+    @Override
+    @Transactional
+    public ResponseEntity updateApplyment(ApplymentParam applymentParam) {
+        HttpStatus status = HttpStatus.CREATED;
+        Participant participant = partiRepo.findById(applymentParam.getId()).orElseGet(null);
+
+        if (participant == null)
+            status = HttpStatus.BAD_REQUEST;
+        else {
+            participant.setAge(applymentParam.getAge());
+            participant.setName(applymentParam.getName());
+            participant.setGender(applymentParam.getGender());
+            participant.setGrade(applymentParam.getGrade());
+            participant.setDepartment(departRepo.findDepartmentByNameIs(applymentParam.getDepartment()));
+
+            if (partiRepo.save(participant).getParticipantId() != participant.getParticipantId())
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity(status);
+    }
+
     /**
      * 종목명과 참가자 id로 신청 내역 삭제
      * 2종목 이상 참여할 경우, 신청 내역만 삭제
@@ -142,28 +164,6 @@ public class ApplymentServiceImpl implements ApplymentService {
             if (!applyRepo.existsByParticipant(participant)) {
                 partiRepo.delete(participant);
             }
-        }
-
-        return new ResponseEntity(status);
-    }
-
-    @Override
-    @Transactional
-    public ResponseEntity updateApplyment(ApplymentParam applymentParam) {
-        HttpStatus status = HttpStatus.CREATED;
-        Participant participant = partiRepo.findById(applymentParam.getId()).orElseGet(null);
-
-        if (participant == null)
-            status = HttpStatus.BAD_REQUEST;
-        else {
-            participant.setAge(applymentParam.getAge());
-            participant.setName(applymentParam.getName());
-            participant.setGender(applymentParam.getGender());
-            participant.setGrade(applymentParam.getGrade());
-            participant.setDepartment(departRepo.findDepartmentByNameIs(applymentParam.getDepartment()));
-
-            if (partiRepo.save(participant).getParticipantId() != participant.getParticipantId())
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         return new ResponseEntity(status);
