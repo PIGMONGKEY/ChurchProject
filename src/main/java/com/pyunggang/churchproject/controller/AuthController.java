@@ -26,9 +26,7 @@ public class AuthController {
     @PostMapping("login")
     @ResponseBody
     public ResponseEntity<TokenInfoParam> login(@RequestBody LoginParam loginParam) {
-        TokenInfoParam tokenInfoParam = churchService.login(loginParam);
-
-        return new ResponseEntity<>(tokenInfoParam, HttpStatus.OK);
+        return churchService.login(loginParam);
     }
 
     /**
