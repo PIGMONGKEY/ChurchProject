@@ -1,7 +1,6 @@
 package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.data.dto.DeleteParam;
-import com.pyunggang.churchproject.data.dto.LoginParam;
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
 import com.pyunggang.churchproject.data.dto.RequestApplymentListParam;
 import com.pyunggang.churchproject.service.ApplymentService;
@@ -28,12 +27,14 @@ public class ApplymentController {
     final EventService eventService;
     final ApplymentService applymentService;
 
+    // 교회 홈
     @GetMapping("/home")
     public String registerHome(Model model) {
         model.addAttribute("events", eventService.findAllEventNames());
         return "/applyment/home";
     }
 
+    // 로그인한 교회 이름 API
     @GetMapping("/church")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -48,7 +49,6 @@ public class ApplymentController {
      * @param eventName 종목 이름
      */
     @GetMapping("/register")
-    @PreAuthorize("hasRole('USER')")
     public String registerParticipant(@RequestParam("churchName") String churchName, @RequestParam("eventName") String eventName, Model model) {
         model.addAttribute("church", churchName);
         model.addAttribute("event", eventName);
@@ -65,10 +65,7 @@ public class ApplymentController {
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity registerParticipant(@RequestBody List<ApplymentParam> applymentParams) {
-        if(applymentService.saveApplyment(applymentParams))
-            return new ResponseEntity(HttpStatus.OK);
-        else
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        return applymentService.saveApplyment(applymentParams);
     }
 
     /**
@@ -80,7 +77,7 @@ public class ApplymentController {
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<ApplymentParam>> applymentList(@RequestBody RequestApplymentListParam param) {
-        return new ResponseEntity<>(applymentService.findApplymentList(param.getChurchName(), param.getEventName()), HttpStatus.OK);
+        return applymentService.findApplymentList(param.getChurchName(), param.getEventName());
     }
 
     /**
@@ -92,9 +89,7 @@ public class ApplymentController {
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity deleteApplyment(@RequestBody DeleteParam deleteParam) {
-        applymentService.deleteApplyment(deleteParam.getEventName(), deleteParam.getParticipantId());
-
-        return new ResponseEntity(HttpStatus.OK);
+        return applymentService.deleteApplyment(deleteParam.getEventName(), deleteParam.getParticipantId());
     }
 
     /**
@@ -106,8 +101,6 @@ public class ApplymentController {
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity modifyApplyment(@RequestBody ApplymentParam applymentParam) {
-        applymentService.updateApplyment(applymentParam);
-
-        return new ResponseEntity(HttpStatus.OK);
+        return applymentService.updateApplyment(applymentParam);
     }
 }
