@@ -38,7 +38,7 @@ public interface ApplymentRepository extends JpaRepository<Applyment, Integer> {
      * @param churchName 교회명
      * @return Participant - List
      */
-    Optional<List<Applyment>> findAllByEventNameAndParticipantChurchName(String eventName, String churchName);
+    List<Applyment> findAllByEventNameAndParticipantChurchName(String eventName, String churchName);
 
     /**
      * 종목명과 참가자 정보로 신청 정보 조회
@@ -46,7 +46,7 @@ public interface ApplymentRepository extends JpaRepository<Applyment, Integer> {
      * @param eventName 종목명
      * @return 신청 정보
      */
-    Optional<Applyment> findByParticipantAndEventName(Participant participant, String eventName);
+    Applyment findByParticipantAndEventName(Participant participant, String eventName);
 
     /**
      * 참가자 정보로 신청 정보 유무 확인

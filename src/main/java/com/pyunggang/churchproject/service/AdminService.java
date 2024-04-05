@@ -8,5 +8,5 @@ import java.io.IOException;
 
 public interface AdminService {
     public AdminPageParam getAdminPageInfo();
-    public void  getAllInfoAsExcel(HttpServletResponse response) throws IOException;
+    public void getAllInfoAsExcel(HttpServletResponse response) throws IOException;
 }

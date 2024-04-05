@@ -8,7 +8,10 @@ import com.pyunggang.churchproject.data.repository.EventRepository;
 import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,13 +28,19 @@ public class EventServiceImpl implements EventService {
      * 모든 종목 이름 가져오기
      */
     @Override
-    public List<String> findAllEventNames() {
-        List<String> events = new LinkedList<>();
-        for (Event event : eventRepository.findAll()) {
-            events.add(event.getName());
-        }
+    @Transactional
+    public ResponseEntity<List<String>> findAllEventNames() {
+        HttpStatus status = HttpStatus.OK;
+        List<String> eventNames = new LinkedList<>();
+        List<Event> events = eventRepository.findAll();
 
-        return events;
+        if (events.isEmpty())
+            status = HttpStatus.BAD_REQUEST;
+        else
+            for (Event event : events)
+                eventNames.add(event.getName());
+
+        return new ResponseEntity<>(eventNames, status);
     }
 
     /**
@@ -39,16 +48,16 @@ public class EventServiceImpl implements EventService {
      * @param eventName 종목 이름
      */
     @Override
-    public boolean saveEvent(String eventName) {
+    @Transactional
+    public ResponseEntity saveEvent(String eventName) {
+        HttpStatus status = HttpStatus.OK;
         // 이미 있는 종목이면 삽입하지 않음
         if (eventRepository.existsById(eventName))
-            return false;
+            status = HttpStatus.BAD_REQUEST;
+        else
+            eventRepository.save(Event.builder().name(eventName).build());
 
-        eventRepository.save(Event.builder()
-                                            .name(eventName)
-                                            .build());
-
-        return true;
+        return new ResponseEntity(status);
     }
 
     /**
@@ -59,7 +68,8 @@ public class EventServiceImpl implements EventService {
      * @return
      */
     @Override
-    public boolean removeEvent(String eventName) {
+    public ResponseEntity removeEvent(String eventName) {
+        HttpStatus status = HttpStatus.OK;
         Event event = eventRepository.findById(eventName).get();
         List<Applyment> applyments = applymentRepository.findAllByEventName(eventName);
 
@@ -76,6 +86,6 @@ public class EventServiceImpl implements EventService {
 
         eventRepository.delete(event);
 
-        return true;
+        return new ResponseEntity(status);
     }
 }

@@ -43,9 +43,7 @@ public class AdminController {
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> getChurchPassword(@RequestParam("churchName") String churchName) {
-        String password = churchService.findChurchPassword(churchName);
-
-        return new ResponseEntity<>(password, HttpStatus.OK);
+        return churchService.findChurchPassword(churchName);
     }
 
     // 새로운 교회 추가 API
@@ -53,9 +51,7 @@ public class AdminController {
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewChurch(@RequestParam("newChurch") String churchName) {
-        churchService.saveChurch(churchName);
-
-        return new ResponseEntity(HttpStatus.OK);
+        return churchService.saveChurch(churchName);
     }
 
     // 교회 삭제 API
@@ -63,9 +59,7 @@ public class AdminController {
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteChurch(@RequestParam("deleteChurch") String churchName) {
-        churchService.deleteChurch(churchName);
-
-        return new ResponseEntity(HttpStatus.OK);
+        return churchService.deleteChurch(churchName);
     }
 
     // 새로운 종목 추가 API
@@ -73,11 +67,7 @@ public class AdminController {
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewEvent(@RequestParam("newEvent") String eventName) {
-        if (eventService.saveEvent(eventName)) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return eventService.saveEvent(eventName);
     }
 
     // 종목 제거 API
@@ -85,9 +75,7 @@ public class AdminController {
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteEvent(@RequestParam("deleteEvent") String eventName) {
-        eventService.removeEvent(eventName);
-
-        return new ResponseEntity(HttpStatus.OK);
+        return eventService.removeEvent(eventName);
     }
 
     // 새로운 부서 추가 API
@@ -95,9 +83,7 @@ public class AdminController {
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewDepartment(@RequestParam("newDepartment") String departmentName) {
-        departmentService.addDepartment(departmentName);
-
-        return new ResponseEntity(HttpStatus.OK);
+        return departmentService.addDepartment(departmentName);
     }
 
     // 부서 제거 API
@@ -105,9 +91,7 @@ public class AdminController {
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteDepartment(@RequestParam("deleteDepartment") String departmentName) {
-        departmentService.deleteDepartment(departmentName);
-
-        return new ResponseEntity(HttpStatus.OK);
+        return departmentService.deleteDepartment(departmentName);
     }
 
     // 엑셀 다운로드 링크 반환 API

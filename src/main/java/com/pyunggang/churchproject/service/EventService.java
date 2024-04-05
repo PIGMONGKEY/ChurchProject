@@ -1,11 +1,13 @@
 package com.pyunggang.churchproject.service;
 
+import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 
 public interface EventService {
-    List<String> findAllEventNames();
+    ResponseEntity<List<String>> findAllEventNames();
 
-    boolean saveEvent(String eventName);
+    ResponseEntity saveEvent(String eventName);
 
-    boolean removeEvent(String eventName);
+    ResponseEntity removeEvent(String eventName);
 }

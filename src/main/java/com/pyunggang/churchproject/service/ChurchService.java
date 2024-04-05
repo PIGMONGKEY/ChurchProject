@@ -2,19 +2,18 @@ package com.pyunggang.churchproject.service;
 
 import com.pyunggang.churchproject.data.dto.LoginParam;
 import com.pyunggang.churchproject.data.dto.TokenInfoParam;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface ChurchService {
-    public List<String> findAllChurchNames();
+    public ResponseEntity<List<String>> findAllChurchNames();
 
-    public boolean verifyPassword(String name, String password);
+    public ResponseEntity saveChurch(String name);
 
-    public boolean saveChurch(String name);
+    public ResponseEntity<String> findChurchPassword(String churchName);
 
-    public String findChurchPassword(String churchName);
+    public ResponseEntity deleteChurch(String churchName);
 
-    public void deleteChurch(String churchName);
-
-    public TokenInfoParam login(LoginParam loginParam);
+    public ResponseEntity<TokenInfoParam> login(LoginParam loginParam);
 }

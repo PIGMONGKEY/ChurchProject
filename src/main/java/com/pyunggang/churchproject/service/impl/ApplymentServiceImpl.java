@@ -48,7 +48,7 @@ public class ApplymentServiceImpl implements ApplymentService {
             // 새로운 참가자 객체 생성
             participant = Participant.builder()
                     .department(departRepo.findDepartmentByNameIs(param.getDepartment()))
-                    .church(churchRepo.findChurchByNameIs(param.getChurchName()))
+                    .church(churchRepo.findById(param.getChurchName()).get())
                     .name(param.getName())
                     .age(param.getAge())
                     .gender(param.getGender())
@@ -102,7 +102,7 @@ public class ApplymentServiceImpl implements ApplymentService {
         HttpStatus status = HttpStatus.OK;
         // 빈 linked list 생성
         List<ApplymentParam> params = new LinkedList<>();
-        List<Applyment> applyments = applyRepo.findAllByEventNameAndParticipantChurchName(eventName, churchName).orElseGet(null);
+        List<Applyment> applyments = applyRepo.findAllByEventNameAndParticipantChurchName(eventName, churchName);
 
         if (applyments == null)
             status = HttpStatus.NOT_FOUND;
@@ -152,7 +152,7 @@ public class ApplymentServiceImpl implements ApplymentService {
         // id로 참가자 정보 불러오기
         Participant participant = partiRepo.findById(participantId).orElseGet(null);
         // applyment 정보 불러오기
-        Applyment applyment = applyRepo.findByParticipantAndEventName(participant, eventName).orElse(null);
+        Applyment applyment = applyRepo.findByParticipantAndEventName(participant, eventName);
 
         if (participant == null || applyment == null) {
             status = HttpStatus.BAD_REQUEST;

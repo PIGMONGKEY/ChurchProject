@@ -1,6 +1,8 @@
 package com.pyunggang.churchproject.service;
 
+import org.springframework.http.ResponseEntity;
+
 public interface DepartmentService {
-    public boolean addDepartment(String departmentName);
-    public boolean deleteDepartment(String departmentName);
+    public ResponseEntity addDepartment(String departmentName);
+    public ResponseEntity deleteDepartment(String departmentName);
 }

@@ -31,7 +31,7 @@ public class ParticipantTests {
                 .age(15)
                 .grade(2)
                 .gender("male")
-                .church(churchRepository.findChurchByNameIs("평강교회"))
+                .church(churchRepository.findById("평강교회").get())
                 .department(departmentRepository.findDepartmentByNameIs("중등부"))
                 .build();
         participantRepository.save(participant);

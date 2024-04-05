@@ -11,10 +11,13 @@ import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.jwt.JwtTokenProvider;
 import com.pyunggang.churchproject.service.ChurchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -30,56 +33,72 @@ public class ChurchServiceImpl implements ChurchService {
     final private JwtTokenProvider jwtTokenProvider;
     final private AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    final Random random = new Random();
-
     /**
      * 저장된 모든 교회 이름을 ArrayList로 반환
      * @return ArrayList<String> - 교회 이름들
      */
     @Override
-    public List<String> findAllChurchNames() {
-        List<String> churches = new ArrayList<>();
-        for (Church church : churchRepository.findAll()) {
-            churches.add(church.getName());
-        }
+    @Transactional
+    public ResponseEntity<List<String>> findAllChurchNames() {
+        HttpStatus status = HttpStatus.OK;
+        List<String> churchNames = new ArrayList<>();
+        List<Church> churches = churchRepository.findAll();
 
-        return churches;
+        if (churches.isEmpty())
+            status = HttpStatus.NOT_FOUND;
+        else
+            for (Church church : churches)
+                churchNames.add(church.getName());
+
+        return new ResponseEntity<>(churchNames, status);
     }
 
     @Override
-    public boolean verifyPassword(String name, String password) {
-        return churchRepository.findChurchByNameIs(name).getPassword().equals(password);
-    }
-
-    @Override
-    public boolean saveChurch(String name) {
-        if (churchRepository.existsById(name)) {
-            return false;
-        }
-
+    @Transactional
+    public ResponseEntity saveChurch(String name) {
+        HttpStatus status = HttpStatus.OK;
+        Random random = new Random(System.currentTimeMillis());
         String password;
+        Church church;
 
-        random.setSeed(System.currentTimeMillis());
-        password = Integer.toString(random.nextInt(1000, 10000));
+        if (churchRepository.existsById(name))
+            status = HttpStatus.BAD_REQUEST;
+        else {
+            random.setSeed(System.currentTimeMillis());
+            password = Integer.toString(random.nextInt(1000, 10000));
 
-        Church returnChurch = churchRepository.saveAndFlush(Church
-                .builder()
-                .name(name)
-                .password(password)
-                .role("USER")
-                .build());
+            church = Church.builder()
+                                    .name(name)
+                                    .password(password)
+                                    .role("USER")
+                                    .build();
 
-        return returnChurch.getName().equals(name) ? true : false;
+            if (!churchRepository.save(church).getName().equals(name))
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity(status);
     }
 
     @Override
-    public String findChurchPassword(String churchName) {
-        return churchRepository.findChurchByNameIs(churchName).getPassword();
+    @Transactional
+    public ResponseEntity<String> findChurchPassword(String churchName) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        Church church = churchRepository.findById(churchName).get();
+        String password = null;
+
+        if (church != null) {
+            status = HttpStatus.OK;
+            password = church.getPassword();
+        }
+
+        return new ResponseEntity<>(password, status);
     }
 
     @Override
-    public void deleteChurch(String churchName) {
-        Church church = churchRepository.findChurchByNameIs(churchName);
+    public ResponseEntity deleteChurch(String churchName) {
+        HttpStatus status = HttpStatus.OK;
+        Church church = churchRepository.findById(churchName).get();
         List<Applyment> applyments = applymentRepository.findAllByParticipantChurchName(churchName);
         List<Participant> participants = participantRepository.findAllByChurchName(churchName);
 
@@ -89,10 +108,12 @@ public class ChurchServiceImpl implements ChurchService {
         }
 
         churchRepository.delete(church);
+
+        return new ResponseEntity(status);
     }
 
     @Override
-    public TokenInfoParam login(LoginParam loginParam) {
+    public ResponseEntity<TokenInfoParam> login(LoginParam loginParam) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginParam.getChurchName(), loginParam.getPassword());
 
@@ -100,6 +121,6 @@ public class ChurchServiceImpl implements ChurchService {
 
         TokenInfoParam tokenInfoParam = jwtTokenProvider.generateToken(authentication);
 
-        return tokenInfoParam;
+        return new ResponseEntity<>(tokenInfoParam, HttpStatus.OK);
     }
 }

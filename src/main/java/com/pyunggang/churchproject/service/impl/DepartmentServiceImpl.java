@@ -7,6 +7,8 @@ import com.pyunggang.churchproject.data.repository.DepartmentRepository;
 import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,22 +21,23 @@ public class DepartmentServiceImpl implements DepartmentService {
     final private ApplymentRepository applymentRepository;
 
     @Override
-    public boolean addDepartment(String departmentName) {
+    public ResponseEntity addDepartment(String departmentName) {
+        HttpStatus status = HttpStatus.OK;
+
         if (departmentRepository.existsById(departmentName))
-            return false;
+            status = HttpStatus.BAD_REQUEST;
+        else {
+            Department department = Department.builder().name(departmentName).build();
 
-        Department department = Department.builder()
-                                                    .name(departmentName)
-                                                    .build();
+            if (!departmentRepository.save(department).equals(department))
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
 
-        if (!departmentRepository.save(department).equals(department))
-            return false;
-
-        return true;
+        return new ResponseEntity(status);
     }
 
     @Override
-    public boolean deleteDepartment(String departmentName) {
+    public ResponseEntity deleteDepartment(String departmentName) {
         Department department = departmentRepository.findDepartmentByNameIs(departmentName);
         List<Participant> participants = participantRepository.findAllByDepartmentName(departmentName);
 
@@ -47,6 +50,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         departmentRepository.delete(department);
 
-        return true;
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
