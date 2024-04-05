@@ -34,7 +34,7 @@ public class AuthController {
      */
     @GetMapping("login")
     public String loginPage(Model model) {
-        model.addAttribute("churches", churchService.findAllChurchNames());
+        model.addAttribute("churches", churchService.findAllChurchNames().getBody());
         model.addAttribute("loginParam", new LoginParam());
 
         return "login";

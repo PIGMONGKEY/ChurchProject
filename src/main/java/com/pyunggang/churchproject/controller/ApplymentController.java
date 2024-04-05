@@ -30,7 +30,7 @@ public class ApplymentController {
     // 교회 홈
     @GetMapping("/home")
     public String registerHome(Model model) {
-        model.addAttribute("events", eventService.findAllEventNames());
+        model.addAttribute("events", eventService.findAllEventNames().getBody());
         return "/applyment/home";
     }
 
@@ -61,6 +61,8 @@ public class ApplymentController {
      * @param applymentParams ParticipantRegisterParam list 형태로 받음
      * @return
      */
+    // TODO: 모든 정보가 같은 동명이인 처리
+    // TODO: 중복 신청으로 넘어간 참가자 정보 표시하여 동명이인 처리 부탁 - ex) 김춘자A, 김춘자B
     @PostMapping("/register")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -70,14 +72,14 @@ public class ApplymentController {
 
     /**
      * 신청 정보 리스트 요청 API
-     * @param param RequestApplymentListParam - eventName / churchName
+     * 교회명과 종목명 받음
      * @return ApplymentParam - List 형태로 반환
      */
-    @PostMapping("/list")
+    @GetMapping("/list")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<ApplymentParam>> applymentList(@RequestBody RequestApplymentListParam param) {
-        return applymentService.findApplymentList(param.getChurchName(), param.getEventName());
+    public ResponseEntity<List<ApplymentParam>> applymentList(@RequestParam("churchName") String churchName, @RequestParam("eventName") String eventName) {
+        return applymentService.findApplymentList(churchName, eventName);
     }
 
     /**
@@ -85,7 +87,7 @@ public class ApplymentController {
      * @param deleteParam eventName, participantId
      * @return
      */
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity deleteApplyment(@RequestBody DeleteParam deleteParam) {
@@ -97,7 +99,8 @@ public class ApplymentController {
      * @param applymentParam
      * @return
      */
-    @PostMapping("/modify")
+    // TODO: 수정하여 다른 참가자와 정보가 모두 같고 ID만 다른 상태가 되는 현상 해결 필요
+    @PutMapping("/modify")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity modifyApplyment(@RequestBody ApplymentParam applymentParam) {
