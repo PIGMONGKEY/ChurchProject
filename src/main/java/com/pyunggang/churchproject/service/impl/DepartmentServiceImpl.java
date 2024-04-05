@@ -29,7 +29,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         else {
             Department department = Department.builder().name(departmentName).build();
 
-            if (!departmentRepository.save(department).equals(department))
+            if (!departmentRepository.save(department).getName().equals(departmentName))
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
