@@ -61,12 +61,10 @@ public class ApplymentController {
      * @param applymentParams ParticipantRegisterParam list 형태로 받음
      * @return
      */
-    // TODO: 모든 정보가 같은 동명이인 처리
-    // TODO: 중복 신청으로 넘어간 참가자 정보 표시하여 동명이인 처리 부탁 - ex) 김춘자A, 김춘자B
     @PostMapping("/register")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity registerParticipant(@RequestBody List<ApplymentParam> applymentParams) {
+    public ResponseEntity<List<ApplymentParam>> registerParticipant(@RequestBody List<ApplymentParam> applymentParams) {
         return applymentService.saveApplyment(applymentParams);
     }
 

@@ -31,12 +31,13 @@ public class ApplymentServiceImpl implements ApplymentService {
      * @param params List<ParticipantRegisterParam> 형태로 참가자 정보를 받음
      * @return 성공하면 true, 실패하면 false
      */
-//    TODO: 동명이인 어떡할지 고민 필요
 //    TODO: 런타임 에러 발생시켜서 롤백 시킬 방법 찾기
     @Override
-    public ResponseEntity saveApplyment(List<ApplymentParam> params) {
+    @Transactional
+    public ResponseEntity<List<ApplymentParam>> saveApplyment(List<ApplymentParam> params) {
         Participant participant;
         Applyment applyment;
+        List<ApplymentParam> ignoredApplyments = new LinkedList<>();
         HttpStatus status = HttpStatus.OK;
 
         for (ApplymentParam param : params) {
@@ -66,8 +67,12 @@ public class ApplymentServiceImpl implements ApplymentService {
                 // 이미 등록된 참가자라면,
                 // 중복 신청인지, 다른 종목에 참여하는 같은 참가자인지 확인
                 // 중복 신청이라면 건너뜀
-                if (applyRepo.existsByEventNameAndParticipant(param.getEventName(), participant))
+                // 중복 신청으로 건너뛴 참가자 정보 리턴하여 동명이인인지 확인
+                if (applyRepo.existsByEventNameAndParticipant(param.getEventName(), participant)){
+                    ignoredApplyments.add(param);
+                    status = HttpStatus.CREATED;
                     continue;
+                }
 
                 // 저장되어 있는 Participant를 불러온다
                 participant = partiRepo.findParticipantByParticipant(participant);
@@ -88,7 +93,7 @@ public class ApplymentServiceImpl implements ApplymentService {
             }
         }
 
-        return new ResponseEntity(status);
+        return new ResponseEntity(ignoredApplyments, status);
     }
 
     /**
@@ -98,6 +103,7 @@ public class ApplymentServiceImpl implements ApplymentService {
      * @return ParticipantRegisterParam - List 형태로 리턴
      */
     @Override
+    @Transactional
     public ResponseEntity<List<ApplymentParam>> findApplymentList(String churchName, String eventName) {
         HttpStatus status = HttpStatus.OK;
         // 빈 linked list 생성
