@@ -24,11 +24,15 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
     private final Key key;
+    private final int accessExpires;
+    private final int refreshExpires;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, @Value("${jwt.accessExpires}") int accessExpires, @Value("${jwt.refreshExpires}") int refreshExpires) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         // HMAC-SHA 알고리즘으로 새로운 비밀키 생성
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.accessExpires = accessExpires;
+        this.refreshExpires = refreshExpires;
     }
 
     /**
@@ -43,7 +47,7 @@ public class JwtTokenProvider {
                 .collect(Collectors.joining(","));
 
         // AccessToken 유효시간 30분
-        Date accessTokenExpiresIn = new Date(System.currentTimeMillis() + 1800000);
+        Date accessTokenExpiresIn = new Date(System.currentTimeMillis() + accessExpires);
         // AccessToken 생성
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())   // 교회명
@@ -52,9 +56,11 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256) // 비밀키
                 .compact();
 
+        // RefreshToken 유효시간 3시간
+        Date refreshTokenExpiresIn = new Date(System.currentTimeMillis() + refreshExpires);
         // RefreshToken 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(accessTokenExpiresIn)
+                .setExpiration(refreshTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -117,5 +123,16 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    public Long getExpiration(String token) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration()
+                .getTime();
     }
 }
