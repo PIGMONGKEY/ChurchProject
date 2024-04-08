@@ -60,6 +60,8 @@ public class JwtTokenProvider {
         Date refreshTokenExpiresIn = new Date(System.currentTimeMillis() + refreshExpires);
         // RefreshToken 생성
         String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim("auth", authorities)
                 .setExpiration(refreshTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -73,11 +75,11 @@ public class JwtTokenProvider {
 
     /**
      * accessToken을 가지고 유저 정보를 읽어옴
-     * @param accessToken accessToken
+     * @param token accessToken
      * @return
      */
-    public Authentication getAuthentication(String accessToken) {
-        Claims claims = parseClaims(accessToken);
+    public Authentication getAuthentication(String token) {
+        Claims claims = parseClaims(token);
 
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");

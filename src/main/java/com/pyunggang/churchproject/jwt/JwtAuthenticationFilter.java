@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,11 +27,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         // 토큰 유효성 검증 후 Authentication 객체를 SecurityContext에 저장
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            // 로그아웃하여 redis에 저장된 토큰이 아니라면 SecurityContext에 저장
-            if (redisTemplate.opsForValue().get(token) == null) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
         }
 
         chain.doFilter(request, response);
