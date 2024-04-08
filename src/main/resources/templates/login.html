@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>노회대회</title>
+    </head>
+    <body>
+        <div class="base">
+            <div class="center">
+                <div class="church" th:object="${loginParam}">
+                    <p>
+                        <label>교회 선택 : </label>
+                        <select th:field="*{churchName}">
+                            <option th:each="church : ${churches}" th:value="${church}" th:utext="${church}"></option>
+                        </select>
+                    </p>
+                    <p>
+                        <label>비밀번호 : </label>
+                        <input type="password" th:field="*{password}">
+                    </p>
+                    <p>
+                        <input type="button" value="Submit" id="login">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        const $login = $("#login");
+        const $churchName = $("#churchName")
+        const $password = $("#password")
+
+        $login.on("click", function () {
+            $.ajax({
+                url: "/login",
+                type: "post",
+                data: JSON.stringify({churchName: $churchName.val(), password: $password.val()}),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    saveTokenInCookie(data)
+                    saveTokenInSession(data)
+                    location.replace("/register/home")
+                },
+                error: function() {
+                    alert("비밀번호가 일치하지 않습니다.")
+                }
+            })
+        })
+    </script>
+    <script>
+        function saveTokenInCookie(data) {
+            const expireDate = new Date()
+            expireDate.setMinutes(expireDate.getMinutes() + 120)
+
+            const refresh = data.refreshToken + "; expires=" + expireDate.toUTCString() + "; httpOnly"
+            const grant = data.grantType + "; expires=" + expireDate.toUTCString() + ";"
+            // document.cookie = "refreshToken=" + refresh
+            document.cookie = "grantType=" + grant
+        }
+
+        function saveTokenInSession(data) {
+            sessionStorage.setItem("accessToken", data.accessToken)
+        }
+    </script>
+</html>

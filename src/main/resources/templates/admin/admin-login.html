@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 로그인</title>
+</head>
+<body>
+    <input type="text" name="churchName" />
+    <input type="password" name="password" />
+    <input type="button" value="로그인" onclick="login()">
+</body>
+<script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function login() {
+        let $churchName = $("input[name='churchName']").val()
+        let $password = $("input[name='password']").val()
+
+        $.ajax({
+            url: "/login",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({churchName: $churchName, password: $password}),
+            success: function (data) {
+                saveTokenInCookie(data)
+                saveTokenInSession(data)
+                location.replace("/admin/")
+            },
+            error: function() {
+                alert("비밀번호가 일치하지 않습니다.")
+            }
+        })
+    }
+</script>
+<script>
+    function saveTokenInCookie(data) {
+        const expireDate = new Date()
+        expireDate.setMinutes(expireDate.getMinutes() + 120)
+
+        const refresh = data.refreshToken + "; expires=" + expireDate.toUTCString() + "; httpOnly"
+        const grant = data.grantType + "; expires=" + expireDate.toUTCString() + ";"
+        document.cookie = "refreshToken=" + refresh
+        document.cookie = "grantType=" + grant
+    }
+
+    function saveTokenInSession(data) {
+        sessionStorage.setItem("accessToken", data.accessToken)
+    }
+</script>
+</html>

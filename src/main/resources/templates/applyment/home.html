@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <form th:action="@{/register/register}" method="get" name="form">
+            <input type="text" name="churchName" readonly style="display: none">
+            <select name="eventName">
+                <option th:each="event : ${events}" th:value="${event}" th:utext="${event}"></option>
+            </select>
+            <input type="submit" value="추가 신청">
+        </form>
+        <button name="list" onclick="getList()">조회</button>
+        <button name="logout" onclick="logout()">로그아웃</button>
+        <div name="list">
+            <table>
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </body>
+    <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        let $act
+        let $churchName
+
+        window.onload = function () {
+            $act = sessionStorage.getItem("accessToken")
+            sessionStorage.removeItem("accessToken")
+            getChurchName()
+        }
+
+        window.addEventListener("beforeunload", (event) => {
+            sessionStorage.setItem("accessToken", $act)
+        })
+    </script>
+    <script>
+        function getChurchName() {
+            $.ajax({
+                url: "/register/church",
+                type: "get",
+                headers: {"Authorization": getCookie("grantType") + " " + $act},
+                success: function (churchName) {
+                    $churchName = churchName
+                    document.title = $churchName
+                    $("input[name='churchName']").val($churchName)
+                },
+                error: function () {
+                    alert("권한이 없습니다.")
+                    location.replace("/login")
+                }
+            })
+        }
+
+        function getList() {
+            const $eventName = $("select[name='eventName']").val()
+            const $churchName = $("input[name='churchName']").val()
+
+            $.ajax({
+                url: "/register/applyment",
+                type: "get",
+                headers: {"Authorization": getCookie("grantType") + " " + $act},
+                contentType: "application/json; charset=utf-8",
+                data: {eventName: $eventName, churchName: $churchName},
+                success: function (response) {
+                    showList(response)
+                },
+                error: function (jqXHR) {
+                    if (jqXHR.status == 404) {
+                        alert("신청 내역이 없습니다.")
+                    } else {
+                        alert("문제가 발생했습니다.\n" +
+                            "새로고침 혹은 재로그인 후 다시 시도하세요.\n" +
+                            "그래도 같은 문제가 발생한다면, 관리자에게 연락부탁드립니다.")
+                    }
+                }
+            })
+        }
+
+        function showList(datas) {
+            $(".inserted").remove()
+
+            $("thead").append(
+                "<tr class=\"inserted\">\n" +
+                "                <td>교회</td>\n" +
+                "                <td>종목</td>\n" +
+                "                <td>이름</td>\n" +
+                "                <td>나이</td>\n" +
+                "                <td>학년</td>\n" +
+                "                <td>부서</td>\n" +
+                "                <td>성별</td>\n" +
+                "            </tr>"
+            )
+            for (const count in datas) {
+                const data = datas[count]
+                $("tbody").append(
+                    "<tr class=\"inserted\" name=\"list_" + data.id + "\">\n" +
+                    "                <td><input name=\"churchName\" type=\"text\" value=\"" + data.churchName + "\" readonly /></td>\n" +
+                    "                <td><input name=\"eventName\" type=\"text\" value=\"" + data.eventName + "\" readonly /></td>\n" +
+                    "                <td><input class=\"focus_input change-able\" type=\"text\" name=\"name\" value=\"" + data.name + "\" readonly/></td>\n" +
+                    "                <td><input class=\"change-able\" type=\"number\" name=\"age\" value=\"" + data.age + "\" readonly/></td>\n" +
+                    "                <td>\n" +
+                    "                    <select class=\"change-able\" name=\"grade\" disabled>\n" +
+                    "                        <option value=\"1\">1학년</option>\n" +
+                    "                        <option value=\"2\">2학년</option>\n" +
+                    "                        <option value=\"3\">3학년</option>\n" +
+                    "                        <option value=\"4\">4학년</option>\n" +
+                    "                        <option value=\"5\">5학년</option>\n" +
+                    "                        <option value=\"6\">6학년</option>\n" +
+                    "                    </select>\n" +
+                    "                </td>\n" +
+                    "                <td>\n" +
+                    "                    <select class=\"change-able\" name=\"department\" disabled>\n" +
+                    "                        <option value=\"유치부\">유치부</option>\n" +
+                    "                        <option value=\"유년부\">유년부</option>\n" +
+                    "                        <option value=\"초등부\">초등부</option>\n" +
+                    "                        <option value=\"중등부\">중등부</option>\n" +
+                    "                        <option value=\"고등부\">고등부</option>\n" +
+                    "                    </select>\n" +
+                    "                </td>\n" +
+                    "                <td>\n" +
+                    "                    <select class=\"change-able\" name=\"gender\" disabled>\n" +
+                    "                        <option value=\"male\">남</option>\n" +
+                    "                        <option value=\"female\">여</option>\n" +
+                    "                    </select>\n" +
+                    "                </td>\n" +
+                    "                <td>\n" +
+                    "                    <button name=\"modify\" value=\"list_" + data.id + "\" onclick=\"modifyClick(this.value)\">수정</button>" +
+                    "                    <button name=\"delete\" value=\"" + data.id + "\" onclick=\"deleteParticipant(this.value)\">삭제</button>" +
+                    "                    <button name=\"modify-done\" value=\"" + data.id + "\" onclick=\"modifyDone(this.value)\" style=\"display: none\">수정 완료</button>" +
+                    "                    <button name=\"modify-cancel\" value=\"list_" + data.id + "\" onclick=\"modifyCancel(this.value)\" \" style=\"display: none\">취소</button>" +
+                    "               </td>" +
+                    "            </tr>"
+                )
+                $("select[name='grade']").last().val(data.grade).prop("selected", true)
+                $("select[name='department']").last().val(data.department).prop("selected", true)
+                $("select[name='gender']").last().val(data.gender).prop("selected", true)
+            }
+        }
+
+        function modifyClick(name) {
+            const $tr = $("tr[name=" + name + "]")
+            $tr.find("input.change-able").each(function () {
+                $(this).attr("readonly", false)
+            })
+
+            $tr.find("select.change-able").each(function () {
+                $(this).attr("disabled", false)
+            })
+
+            $tr.find("button[name='modify']").hide()
+            $tr.find("button[name='delete']").hide()
+            $tr.find("button[name='modify-done']").show()
+            $tr.find("button[name='modify-cancel']").show()
+
+            $tr.find(".focus_input").focus()
+        }
+
+        function modifyCancel(name) {
+            const $tr = $("tr[name=" + name + "]")
+            $tr.find("input.change-able").each(function () {
+                $(this).attr("readonly", true)
+            })
+
+            $tr.find("select.change-able").each(function () {
+                $(this).attr("disabled", true)
+            })
+
+            $tr.find("button[name='modify']").show()
+            $tr.find("button[name='delete']").show()
+            $tr.find("button[name='modify-done']").hide()
+            $tr.find("button[name='modify-cancel']").hide()
+        }
+
+        function modifyDone(id) {
+            const $tr = $("tr[name='list_" + id + "']")[0]
+
+            let data = {}
+
+            data["id"] = Number(id)
+
+            for (let i=0; i<7; i++) {
+                let $temp = $tr.cells.item(i).firstElementChild
+                data[$temp.name] = $temp.value
+                console.log($temp.value)
+            }
+
+            $.ajax({
+                url: "/register/applyment",
+                type: "put",
+                headers: {"Authorization": getCookie("grantType") + " " + $act},
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                success: function () {
+                    alert("수정 완료")
+                    location.reload()
+                },
+                error: function (jqXHR) {
+                    if (jqXHR.status == 400) {
+                        alert("수정하려는 신청 정보가 없습니다.\n" +
+                            "새로고침 후에 다시 시도해주세요.")
+                        location.reload();
+                    } else {
+                        alert("문제가 발생했습니다.\n" +
+                            "새로고침 혹은 다시 로그인 후 다시 시도해주세요.\n" +
+                            "그래도 같은 문제가 발생한다면, 관리자에게 연락부탁드립니다.")
+                        location.reload();
+                    }
+                }
+            })
+        }
+
+        function deleteParticipant(id) {
+            const $tr = $("tr[name='list_" + id + "']")
+            if (!confirm($tr.find("input[name='name']").val() + "님의 신청 정보를 정말 삭제 하시겠습니까?")) {
+                return
+            }
+
+            let $eventName = $tr.find("input[name='eventName']").val()
+            $.ajax({
+                url: "/register/applyment",
+                type: "delete",
+                headers: {"Authorization": getCookie("grantType") + " " + $act},
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({eventName: $eventName, participantId: id}),
+                success: function () {
+                    console.log("success")
+                    alert("삭제 완료")
+                    location.reload()
+                },
+                error: function (jqXHR) {
+                    if (jqXHR.status == 400) {
+                        alert("삭제하려는 신청 정보가 없습니다.\n" +
+                            "새로고침 후에 다시 시도해주세요.")
+                        location.reload();
+                    } else {
+                        alert("문제가 발생했습니다.\n" +
+                            "새로고침 혹은 다시 로그인 후 다시 시도해주세요.\n" +
+                            "그래도 같은 문제가 발생한다면, 관리자에게 연락부탁드립니다.")
+                        location.reload();
+                    }
+                }
+            })
+        }
+
+        function getCookie(name) {
+            let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return value? value[2] : null;
+        }
+
+        function logout() {
+            $.ajax({
+                url: "/auth/logout",
+                type: "post",
+                headers: {"Authorization": getCookie("grantType") + " " + $act},
+                success: function () {
+                    // location.href = "/login";
+                    console.log(document.cookie)
+                }
+            })
+        }
+
+        function refresh(func) {
+            $.ajax({
+                url: "/refresh",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data)
+                    console.log(data.accessToken)
+                    $act = data.accessToken
+
+                    func()
+                },
+                error: function () {
+                    alert("권한이 없습니다.")
+                    location.replace("/login")
+                }
+            })
+        }
+    </script>
+</html>

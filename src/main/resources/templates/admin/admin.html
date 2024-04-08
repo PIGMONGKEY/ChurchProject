@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+  <body>
+    <div class="wrap">
+      <label>교회 비밀번호 확인 : </label>
+      <select name="check-church-password">
+        <option th:each="church : ${adminPageParam.getChurches()}" th:value="${church.getName()}" th:utext="${church.getName()}"></option>
+      </select>
+      <button onclick="getChurchPassword()">조회</button>
+      <input type="number" name="check-church-password" readonly/>
+
+      <br>
+
+      <label>교회 추가 : </label>
+      <input name="church" type="text">
+      <button name="church" onclick="add(this.name)">추가</button>
+
+      <br>
+
+      <label>교회 삭제 : </label>
+      <select name="church">
+        <option th:each="church : ${adminPageParam.getChurches()}" th:value="${church.getName()}" th:utext="${church.getName()}"></option>
+      </select>
+      <button name="church" onclick="remove(this.name)">삭제</button>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="wrap">
+      <label>종목 추가 : </label>
+      <input name="event" type="text">
+      <button name="event" onclick="add(this.name)">추가</button>
+
+      <br>
+
+      <label>종목 삭제 : </label>
+      <select name="event">
+        <option th:each="event : ${adminPageParam.getEvents()}" th:value="${event.getName()}" th:utext="${event.getName()}"></option>
+      </select>
+      <button name="event" onclick="remove(this.name)">삭제</button>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="wrap">
+      <label>부서 추가 : </label>
+      <input name="department" type="text">
+      <button name="department" onclick="add(this.name)">추가</button>
+
+    <br>
+
+      <label>부서 삭제 : </label>
+      <select name="department">
+        <option th:each="department : ${adminPageParam.getDepartments()}" th:value="${department.getName()}" th:utext="${department.getName()}"></option>
+      </select>
+      <button name="department" onclick="remove(this.name)">삭제</button>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="wrap">
+      <label>모든 정보 excel로 받기 : </label>
+      <input type="button" value="다운로드" onclick="getAllDataAsExcel()">
+    </div>
+
+    <br>
+    <br>
+
+    <div class="wrap">
+      <label>로그아웃 : </label>
+      <input type="button" value="로그아웃">
+    </div>
+  </body>
+  <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    let $act
+
+    window.onload = function () {
+      $act = sessionStorage.getItem("accessToken")
+      sessionStorage.removeItem("accessToken")
+    }
+
+    window.addEventListener("beforeunload", (event) => {
+      sessionStorage.setItem("accessToken", $act)
+    })
+  </script>
+  <script>
+    function getChurchPassword() {
+      const $churchName = $("select[name='check-church-password']").val()
+      const $passwordShow = $("input[name='check-church-password']")
+
+      $.ajax({
+        url: "/admin/church-password",
+        type: "get",
+        data: {"churchName": $churchName},
+        headers: {"Authorization": getCookie("grantType") + " " + $act},
+        success: function (password) {
+          $passwordShow.val(password)
+        },
+        error: function (jqXHR) {
+          if (jqXHR.status == 404) {
+            alert("교회 정보가 존재하지 않습니다.\n" +
+                    "새로고침 후에 다시 시도해주세요.")
+            location.reload();
+          } else {
+            alert("문제가 발생했습니다.\n" +
+                    "새로고침 혹은 다시 로그인 후 다시 시도해주세요.\n" +
+                    "그래도 같은 문제가 발생한다면, 관리자에게 연락부탁드립니다.")
+            location.reload();
+          }
+        }
+      })
+    }
+
+    function add(name) {
+      const $value = $("input[name=" + name + "]").val()
+      const $data = {}
+      $data[name] = $value
+
+      $.ajax({
+        url: "/admin/" + name,
+        type: "post",
+        data: $data,
+        headers: {"Authorization": getCookie("grantType") + " " + $act},
+        success: function () {
+          alert("추가 성공")
+          location.reload()
+        },
+        error: function (jqXHR) {
+          if (jqXHR.status == 400) {
+            alert("이미 등록되어 있습니다.")
+            location.reload();
+          } else {
+            alert("문제가 발생했습니다.\n" +
+                    "새로고침 혹은 다시 로그인 후 다시 시도해주세요.\n" +
+                    "그래도 같은 문제가 발생한다면, 관리자에게 연락부탁드립니다.")
+            location.reload();
+          }
+        }
+      })
+    }
+
+    function remove(name) {
+      const $value = $("select[name=" + name + "]").val()
+      const $data = {}
+      $data[name] = $value
+
+      if (confirm("정말 " + $value + "의 모든 정보를 삭제할까요? 신청된 참가자 정보도 같이 삭제됩니다.") == false) {
+        return
+      }
+
+      $.ajax({
+        url: "/admin/" + name,
+        type: "DELETE",
+        data: $data,
+        headers: {"Authorization": getCookie("grantType") + " " + $act},
+        success: function () {
+          alert("삭제 성공")
+          location.reload()
+        },
+        error: function () {
+          alert("문제가 발생했습니다.\n" +
+                  "새로고침 혹은 다시 로그인 후 다시 시도해주세요.\n" +
+                  "그래도 같은 문제가 발생한다면, 관리자에게 연락부탁드립니다.")
+          location.reload();
+        }
+      })
+    }
+
+    function getAllDataAsExcel() {
+      $.ajax({
+        url: "/admin/excel",
+        type: "get",
+        headers: {"Authorization": getCookie("grantType") + " " + $act},
+        success: function (link) {
+          let downloadLink = document.createElement("a");
+          downloadLink.href = link;
+
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        },
+        error: function () {
+
+        }
+      })
+    }
+
+    function getCookie(name) {
+      let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      return value? value[2] : null;
+    }
+  </script>
+</html>
