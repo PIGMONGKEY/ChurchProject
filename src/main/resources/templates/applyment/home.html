@@ -265,8 +265,12 @@
                 type: "post",
                 headers: {"Authorization": getCookie("grantType") + " " + $act},
                 success: function () {
-                    // location.href = "/login";
-                    console.log(document.cookie)
+                    location.replace("/login")
+                },
+                error: function (jqXHR) {
+                    if (jqXHR.status == 403) {
+                        refresh(logout)
+                    }
                 }
             })
         }

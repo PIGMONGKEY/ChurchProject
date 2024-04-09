@@ -31,7 +31,6 @@ public class ApplymentServiceImpl implements ApplymentService {
      * @param params List<ParticipantRegisterParam> 형태로 참가자 정보를 받음
      * @return 성공하면 true, 실패하면 false
      */
-//    TODO: 런타임 에러 발생시켜서 롤백 시킬 방법 찾기
     @Override
     @Transactional
     public ResponseEntity<List<ApplymentParam>> saveApplyment(List<ApplymentParam> params) {

@@ -75,7 +75,7 @@
 
     <div class="wrap">
       <label>로그아웃 : </label>
-      <input type="button" value="로그아웃">
+      <input type="button" value="로그아웃" onclick="logout()">
     </div>
   </body>
   <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -213,6 +213,23 @@
       return value? value[2] : null;
     }
 // TODO: 겹치는 함수들 파일 분리
+
+    function logout() {
+      $.ajax({
+        url: "/auth/logout",
+        type: "post",
+        headers: {"Authorization": getCookie("grantType") + " " + $act},
+        success: function () {
+          location.replace("/admin/login")
+        },
+        error: function (jqXHR) {
+          if (jqXHR.status == 403) {
+            refresh(logout)
+          }
+        }
+      })
+    }
+
     function refresh(func, id) {
       $.ajax({
         url: "/refresh",
