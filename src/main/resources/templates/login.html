@@ -2,27 +2,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/login-style.css}">
         <title>노회대회</title>
     </head>
     <body>
-        <div class="base">
-            <div class="center">
-                <div class="church" th:object="${loginParam}">
-                    <p>
-                        <label>교회 선택 : </label>
-                        <select th:field="*{churchName}">
-                            <option th:each="church : ${churches}" th:value="${church}" th:utext="${church}"></option>
-                        </select>
-                    </p>
-                    <p>
-                        <label>비밀번호 : </label>
-                        <input type="password" th:field="*{password}">
-                    </p>
-                    <p>
-                        <input type="button" value="Submit" id="login">
-                    </p>
-                </div>
-            </div>
+        <div class="church" th:object="${loginParam}">
+            <p class="wrapped">
+                <label>교회 선택</label>
+                <select th:field="*{churchName}">
+                    <option th:each="church : ${churches}" th:value="${church}" th:utext="${church}"></option>
+                </select>
+            </p>
+            <p class="wrapped">
+                <label>비밀번호</label>
+                <input type="password" th:field="*{password}">
+            </p>
+            <p class="wrapped">
+                <button type="button" id="login">로그인</button>
+            </p>
         </div>
     </body>
     <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>

@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Stylish&display=swap');
+
+:root {
+    --button-color: #ffffff;
+    --button-bg-color: #bdbdbd;
+    --button-hover-bg-color: #5bc873;
+    --border-color: #c4c4c4;
+    --select--font--color: #525252;
+}
+
+html {
+    font-size: 20px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.church {
+    width: 50%;
+}
+
+.wrapped {
+    width: 100%;
+    position: relative;
+}
+
+.wrapped label {
+    display: inline-block;
+    position: absolute;
+    top: -5px;
+    left: 14px;
+    padding: 10px;
+    background: white;
+    font-size: 14px;
+    color: #888;
+    font-weight: bold;
+}
+
+.wrapped select {
+    width: 100%;
+    border: 1px solid #dddddd !important;
+    font-size: 1rem;
+    color: var(--select--font--color);
+    line-height: 1.45;
+    letter-spacing: -0.04rem;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+}
+
+.wrapped input {
+    width: 100%;
+    border: 1px solid #dddddd !important;
+    font-size: 1rem;
+    line-height: 1.45;
+    letter-spacing: -0.04rem;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+    box-sizing: border-box;
+}
+
+.wrapped button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    background: var(--button-bg-color);
+    color: var(--button-color);
+
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1rem;
+    text-align: center;
+
+    line-height: 1.45;
+    letter-spacing: -0.04rem;
+
+    padding: 16px;
+    margin-top: 12px;
+}
+
+.wrapped button:hover {
+    background: var(--button-hover-bg-color);
+}
