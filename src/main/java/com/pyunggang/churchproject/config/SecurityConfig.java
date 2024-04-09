@@ -32,7 +32,7 @@ public class SecurityConfig {
                     // 교회 홈 접근
                     authorizeRequest.requestMatchers("/register/home").permitAll();
                     // 교회 참가자 신청 접근
-                    authorizeRequest.requestMatchers("/register/register").permitAll();
+                    authorizeRequest.requestMatchers(HttpMethod.GET, "/register/register").permitAll();
                     // 로그인 페이지 접근
                     authorizeRequest.requestMatchers("/login").permitAll();
                     // 관리자 로그인 페이지 접근
@@ -41,6 +41,8 @@ public class SecurityConfig {
                     authorizeRequest.requestMatchers("/admin/").permitAll();
                     // 엑셀 다운로드 링크 접근
                     authorizeRequest.requestMatchers("/admin/excel-download").permitAll();
+                    // refresh
+                    authorizeRequest.requestMatchers("/refresh").permitAll();
                     // 나머지 모두 인증 필요
                     authorizeRequest.anyRequest().authenticated();
                 })

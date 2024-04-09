@@ -47,9 +47,13 @@
                     document.title = $churchName
                     $("input[name='churchName']").val($churchName)
                 },
-                error: function () {
-                    alert("권한이 없습니다.")
-                    location.replace("/login")
+                error: function (jqXHR) {
+                    if (jqXHR.status == 403) {
+                        refresh(getChurchName)
+                    } else {
+                        alert("권한이 없습니다.")
+                        location.replace("/login")
+                    }
                 }
             })
         }
@@ -70,6 +74,8 @@
                 error: function (jqXHR) {
                     if (jqXHR.status == 404) {
                         alert("신청 내역이 없습니다.")
+                    } else if (jqXHR.status == 403) {
+                        refresh(getList)
                     } else {
                         alert("문제가 발생했습니다.\n" +
                             "새로고침 혹은 재로그인 후 다시 시도하세요.\n" +
@@ -184,7 +190,6 @@
             for (let i=0; i<7; i++) {
                 let $temp = $tr.cells.item(i).firstElementChild
                 data[$temp.name] = $temp.value
-                console.log($temp.value)
             }
 
             $.ajax({
@@ -202,6 +207,8 @@
                         alert("수정하려는 신청 정보가 없습니다.\n" +
                             "새로고침 후에 다시 시도해주세요.")
                         location.reload();
+                    } else if (jqXHR.status == 403) {
+                        refresh(modifyDone, id)
                     } else {
                         alert("문제가 발생했습니다.\n" +
                             "새로고침 혹은 다시 로그인 후 다시 시도해주세요.\n" +
@@ -228,13 +235,15 @@
                 success: function () {
                     console.log("success")
                     alert("삭제 완료")
-                    location.reload()
+                    getList()
                 },
                 error: function (jqXHR) {
                     if (jqXHR.status == 400) {
                         alert("삭제하려는 신청 정보가 없습니다.\n" +
                             "새로고침 후에 다시 시도해주세요.")
                         location.reload();
+                    } else if (jqXHR.status == 403) {
+                        refresh(deleteParticipant, id)
                     } else {
                         alert("문제가 발생했습니다.\n" +
                             "새로고침 혹은 다시 로그인 후 다시 시도해주세요.\n" +
@@ -262,17 +271,19 @@
             })
         }
 
-        function refresh(func) {
+        function refresh(func, id) {
             $.ajax({
                 url: "/refresh",
                 type: "post",
                 dataType: "json",
                 success: function (data) {
-                    console.log(data)
-                    console.log(data.accessToken)
                     $act = data.accessToken
 
-                    func()
+                    if (id == undefined) {
+                        func()
+                    } else {
+                        func(id)
+                    }
                 },
                 error: function () {
                     alert("권한이 없습니다.")

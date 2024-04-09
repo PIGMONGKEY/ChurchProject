@@ -48,12 +48,21 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<TokenInfoParam> refresh(String refreshToken) {
+    public ResponseEntity<TokenInfoParam> refresh(String refreshToken, HttpServletResponse response) {
         TokenInfoParam tokenInfoParam = null;
         HttpStatus status = HttpStatus.OK;
+        Cookie cookie;
 
-        if (refreshToken != null && jwtTokenProvider.validateToken(refreshToken)) {
+        if (refreshToken != null && jwtTokenProvider.validateToken(refreshToken) && redisTemplate.opsForValue().get(refreshToken) == null) {
             tokenInfoParam = jwtTokenProvider.generateToken(jwtTokenProvider.getAuthentication(refreshToken));
+
+            cookie = new Cookie("refreshToken", tokenInfoParam.getRefreshToken());
+            cookie.setMaxAge(3*60*60);
+            cookie.setHttpOnly(true);
+
+            response.addCookie(cookie);
+
+            tokenInfoParam.setRefreshToken("");
         } else {
             status = HttpStatus.UNAUTHORIZED;
         }

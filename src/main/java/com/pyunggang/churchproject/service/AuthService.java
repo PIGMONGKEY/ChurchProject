@@ -10,5 +10,5 @@ public interface AuthService {
 
     public void logout(String token);
 
-    public ResponseEntity<TokenInfoParam> refresh(String refreshToken);
+    public ResponseEntity<TokenInfoParam> refresh(String refreshToken, HttpServletResponse response);
 }
