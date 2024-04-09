@@ -94,7 +94,6 @@ public class AdminController {
         return departmentService.deleteDepartment(departmentName);
     }
 
-    // TODO: 엑셀 api 하나로 합치기
     // 엑셀 다운로드 링크 반환 API
     @GetMapping("/excel")
     @ResponseBody
