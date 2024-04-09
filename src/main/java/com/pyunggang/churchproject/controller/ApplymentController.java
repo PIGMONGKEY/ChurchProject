@@ -97,7 +97,6 @@ public class ApplymentController {
      * @param applymentParam
      * @return
      */
-    // TODO: 수정하여 다른 참가자와 정보가 모두 같고 ID만 다른 상태가 되는 현상 해결 필요
     @PutMapping("/applyment")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -105,6 +104,5 @@ public class ApplymentController {
         return applymentService.updateApplyment(applymentParam);
     }
 
-    // TODO: 회원 로그아웃 구현
     // TODO: 신청 내역 엑셀 파일로 다운받기 구현
 }

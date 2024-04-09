@@ -109,7 +109,7 @@ public class ApplymentServiceImpl implements ApplymentService {
         List<ApplymentParam> params = new LinkedList<>();
         List<Applyment> applyments = applyRepo.findAllByEventNameAndParticipantChurchName(eventName, churchName);
 
-        if (applyments == null)
+        if (applyments.isEmpty())
             status = HttpStatus.NOT_FOUND;
         else {
             for (Applyment applyment : applyments) {
@@ -124,9 +124,17 @@ public class ApplymentServiceImpl implements ApplymentService {
     @Transactional
     public ResponseEntity updateApplyment(ApplymentParam applymentParam) {
         HttpStatus status = HttpStatus.CREATED;
-        Participant participant = partiRepo.findById(applymentParam.getId()).orElseGet(null);
+        Participant participant = partiRepo.findById(applymentParam.getId()).get();
+        Participant newParticipant = Participant.builder()
+                .name(applymentParam.getName())
+                .age(applymentParam.getAge())
+                .gender(applymentParam.getGender())
+                .grade(applymentParam.getGrade())
+                .department(departRepo.findDepartmentByNameIs(applymentParam.getDepartment()))
+                .church(churchRepo.findById(applymentParam.getChurchName()).get())
+                .build();
 
-        if (participant == null)
+        if (participant == null || partiRepo.findParticipantByParticipant(newParticipant).getParticipantId() != applymentParam.getId())
             status = HttpStatus.BAD_REQUEST;
         else {
             participant.setAge(applymentParam.getAge());

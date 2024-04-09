@@ -204,8 +204,8 @@
                 },
                 error: function (jqXHR) {
                     if (jqXHR.status == 400) {
-                        alert("수정하려는 신청 정보가 없습니다.\n" +
-                            "새로고침 후에 다시 시도해주세요.")
+                        alert("수정하려는 신청 정보가 없거나, 중복되는 참가자가 있습니다.\n" +
+                            "새로고침 후에 다시 시도할 때에도 같은 문제가 발생한다면, 중복되는 참가자가 있는것이므로, 홍길동A/홍길동B 와 같이 구분하거나, 삭제 후 다시 신청하세요")
                         location.reload();
                     } else if (jqXHR.status == 403) {
                         refresh(modifyDone, id)

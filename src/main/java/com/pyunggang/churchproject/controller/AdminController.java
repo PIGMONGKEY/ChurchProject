@@ -108,6 +108,4 @@ public class AdminController {
     public void download(HttpServletResponse response) throws IOException {
         adminService.getAllInfoAsExcel(response);
     }
-
-    // TODO: 로그아웃 구현
 }
