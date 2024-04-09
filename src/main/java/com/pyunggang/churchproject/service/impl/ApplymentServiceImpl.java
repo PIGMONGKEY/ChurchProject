@@ -134,7 +134,9 @@ public class ApplymentServiceImpl implements ApplymentService {
                 .church(churchRepo.findById(applymentParam.getChurchName()).get())
                 .build();
 
-        if (participant == null || partiRepo.findParticipantByParticipant(newParticipant).getParticipantId() != applymentParam.getId())
+        newParticipant = partiRepo.findParticipantByParticipant(newParticipant);
+
+        if (participant == null || (newParticipant != null && newParticipant.getParticipantId() != applymentParam.getId()))
             status = HttpStatus.BAD_REQUEST;
         else {
             participant.setAge(applymentParam.getAge());

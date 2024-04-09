@@ -118,4 +118,83 @@ public class TotalTests {
         });
         latch.await();
     }
+
+    @Test
+    public void updateDeadLockTest() throws InterruptedException{
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        CountDownLatch latch = new CountDownLatch(5);
+
+        ApplymentParam applymentParam1 = ApplymentParam.builder()
+                .id(1)
+                .name("1")
+                .gender("male")
+                .grade(1)
+                .age(2)
+                .department("유년부")
+                .eventName("글짓기")
+                .churchName("평강교회")
+                .build();
+        ApplymentParam applymentParam2 = ApplymentParam.builder()
+                .id(2)
+                .name("1")
+                .gender("male")
+                .grade(1)
+                .age(2)
+                .department("유년부")
+                .eventName("글짓기")
+                .churchName("성현교회")
+                .build();
+        ApplymentParam applymentParam3 = ApplymentParam.builder()
+                .id(3)
+                .name("1")
+                .gender("male")
+                .grade(1)
+                .age(2)
+                .department("유년부")
+                .eventName("글짓기")
+                .churchName("동도교회")
+                .build();
+        ApplymentParam applymentParam4 = ApplymentParam.builder()
+                .id(4)
+                .name("1")
+                .gender("male")
+                .grade(1)
+                .age(2)
+                .department("유년부")
+                .eventName("글짓기")
+                .churchName("은석교회")
+                .build();
+        ApplymentParam applymentParam5 = ApplymentParam.builder()
+                .id(5)
+                .name("1")
+                .gender("male")
+                .grade(1)
+                .age(2)
+                .department("유년부")
+                .eventName("글짓기")
+                .churchName("가산제일교회")
+                .build();
+
+        executorService.execute(() -> {
+            applymentService.updateApplyment(applymentParam1);
+            latch.countDown();
+        });
+        executorService.execute(() -> {
+            applymentService.updateApplyment(applymentParam2);
+            latch.countDown();
+        });
+        executorService.execute(() -> {
+            applymentService.updateApplyment(applymentParam3);
+            latch.countDown();
+        });
+        executorService.execute(() -> {
+            applymentService.updateApplyment(applymentParam4);
+            latch.countDown();
+        });
+        executorService.execute(() -> {
+            applymentService.updateApplyment(applymentParam5);
+            latch.countDown();
+        });
+        latch.await();
+    }
 }
