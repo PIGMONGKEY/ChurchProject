@@ -1,80 +1,80 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin-style.css}">
+    <title>Document</title>
+  </head>
   <body>
-    <div class="wrap">
-      <label>교회 비밀번호 확인 : </label>
-      <select name="check-church-password">
-        <option th:each="church : ${adminPageParam.getChurches()}" th:value="${church.getName()}" th:utext="${church.getName()}"></option>
-      </select>
-      <button onclick="getChurchPassword()">조회</button>
-      <input type="number" name="check-church-password" readonly/>
-
-      <br>
-
-      <label>교회 추가 : </label>
-      <input name="church" type="text">
-      <button name="church" onclick="add(this.name)">추가</button>
-
-      <br>
-
-      <label>교회 삭제 : </label>
-      <select name="church">
-        <option th:each="church : ${adminPageParam.getChurches()}" th:value="${church.getName()}" th:utext="${church.getName()}"></option>
-      </select>
-      <button name="church" onclick="remove(this.name)">삭제</button>
+    <div class="password wrapper">
+      <div class="add">
+        <h4>교회 비밀번호 확인</h4>
+        <select name="check-church-password">
+          <option th:each="church : ${adminPageParam.getChurches()}" th:value="${church.getName()}" th:utext="${church.getName()}"></option>
+        </select>
+        <button onclick="getChurchPassword()">조회</button>
+      </div>
+      <div class="remove">
+        <h4>비밀번호</h4>
+        <input type="number" name="check-church-password" readonly/>
+      </div>
     </div>
 
-    <br>
-    <br>
+    <div class="church wrapper">
+      <div class="add">
+        <h4>교회 추가</h4>
+        <input name="church" type="text">
+        <button name="church" onclick="add(this.name)">추가</button>
+      </div>
 
-    <div class="wrap">
-      <label>종목 추가 : </label>
-      <input name="event" type="text">
-      <button name="event" onclick="add(this.name)">추가</button>
-
-      <br>
-
-      <label>종목 삭제 : </label>
-      <select name="event">
-        <option th:each="event : ${adminPageParam.getEvents()}" th:value="${event.getName()}" th:utext="${event.getName()}"></option>
-      </select>
-      <button name="event" onclick="remove(this.name)">삭제</button>
+      <div class="remove">
+        <h4>교회 삭제</h4>
+        <select name="church">
+          <option th:each="church : ${adminPageParam.getChurches()}" th:value="${church.getName()}" th:utext="${church.getName()}"></option>
+        </select>
+        <button name="church" onclick="remove(this.name)">삭제</button>
+      </div>
     </div>
 
-    <br>
-    <br>
+    <div class="event wrapper">
+      <div class="add">
+        <h4>종목 추가</h4>
+        <input name="event" type="text">
+        <button name="event" onclick="add(this.name)">추가</button>
+      </div>
 
-    <div class="wrap">
-      <label>부서 추가 : </label>
-      <input name="department" type="text">
-      <button name="department" onclick="add(this.name)">추가</button>
-
-    <br>
-
-      <label>부서 삭제 : </label>
-      <select name="department">
-        <option th:each="department : ${adminPageParam.getDepartments()}" th:value="${department.getName()}" th:utext="${department.getName()}"></option>
-      </select>
-      <button name="department" onclick="remove(this.name)">삭제</button>
+      <div class="remove">
+        <h4>종목 삭제</h4>
+        <select name="event">
+          <option th:each="event : ${adminPageParam.getEvents()}" th:value="${event.getName()}" th:utext="${event.getName()}"></option>
+        </select>
+        <button name="event" onclick="remove(this.name)">삭제</button>
+      </div>
     </div>
 
-    <br>
-    <br>
+    <div class="department wrapper">
+      <div class="add">
+        <h4>부서 추가</h4>
+        <input name="department" type="text">
+        <button name="department" onclick="add(this.name)">추가</button>
+      </div>
 
-    <div class="wrap">
-      <label>모든 정보 excel로 받기 : </label>
+      <div class="remove">
+        <h4>부서 삭제</h4>
+        <select name="department">
+          <option th:each="department : ${adminPageParam.getDepartments()}" th:value="${department.getName()}" th:utext="${department.getName()}"></option>
+        </select>
+        <button name="department" onclick="remove(this.name)">삭제</button>
+      </div>
+    </div>
+
+    <div class="excel wrapper">
+      <h4>모든 정보 excel로 받기</h4>
       <input type="button" value="다운로드" onclick="getAllDataAsExcel()">
     </div>
 
-    <br>
-    <br>
-
-    <div class="wrap">
-      <label>로그아웃 : </label>
+    <div class="logout wrapper">
+      <h4>로그아웃</h4>
       <input type="button" value="로그아웃" onclick="logout()">
     </div>
   </body>
