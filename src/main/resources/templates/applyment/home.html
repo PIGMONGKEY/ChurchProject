@@ -2,19 +2,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
         <title></title>
     </head>
     <body>
-        <form th:action="@{/register/register}" method="get" name="form">
-            <input type="text" name="churchName" readonly style="display: none">
-            <select name="eventName">
-                <option th:each="event : ${events}" th:value="${event}" th:utext="${event}"></option>
-            </select>
-            <input type="submit" value="추가 신청">
-        </form>
-        <button name="list" onclick="getList()">조회</button>
-        <button name="logout" onclick="logout()">로그아웃</button>
-        <div name="list">
+        <h1></h1>
+        <div class="first-line-wrapper">
+            <div class="first-line">
+                <form th:action="@{/register/register}" method="get" name="form">
+                    <input type="text" name="churchName" readonly style="display: none">
+                    <select name="eventName" onchange="getList()">
+                        <option th:each="event : ${events}" th:value="${event}" th:utext="${event}"></option>
+                    </select>
+                    <input type="submit" value="추가 신청">
+                </form>
+                <button name="logout" onclick="logout()">로그아웃</button>
+            </div>
+        </div>
+        <div name="list" class="list">
             <table>
                 <thead></thead>
                 <tbody></tbody>
@@ -30,6 +35,7 @@
             $act = sessionStorage.getItem("accessToken")
             sessionStorage.removeItem("accessToken")
             getChurchName()
+            getList()
         }
 
         window.addEventListener("beforeunload", (event) => {
@@ -46,6 +52,7 @@
                     $churchName = churchName
                     document.title = $churchName
                     $("input[name='churchName']").val($churchName)
+                    $("h1").text($churchName + " 참가자 신청 목록")
                 },
                 error: function (jqXHR) {
                     if (jqXHR.status == 403) {
@@ -74,6 +81,7 @@
                 error: function (jqXHR) {
                     if (jqXHR.status == 404) {
                         alert("신청 내역이 없습니다.")
+                        $(".inserted").remove()
                     } else if (jqXHR.status == 403) {
                         refresh(getList)
                     } else {
@@ -97,6 +105,8 @@
                 "                <td>학년</td>\n" +
                 "                <td>부서</td>\n" +
                 "                <td>성별</td>\n" +
+                "                <td></td>\n" +
+                "                <td></td>\n" +
                 "            </tr>"
             )
             for (const count in datas) {
@@ -200,13 +210,13 @@
                 data: JSON.stringify(data),
                 success: function () {
                     alert("수정 완료")
-                    location.reload()
+                    getList()
                 },
                 error: function (jqXHR) {
                     if (jqXHR.status == 400) {
                         alert("수정하려는 신청 정보가 없거나, 중복되는 참가자가 있습니다.\n" +
                             "새로고침 후에 다시 시도할 때에도 같은 문제가 발생한다면, 중복되는 참가자가 있는것이므로, 홍길동A/홍길동B 와 같이 구분하거나, 삭제 후 다시 신청하세요")
-                        location.reload();
+                        getList()
                     } else if (jqXHR.status == 403) {
                         refresh(modifyDone, id)
                     } else {
@@ -241,7 +251,7 @@
                     if (jqXHR.status == 400) {
                         alert("삭제하려는 신청 정보가 없습니다.\n" +
                             "새로고침 후에 다시 시도해주세요.")
-                        location.reload();
+                        getList()
                     } else if (jqXHR.status == 403) {
                         refresh(deleteParticipant, id)
                     } else {

@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+:root {
+    --thead-background-color: #a9a7a7;
+    --insert-select-border-color: #c7c7c7;
+    --modify-button-hover-color: #90cdff;
+    --modify-done-button-hover-color: #6ae785;
+    --modify-cancel-button-hover-color: #e79a6a;
+    --delete-button-hover-color: #ff9090;
+    /* --tr-hover-color: #e0f7ff; */
+    --tr-hover-color: #f0f0f0;
+    --firstline-bottom-border-color: #a9a7a7;
+    --border-color: #c4c4c4;
+    --read-only-text-color: #686868;
+}
+
+body {
+    font-size: 16px;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+}
+
+.first-line-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.first-line {
+    display: flex;
+    justify-content: space-between;
+
+    width: 900px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.first-line select,
+.first-line input,
+.first-line button {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.first-line input:hover {
+    background: var(--modify-button-hover-color);
+    color: #ffffff;
+    border: none;
+}
+
+.first-line button:hover {
+    background-color: var(--delete-button-hover-color);
+    color: #ffffff;
+    border: none;
+}
+
+.list {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    border-spacing: 0px;
+    width: 900px;
+}
+
+table tr:first-child {
+    border-left: 1px solid var(--thead-background-color);
+}
+
+table tr:last-child {
+    border-left: 1px solid var(--thead-background-color);
+}
+
+thead {
+    text-align: center;
+}
+
+thead td {
+    line-height: 3rem;
+    border-bottom: 1px solid var(--thead-background-color);
+}
+
+tbody td {
+    border-top: 1rem solid white;
+}
+
+tbody input,
+tbody select {
+    margin: 0.5rem;
+    padding: 0.5rem;
+
+    background-color: #ffffff;
+
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom: 1px solid var(--insert-select-border-color);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+
+    text-align: center;
+}
+
+tbody input {
+    width: 6rem;
+}
+
+tbody button {
+    padding: 0.5rem;
+
+    border-radius: 0.5rem;
+    border: 1px solid var(--insert-select-border-color);
+}
+
+tbody tr:hover {
+    background: var(--tr-hover-color);
+}
+
+td input[type="text"]:read-only,
+td input[type="number"]:read-only,
+td select:disabled {
+    color: var(--read-only-text-color);
+}
+
+button[name="modify"]:hover {
+    background: var(--modify-button-hover-color);
+    color: #ffffff;
+    border: none;
+}
+
+button[name="modify-done"]:hover {
+    background: var(--modify-done-button-hover-color);
+    color: #ffffff;
+    border: none;
+}
+
+button[name="modify-cancel"]:hover {
+    background: var(--modify-cancel-button-hover-color);
+    color: #ffffff;
+    border: none;
+}
+
+button[name="delete"] {
+    margin-right: 0.5rem;
+}
+
+button[name="delete"]:hover {
+    background-color: var(--delete-button-hover-color);
+    color: #ffffff;
+    border: none;
+}

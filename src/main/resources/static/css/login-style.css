@@ -1,24 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Stylish&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
 
 :root {
     --button-color: #ffffff;
     --button-bg-color: #bdbdbd;
-    --button-hover-bg-color: #5bc873;
+    --button-hover-bg-color: #6ae785;
     --border-color: #c4c4c4;
     --select--font--color: #525252;
+    --item-width: 20rem;
 }
 
 html {
-    font-size: 20px;
-}
+    height: 100%;
 
-body {
+    font-size: 16pt;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
-.church {
-    width: 50%;
+.login {
+    width: var(--item-width);
 }
 
 .wrapped {
@@ -26,43 +27,42 @@ body {
     position: relative;
 }
 
-.wrapped label {
+label {
     display: inline-block;
     position: absolute;
     top: -5px;
     left: 14px;
     padding: 10px;
     background: white;
-    font-size: 14px;
+    font-size: 0.8rem;
     color: #888;
     font-weight: bold;
 }
 
-.wrapped select {
+select {
     width: 100%;
     border: 1px solid #dddddd !important;
     font-size: 1rem;
-    color: var(--select--font--color);
     line-height: 1.45;
     letter-spacing: -0.04rem;
     border-radius: 8px;
-    padding: 16px;
-    margin-top: 12px;
+    padding: 0.9rem;
+    margin-top: 0.6rem;
 }
 
-.wrapped input {
+input {
     width: 100%;
     border: 1px solid #dddddd !important;
     font-size: 1rem;
     line-height: 1.45;
     letter-spacing: -0.04rem;
     border-radius: 8px;
-    padding: 16px;
-    margin-top: 12px;
+    padding: 0.9rem;
+    margin-top: 0.6rem;
     box-sizing: border-box;
 }
 
-.wrapped button {
+button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -72,17 +72,16 @@ body {
 
     width: 100%;
     border: none;
-    border-radius: 8px;
+    border-radius: 0.5rem;
 
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 1rem;
     text-align: center;
 
-    line-height: 1.45;
     letter-spacing: -0.04rem;
 
-    padding: 16px;
-    margin-top: 12px;
+    padding: 0.9rem;
+    margin-top: 0.6rem;
 }
 
 .wrapped button:hover {
