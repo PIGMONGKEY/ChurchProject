@@ -35,7 +35,6 @@
             $act = sessionStorage.getItem("accessToken")
             sessionStorage.removeItem("accessToken")
             getChurchName()
-            getList()
         }
 
         window.addEventListener("beforeunload", (event) => {
@@ -53,6 +52,7 @@
                     document.title = $churchName
                     $("input[name='churchName']").val($churchName)
                     $("h1").text($churchName + " 참가자 신청 목록")
+                    getList()
                 },
                 error: function (jqXHR) {
                     if (jqXHR.status == 403) {

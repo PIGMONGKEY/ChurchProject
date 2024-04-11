@@ -1,0 +1,155 @@
+:root {
+    --dividing-border-color: #a9a7a7;
+    --insert-select-border-color: #c7c7c7;
+    --more-button-hover-color: #90cdff;
+    --register-button-hover-color: #6ae785;
+    --home-button-hover-color: #e79a6a;
+    --reset-button-hover-color: #ff9090;
+    --firstline-bottom-border-color: #a9a7a7;
+    --button-border-color: #c4c4c4;
+    --input-focus-bottom-border-color: #31bb41;
+}
+
+body {
+    font-size: 16px;
+}
+
+.first-line-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.first-line {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    width: 800px;
+
+    border-bottom: 1px solid var(--dividing-border-color);
+
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    text-align: right;
+}
+
+input[type="submit"] {
+    width: 6rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--button-border-color);
+}
+
+input[type="submit"]:hover {
+    background-color: var(--home-button-hover-color);
+    border: 1px solid #ffffff;
+    color: #ffffff;
+}
+
+.list-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.list {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 800px;
+}
+
+.list p {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    border-spacing: 0px;
+}
+
+thead {
+    text-align: center;
+}
+
+thead td {
+    line-height: 3rem;
+    border-bottom: 1px solid var(--dividing-border-color);
+}
+
+tbody td {
+    border-top: 1rem solid white;
+}
+
+tbody input,
+tbody select {
+    margin: 0.5rem;
+    padding: 0.5rem;
+
+    background-color: #ffffff;
+
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom: 1px solid var(--insert-select-border-color);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+
+    text-align: center;
+}
+
+tbody input:focus,
+tbody select:focus {
+    outline: none;
+    border-bottom: 1px solid var(--input-focus-bottom-border-color);
+}
+
+tbody input {
+    width: 6rem;
+}
+
+.more-button-wrapper {
+    margin-top: 1rem;
+    border-top: 1px solid var(--dividing-border-color);
+}
+
+input[name="more"] {
+    padding: 0.5rem;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--button-border-color);
+
+    width: 8rem;
+}
+
+input[name="more"]:hover {
+    background-color: var(--more-button-hover-color);
+    border: 1px solid #ffffff;
+    color: #ffffff;
+}
+
+p input {
+    width: 5rem;
+    padding: 0.5rem;
+    margin: 3px;
+    border-radius: 0.5rem;
+    border: 1px solid var(--button-border-color);
+}
+
+input[name="submit"]:hover {
+    background-color: var(--register-button-hover-color);
+    border: 1px solid #ffffff;
+    color: #ffffff;
+}
+
+input[type="reset"]:hover {
+    background-color: var(--reset-button-hover-color);
+    border: 1px solid #ffffff;
+    color: #ffffff;
+}

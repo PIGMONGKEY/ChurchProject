@@ -2,66 +2,76 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/register-style.css}">
     <title>참가자 등록</title>
 </head>
 <body>
-    <form th:action="@{/register/home}" method="get" name="home-form">
-        <input type="hidden" name="churchName" th:value="${church}">
-        <input type="submit" value="메인 화면">
-    </form>
-    <table>
-        <thead>
-            <tr>
-                <td>교회</td>
-                <td>종목</td>
-                <td>이름</td>
-                <td>나이</td>
-                <td>학년</td>
-                <td>부서</td>
-                <td>성별</td>
-            </tr>
-        </thead>
-        <tbody id="participant_table_body">
-            <tr>
-                <td><input type="text" th:value="${church}" readonly /></td>
-                <td><input type="text" th:value="${event}" readonly /></td>
-                <td><input class="input focus_input" type="text" name="name" /></td>
-                <td><input class="input" type="number" name="age"/></td>
-                <td>
-                    <select name="grade">
-                        <option value="1">1학년</option>
-                        <option value="2">2학년</option>
-                        <option value="3">3학년</option>
-                        <option value="4">4학년</option>
-                        <option value="5">5학년</option>
-                        <option value="6">6학년</option>
-                    </select>
-                </td>
-                <td>
-                    <select name="department">
-                        <option value="유치부">유치부</option>
-                        <option value="유년부">유년부</option>
-                        <option value="초등부">초등부</option>
-                        <option value="중등부">중등부</option>
-                        <option value="고등부">고등부</option>
-                    </select>
-                </td>
-                <td>
-                    <select name="gender">
-                        <option value="male">남</option>
-                        <option value="female">여</option>
-                    </select>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <input type="button" name="more" value="더 입력하기..." onclick="newLine()" />
-
-    <p>
-        <input type="button" value="등록" name="submit" onclick="requestSave()"/>
-        <input type="reset" value="초기화" onclick="reset()" />
-    </p>
+    <h1 th:utext="${church} + ' 참가자 신청'"></h1>
+    <div class="first-line-wrapper">
+        <div class="first-line">
+            <form th:action="@{/register/home}" method="get" name="home-form">
+                <input type="hidden" name="churchName" th:value="${church}">
+                <input type="submit" value="메인 화면">
+            </form>
+        </div>
+    </div>
+    <div class="list-wrapper">
+        <div class="list">
+            <table>
+                <thead>
+                    <tr>
+                        <td>교회</td>
+                        <td>종목</td>
+                        <td>이름</td>
+                        <td>나이</td>
+                        <td>학년</td>
+                        <td>부서</td>
+                        <td>성별</td>
+                    </tr>
+                </thead>
+                <tbody id="participant_table_body">
+                    <tr>
+                        <td><input type="text" th:value="${church}" readonly /></td>
+                        <td><input type="text" th:value="${event}" readonly /></td>
+                        <td><input class="input focus_input" type="text" name="name" /></td>
+                        <td><input class="input" type="number" name="age"/></td>
+                        <td>
+                            <select name="grade">
+                                <option value="1">1학년</option>
+                                <option value="2">2학년</option>
+                                <option value="3">3학년</option>
+                                <option value="4">4학년</option>
+                                <option value="5">5학년</option>
+                                <option value="6">6학년</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="department">
+                                <option value="유치부">유치부</option>
+                                <option value="유년부">유년부</option>
+                                <option value="초등부">초등부</option>
+                                <option value="중등부">중등부</option>
+                                <option value="고등부">고등부</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="gender">
+                                <option value="male">남</option>
+                                <option value="female">여</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="more-button-wrapper">
+                <input type="button" name="more" value="더 입력하기..." onclick="newLine()" />
+            </div>
+            <p>
+                <input type="button" value="등록" name="submit" onclick="requestSave()"/>
+                <input type="reset" value="초기화" onclick="reset()" />
+            </p>
+        </div>
+    </div>
 </body>
 <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script th:inline="javascript">

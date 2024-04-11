@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
 
 :root {
-    --thead-background-color: #a9a7a7;
+    --dividing-border-color: #a9a7a7;
     --insert-select-border-color: #c7c7c7;
     --modify-button-hover-color: #90cdff;
     --modify-done-button-hover-color: #6ae785;
     --modify-cancel-button-hover-color: #e79a6a;
     --delete-button-hover-color: #ff9090;
-    /* --tr-hover-color: #e0f7ff; */
     --tr-hover-color: #f0f0f0;
     --firstline-bottom-border-color: #a9a7a7;
-    --border-color: #c4c4c4;
+    --button-border-color: #c4c4c4;
     --read-only-text-color: #686868;
+    --input-focus-bottom-border-color: #31bb41;
 }
 
 body {
@@ -34,7 +34,7 @@ h1 {
 
     width: 900px;
 
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--dividing-border-color);
 
     padding-bottom: 1rem;
     margin-bottom: 1rem;
@@ -45,19 +45,19 @@ h1 {
 .first-line button {
     padding: 0.5rem;
     border-radius: 0.5rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--button-border-color);
 }
 
 .first-line input:hover {
     background: var(--modify-button-hover-color);
     color: #ffffff;
-    border: none;
+    border: 1px solid #ffffff;
 }
 
 .first-line button:hover {
     background-color: var(--delete-button-hover-color);
     color: #ffffff;
-    border: none;
+    border: 1px solid #ffffff;
 }
 
 .list {
@@ -70,21 +70,13 @@ table {
     width: 900px;
 }
 
-table tr:first-child {
-    border-left: 1px solid var(--thead-background-color);
-}
-
-table tr:last-child {
-    border-left: 1px solid var(--thead-background-color);
-}
-
 thead {
     text-align: center;
 }
 
 thead td {
     line-height: 3rem;
-    border-bottom: 1px solid var(--thead-background-color);
+    border-bottom: 1px solid var(--dividing-border-color);
 }
 
 tbody td {
@@ -106,6 +98,12 @@ tbody select {
     border-right: none;
 
     text-align: center;
+}
+
+tbody input:focus,
+tbody select:focus {
+    outline: none;
+    border-bottom: 1px solid var(--input-focus-bottom-border-color);
 }
 
 tbody input {
@@ -132,19 +130,19 @@ td select:disabled {
 button[name="modify"]:hover {
     background: var(--modify-button-hover-color);
     color: #ffffff;
-    border: none;
+    border: 1px solid #ffffff;
 }
 
 button[name="modify-done"]:hover {
     background: var(--modify-done-button-hover-color);
     color: #ffffff;
-    border: none;
+    border: 1px solid #ffffff;
 }
 
 button[name="modify-cancel"]:hover {
     background: var(--modify-cancel-button-hover-color);
     color: #ffffff;
-    border: none;
+    border: 1px solid #ffffff;
 }
 
 button[name="delete"] {
@@ -154,5 +152,5 @@ button[name="delete"] {
 button[name="delete"]:hover {
     background-color: var(--delete-button-hover-color);
     color: #ffffff;
-    border: none;
+    border: 1px solid #ffffff;
 }

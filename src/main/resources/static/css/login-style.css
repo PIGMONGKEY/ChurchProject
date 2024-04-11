@@ -4,7 +4,7 @@
     --button-color: #ffffff;
     --button-bg-color: #bdbdbd;
     --button-hover-bg-color: #6ae785;
-    --border-color: #c4c4c4;
+    --button-border-color: #c4c4c4;
     --select--font--color: #525252;
     --item-width: 20rem;
 }
@@ -84,6 +84,9 @@ button {
     margin-top: 0.6rem;
 }
 
-.wrapped button:hover {
+.wrapped button:hover,
+.wrapped button:focus{
     background: var(--button-hover-bg-color);
+
+    outline: none;
 }
