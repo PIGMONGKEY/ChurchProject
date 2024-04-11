@@ -20,6 +20,7 @@
             </div>
         </div>
         <div name="list" class="list">
+            <h3 name="no-data-h3"></h3>
             <table>
                 <thead></thead>
                 <tbody></tbody>
@@ -80,7 +81,7 @@
                 },
                 error: function (jqXHR) {
                     if (jqXHR.status == 404) {
-                        alert("신청 내역이 없습니다.")
+                        $("h3[name='no-data-h3']").text("신청 내역이 없습니다.")
                         $(".inserted").remove()
                     } else if (jqXHR.status == 403) {
                         refresh(getList)
@@ -95,6 +96,7 @@
 
         function showList(datas) {
             $(".inserted").remove()
+            $("h3[name='no-data-h3']").text("")
 
             $("thead").append(
                 "<tr class=\"inserted\">\n" +
