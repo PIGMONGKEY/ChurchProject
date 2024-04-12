@@ -28,6 +28,8 @@ public class AdminServiceImpl implements AdminService {
     final private ApplymentRepository applymentRepository;
     final private ParticipantRepository participantRepository;
 
+    // 관리자 페이지 정보 리턴
+    // 교회명, 부서명, 종목명 검색하여 리턴
     @Override
     public AdminPageParam getAdminPageInfo() {
         AdminPageParam adminPageParam = AdminPageParam.builder()
@@ -39,6 +41,7 @@ public class AdminServiceImpl implements AdminService {
         return adminPageParam;
     }
 
+    // DB 속 모든 정보를 excel로 다운로드
     @Override
     public void getAllInfoAsExcel(HttpServletResponse response) throws IOException {
         final String[] cellNames = {"종목", "교회", "이름", "나이", "학년", "부서", "성별"};

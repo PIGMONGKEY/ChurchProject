@@ -46,6 +46,7 @@ public class AuthController {
         return "login";
     }
 
+    // 로그아웃
     @PostMapping("auth/logout")
     @ResponseBody
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -62,6 +63,7 @@ public class AuthController {
         authService.logout(refreshToken);
     }
 
+    // accessToken 만료시, refresh 토큰으로 accessToken 재발급
     @PostMapping("refresh")
     @ResponseBody
     public ResponseEntity<TokenInfoParam> refresh(HttpServletRequest request, HttpServletResponse response) {

@@ -20,6 +20,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     final private ParticipantRepository participantRepository;
     final private ApplymentRepository applymentRepository;
 
+    // 부서 추가
+    // 이미 있으면 400
     @Override
     public ResponseEntity addDepartment(String departmentName) {
         HttpStatus status = HttpStatus.OK;
@@ -36,6 +38,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         return new ResponseEntity(status);
     }
 
+    // 부서 삭제
+    // 부서 참가자, 신청 내역 같이 삭제
     @Override
     public ResponseEntity deleteDepartment(String departmentName) {
         Department department = departmentRepository.findDepartmentByNameIs(departmentName);

@@ -212,7 +212,6 @@
       let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
       return value? value[2] : null;
     }
-// TODO: 겹치는 함수들 파일 분리
 
     function logout() {
       $.ajax({

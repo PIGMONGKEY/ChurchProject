@@ -103,6 +103,4 @@ public class ApplymentController {
     public ResponseEntity modifyApplyment(@RequestBody ApplymentParam applymentParam) {
         return applymentService.updateApplyment(applymentParam);
     }
-
-    // TODO: 신청 내역 엑셀 파일로 다운받기 구현
 }

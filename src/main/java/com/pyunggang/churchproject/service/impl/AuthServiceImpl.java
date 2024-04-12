@@ -24,6 +24,9 @@ public class AuthServiceImpl implements AuthService {
     final private AuthenticationManagerBuilder authenticationManagerBuilder;
     final private RedisTemplate<String, Object> redisTemplate;
 
+    // 로그인
+    // 인증 성공 시, accessToken은 response body에,
+    // refreshToken은 쿠키에 httpOnly로 리턴
     @Override
     public ResponseEntity<TokenInfoParam> login(LoginParam loginParam, HttpServletResponse response) {
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -33,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
         TokenInfoParam tokenInfoParam = jwtTokenProvider.generateToken(authentication);
 
         Cookie cookie = new Cookie("refreshToken", tokenInfoParam.getRefreshToken());
-        cookie.setMaxAge(60*60);
+        cookie.setMaxAge(3*60*60);
         cookie.setHttpOnly(true);
 
         tokenInfoParam.setRefreshToken("");
@@ -42,11 +45,14 @@ public class AuthServiceImpl implements AuthService {
         return new ResponseEntity<>(tokenInfoParam, HttpStatus.OK);
     }
 
+    // redis에 refresh 토큰을 저장함으로써 로그아웃
     @Override
     public void logout(String refreshToken) {
         redisTemplate.opsForValue().set(refreshToken, "logout", jwtTokenProvider.getExpiration(refreshToken) - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
     }
 
+    // refreshToken으로 인증 수행 후 새로운 accessToken 발급
+    // 로그아웃되어 redis에 저장된 토큰이면 401 리턴
     @Override
     public ResponseEntity<TokenInfoParam> refresh(String refreshToken, HttpServletResponse response) {
         TokenInfoParam tokenInfoParam = null;

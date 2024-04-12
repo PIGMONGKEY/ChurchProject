@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface ParticipantRepository extends JpaRepository<Participant, Integer> {
 
+    // ID빼고 나머지 정보가 모두 일치하는 참가자가 있는지 확인
     default boolean existsByParticipant(Participant participant) {
         return existsByNameAndAgeAndGenderAndGradeAndChurchNameAndDepartmentName(
                 participant.getName(),
@@ -20,6 +21,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Intege
         );
     }
 
+    // ID 빼고 나머지 정보가 모두 일치하는 참가자 정보 찾기
     default Participant findParticipantByParticipant(Participant participant) {
         return findParticipantByNameAndAgeAndGenderAndGradeAndChurchNameAndDepartmentName(
                 participant.getName(),
@@ -45,7 +47,9 @@ public interface ParticipantRepository extends JpaRepository<Participant, Intege
                                                                                            String churchName,
                                                                                            String departmentName);
 
+    // 교회명으로 참가자 검색
     List<Participant> findAllByChurchName(String churchName);
 
+    // 부서명으로 참가자 검색
     List<Participant> findAllByDepartmentName(String departmentName);
 }

@@ -44,6 +44,9 @@ public class ChurchServiceImpl implements ChurchService {
         return new ResponseEntity<>(churchNames, status);
     }
 
+    // 새로운 교회 추가
+    // 비밀번호는 4자리 숫자 랜덤값
+    // 이미 있으면 400 리턴
     @Override
     @Transactional
     public ResponseEntity saveChurch(String name) {
@@ -71,6 +74,7 @@ public class ChurchServiceImpl implements ChurchService {
         return new ResponseEntity(status);
     }
 
+    // 교회 비밀번호 검색
     @Override
     @Transactional
     public ResponseEntity<String> findChurchPassword(String churchName) {
@@ -86,6 +90,8 @@ public class ChurchServiceImpl implements ChurchService {
         return new ResponseEntity<>(password, status);
     }
 
+    // 교회 삭제
+    // 교회 신청 내역, 참가자 모두 삭제
     @Override
     public ResponseEntity deleteChurch(String churchName) {
         HttpStatus status = HttpStatus.OK;

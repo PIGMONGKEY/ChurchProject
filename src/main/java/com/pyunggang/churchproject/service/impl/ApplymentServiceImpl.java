@@ -109,6 +109,7 @@ public class ApplymentServiceImpl implements ApplymentService {
         List<ApplymentParam> params = new LinkedList<>();
         List<Applyment> applyments = applyRepo.findAllByEventNameAndParticipantChurchName(eventName, churchName);
 
+        // 신청정보가 없다면 404
         if (applyments.isEmpty())
             status = HttpStatus.NOT_FOUND;
         else {
@@ -120,6 +121,8 @@ public class ApplymentServiceImpl implements ApplymentService {
         return new ResponseEntity<>(params, status);
     }
 
+    // 신청 정보 수정
+    // 수정 후 중복되는 정보가 없는지 확인 후 수정
     @Override
     @Transactional
     public ResponseEntity updateApplyment(ApplymentParam applymentParam) {
