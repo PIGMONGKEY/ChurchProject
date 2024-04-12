@@ -22,6 +22,18 @@
 </body>
 <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
+    let $act
+
+    window.onload = function () {
+        $act = sessionStorage.getItem("accessToken")
+        sessionStorage.removeItem("accessToken")
+        if ($act != null) {
+            logout()
+        }
+    }
+
+</script>
+<script>
     function login() {
         let $churchName = $("input[name='churchName']").val()
         let $password = $("input[name='password']").val()
@@ -35,15 +47,14 @@
             success: function (data) {
                 saveTokenInCookie(data)
                 saveTokenInSession(data)
-                location.replace("/admin/")
+                location.href = "/admin/"
             },
             error: function() {
                 alert("비밀번호가 일치하지 않습니다.")
             }
         })
     }
-</script>
-<script>
+
     function saveTokenInCookie(data) {
         const expireDate = new Date()
         expireDate.setMinutes(expireDate.getMinutes() + 120)
@@ -56,6 +67,44 @@
 
     function saveTokenInSession(data) {
         sessionStorage.setItem("accessToken", data.accessToken)
+    }
+
+    function getCookie(name) {
+        let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return value? value[2] : null;
+    }
+
+    function logout() {
+        $.ajax({
+            url: "/auth/logout",
+            type: "post",
+            headers: {"Authorization": getCookie("grantType") + " " + $act},
+            success: function () {
+                // location.replace("/admin/login")
+            },
+            error: function (jqXHR) {
+                if (jqXHR.status == 403) {
+                    refresh(logout)
+                }
+            }
+        })
+    }
+
+    function refresh(func, id) {
+        $.ajax({
+            url: "/refresh",
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                $act = data.accessToken
+
+                if (id === undefined) {
+                    func()
+                } else {
+                    func(id)
+                }
+            }
+        })
     }
 </script>
 </html>

@@ -27,6 +27,15 @@
         const $login = $("#login");
         const $churchName = $("#churchName")
         const $password = $("#password")
+        let $act
+
+        window.onload = function () {
+            $act = sessionStorage.getItem("accessToken")
+            sessionStorage.removeItem("accessToken")
+            if ($act != null) {
+                logout()
+            }
+        }
 
         $login.on("click", function () {
             $.ajax({
@@ -59,6 +68,44 @@
 
         function saveTokenInSession(data) {
             sessionStorage.setItem("accessToken", data.accessToken)
+        }
+
+        function getCookie(name) {
+            let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return value? value[2] : null;
+        }
+
+        function logout() {
+            $.ajax({
+                url: "/auth/logout",
+                type: "post",
+                headers: {"Authorization": getCookie("grantType") + " " + $act},
+                success: function () {
+                    // location.replace("/admin/login")
+                },
+                error: function (jqXHR) {
+                    if (jqXHR.status == 403) {
+                        refresh(logout)
+                    }
+                }
+            })
+        }
+
+        function refresh(func, id) {
+            $.ajax({
+                url: "/refresh",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    $act = data.accessToken
+
+                    if (id === undefined) {
+                        func()
+                    } else {
+                        func(id)
+                    }
+                }
+            })
         }
     </script>
 </html>
