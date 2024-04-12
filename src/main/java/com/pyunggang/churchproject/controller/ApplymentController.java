@@ -31,7 +31,7 @@ public class ApplymentController {
     @GetMapping("home")
     public String registerHome(Model model) {
         model.addAttribute("events", eventService.findAllEventNames().getBody());
-        return "/applyment/home";
+        return "applyment/home";
     }
 
     // 로그인한 교회 이름 API
@@ -53,7 +53,7 @@ public class ApplymentController {
         model.addAttribute("church", churchName);
         model.addAttribute("event", eventName);
 
-        return "/applyment/register";
+        return "applyment/register";
     }
 
     /**

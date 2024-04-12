@@ -27,7 +27,7 @@ public class AdminController {
     // 관리자 로그인 페이지 접근
     @GetMapping("login")
     public String adminLogin() {
-        return "/admin/admin-login";
+        return "admin/admin-login";
     }
 
     // 관리자 페이지 접근
@@ -35,7 +35,7 @@ public class AdminController {
     public String adminPage(Model model) {
         model.addAttribute(adminService.getAdminPageInfo());
 
-        return "/admin/admin";
+        return "admin/admin";
     }
 
     // 교회 비밀번호 확인 API
