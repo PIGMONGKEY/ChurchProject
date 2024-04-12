@@ -28,14 +28,14 @@ public class ApplymentController {
     final ApplymentService applymentService;
 
     // 교회 홈
-    @GetMapping("/home")
+    @GetMapping("home")
     public String registerHome(Model model) {
         model.addAttribute("events", eventService.findAllEventNames().getBody());
         return "/applyment/home";
     }
 
     // 로그인한 교회 이름 API
-    @GetMapping("/church")
+    @GetMapping("church")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> getChurchName() {
@@ -48,7 +48,7 @@ public class ApplymentController {
      * @param churchName 교회 이름
      * @param eventName 종목 이름
      */
-    @GetMapping("/register")
+    @GetMapping("register")
     public String registerParticipant(@RequestParam("churchName") String churchName, @RequestParam("eventName") String eventName, Model model) {
         model.addAttribute("church", churchName);
         model.addAttribute("event", eventName);
@@ -61,7 +61,7 @@ public class ApplymentController {
      * @param applymentParams ParticipantRegisterParam list 형태로 받음
      * @return
      */
-    @PostMapping("/register")
+    @PostMapping("register")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<ApplymentParam>> registerParticipant(@RequestBody List<ApplymentParam> applymentParams) {
@@ -73,7 +73,7 @@ public class ApplymentController {
      * 교회명과 종목명 받음
      * @return ApplymentParam - List 형태로 반환
      */
-    @GetMapping("/applyment")
+    @GetMapping("applyment")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<ApplymentParam>> applymentList(@RequestParam("churchName") String churchName, @RequestParam("eventName") String eventName) {
@@ -85,7 +85,7 @@ public class ApplymentController {
      * @param deleteParam eventName, participantId
      * @return
      */
-    @DeleteMapping("/applyment")
+    @DeleteMapping("applyment")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity deleteApplyment(@RequestBody DeleteParam deleteParam) {
@@ -97,7 +97,7 @@ public class ApplymentController {
      * @param applymentParam
      * @return
      */
-    @PutMapping("/applyment")
+    @PutMapping("applyment")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity modifyApplyment(@RequestBody ApplymentParam applymentParam) {

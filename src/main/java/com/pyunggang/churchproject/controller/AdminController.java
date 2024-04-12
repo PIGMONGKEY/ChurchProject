@@ -25,13 +25,13 @@ public class AdminController {
     final private DepartmentService departmentService;
 
     // 관리자 로그인 페이지 접근
-    @GetMapping("/login")
+    @GetMapping("login")
     public String adminLogin() {
         return "/admin/admin-login";
     }
 
     // 관리자 페이지 접근
-    @GetMapping("/")
+    @GetMapping("")
     public String adminPage(Model model) {
         model.addAttribute(adminService.getAdminPageInfo());
 
@@ -39,7 +39,7 @@ public class AdminController {
     }
 
     // 교회 비밀번호 확인 API
-    @GetMapping("/church-password")
+    @GetMapping("church-password")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> getChurchPassword(@RequestParam("churchName") String churchName) {
@@ -47,7 +47,7 @@ public class AdminController {
     }
 
     // 새로운 교회 추가 API
-    @PostMapping("/church")
+    @PostMapping("church")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewChurch(@RequestParam("church") String churchName) {
@@ -55,7 +55,7 @@ public class AdminController {
     }
 
     // 교회 삭제 API
-    @DeleteMapping("/church")
+    @DeleteMapping("church")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteChurch(@RequestParam("church") String churchName) {
@@ -63,7 +63,7 @@ public class AdminController {
     }
 
     // 새로운 종목 추가 API
-    @PostMapping("/event")
+    @PostMapping("event")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewEvent(@RequestParam("event") String eventName) {
@@ -71,7 +71,7 @@ public class AdminController {
     }
 
     // 종목 제거 API
-    @DeleteMapping("/event")
+    @DeleteMapping("event")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteEvent(@RequestParam("event") String eventName) {
@@ -79,7 +79,7 @@ public class AdminController {
     }
 
     // 새로운 부서 추가 API
-    @PostMapping("/department")
+    @PostMapping("department")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewDepartment(@RequestParam("department") String departmentName) {
@@ -87,7 +87,7 @@ public class AdminController {
     }
 
     // 부서 제거 API
-    @DeleteMapping("/department")
+    @DeleteMapping("department")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteDepartment(@RequestParam("department") String departmentName) {
@@ -95,14 +95,14 @@ public class AdminController {
     }
 
     // 엑셀 다운로드 링크 반환 API
-    @GetMapping("/excel")
+    @GetMapping("excel")
     @ResponseBody
     public String getAllInfoAsExcel() {
         return "/admin/excel-download";
     }
 
     // 다운로드 API
-    @GetMapping("/excel-download")
+    @GetMapping("excel-download")
     @ResponseBody
     public void download(HttpServletResponse response) throws IOException {
         adminService.getAllInfoAsExcel(response);
