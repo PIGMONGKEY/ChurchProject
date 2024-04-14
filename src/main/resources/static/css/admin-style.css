@@ -11,6 +11,10 @@ body {
 }
 
 button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
     border: 1px solid #c4c4c4;
     border-radius: 0.5rem;
     padding: 0.5rem;
@@ -48,6 +52,10 @@ button {
 }
 
 select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
     border: 1px solid #c4c4c4;
     border-radius: 0.5rem;
     padding: 0.5rem;
@@ -55,6 +63,10 @@ select {
 }
 
 input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
     border: 1px solid #c4c4c4;
     border-radius: 0.5rem;
     padding: 0.5rem;

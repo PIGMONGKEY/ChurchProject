@@ -40,6 +40,10 @@ label {
 }
 
 select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
     width: 100%;
     border: 1px solid #dddddd !important;
     font-size: 1rem;
