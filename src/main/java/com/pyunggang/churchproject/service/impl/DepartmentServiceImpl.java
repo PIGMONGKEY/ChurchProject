@@ -7,12 +7,14 @@ import com.pyunggang.churchproject.data.repository.DepartmentRepository;
 import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
@@ -33,6 +35,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
             if (!departmentRepository.save(department).getName().equals(departmentName))
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
+            else
+                log.info("[부서 추가] : {}", departmentName);
         }
 
         return new ResponseEntity(status);
@@ -53,6 +57,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
 
         departmentRepository.delete(department);
+
+        log.info("[부서 삭제] : {}", departmentName);
 
         return new ResponseEntity(HttpStatus.OK);
     }

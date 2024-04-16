@@ -7,6 +7,7 @@ import com.pyunggang.churchproject.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -29,6 +31,8 @@ public class AuthServiceImpl implements AuthService {
     // refreshToken은 쿠키에 httpOnly로 리턴
     @Override
     public ResponseEntity<TokenInfoParam> login(LoginParam loginParam, HttpServletResponse response) {
+        log.info("[로그인 시도] : {}", loginParam.getChurchName());
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginParam.getChurchName(), loginParam.getPassword());
 
@@ -42,12 +46,16 @@ public class AuthServiceImpl implements AuthService {
         tokenInfoParam.setRefreshToken("");
         response.addCookie(cookie);
 
+        log.info("[로그인 성공] : {}", loginParam.getChurchName());
+
         return new ResponseEntity<>(tokenInfoParam, HttpStatus.OK);
     }
 
     // redis에 refresh 토큰을 저장함으로써 로그아웃
     @Override
     public void logout(String refreshToken) {
+        log.info("[로그아웃] : {}", jwtTokenProvider.getAuthentication(refreshToken).getName());
+
         redisTemplate.opsForValue().set(refreshToken, "logout", jwtTokenProvider.getExpiration(refreshToken) - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
     }
 
@@ -55,6 +63,8 @@ public class AuthServiceImpl implements AuthService {
     // 로그아웃되어 redis에 저장된 토큰이면 401 리턴
     @Override
     public ResponseEntity<TokenInfoParam> refresh(String refreshToken, HttpServletResponse response) {
+        log.info("[토큰 재발행 시도] : {}", jwtTokenProvider.getAuthentication(refreshToken).getName());
+
         TokenInfoParam tokenInfoParam = null;
         HttpStatus status = HttpStatus.OK;
         Cookie cookie;
@@ -69,8 +79,11 @@ public class AuthServiceImpl implements AuthService {
             response.addCookie(cookie);
 
             tokenInfoParam.setRefreshToken("");
+
+            log.info("[토큰 재발행 성공] : {}", jwtTokenProvider.getAuthentication(refreshToken).getName());
         } else {
             status = HttpStatus.UNAUTHORIZED;
+            log.info("[토큰 재발행 실패] : {}", jwtTokenProvider.getAuthentication(refreshToken).getName());
         }
 
         return new ResponseEntity<>(tokenInfoParam, status);

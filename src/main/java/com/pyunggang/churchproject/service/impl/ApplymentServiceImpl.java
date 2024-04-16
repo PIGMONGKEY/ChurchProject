@@ -90,6 +90,14 @@ public class ApplymentServiceImpl implements ApplymentService {
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
                 break;
             }
+
+            log.info("[신청 정보 수정] : {}/{}/{}/{}/{}/{}/{}", param.getChurchName(),
+                    param.getEventName(),
+                    param.getName(),
+                    param.getAge(),
+                    param.getGrade(),
+                    param.getDepartment(),
+                    param.getGender());
         }
 
         return new ResponseEntity(ignoredApplyments, status);
@@ -117,6 +125,8 @@ public class ApplymentServiceImpl implements ApplymentService {
                 params.add(new ApplymentParam(applyment));
             }
         }
+
+        log.info("[신청 정보 조회] : {}/{}", churchName, eventName);
 
         return new ResponseEntity<>(params, status);
     }
@@ -150,6 +160,14 @@ public class ApplymentServiceImpl implements ApplymentService {
 
             if (partiRepo.save(participant).getParticipantId() != participant.getParticipantId())
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+            log.info("[신청 정보 수정] : {}/{}/{}/{}/{}/{}/{}", applymentParam.getChurchName(),
+                    applymentParam.getEventName(),
+                    applymentParam.getName(),
+                    applymentParam.getAge(),
+                    applymentParam.getGrade(),
+                    applymentParam.getDepartment(),
+                    applymentParam.getGender());
         }
 
         return new ResponseEntity(status);
@@ -182,6 +200,8 @@ public class ApplymentServiceImpl implements ApplymentService {
             if (!applyRepo.existsByParticipant(participant)) {
                 partiRepo.delete(participant);
             }
+
+            log.info("[신청 정보 삭제] : {}/{}/{}", participant.getChurch().getName(), eventName, participant.getName());
         }
 
         return new ResponseEntity(status);

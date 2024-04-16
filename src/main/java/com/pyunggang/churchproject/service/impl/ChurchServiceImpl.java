@@ -8,6 +8,7 @@ import com.pyunggang.churchproject.data.repository.ChurchRepository;
 import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.service.ChurchService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChurchServiceImpl implements ChurchService {
@@ -69,6 +71,8 @@ public class ChurchServiceImpl implements ChurchService {
 
             if (!churchRepository.save(church).getName().equals(name))
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
+            else
+                log.info("[교회 추가] : {}", name);
         }
 
         return new ResponseEntity(status);
@@ -85,6 +89,8 @@ public class ChurchServiceImpl implements ChurchService {
         if (church != null) {
             status = HttpStatus.OK;
             password = church.getPassword();
+
+            log.info("[교회 비밀번호 확인] : {}", churchName);
         }
 
         return new ResponseEntity<>(password, status);
@@ -105,6 +111,8 @@ public class ChurchServiceImpl implements ChurchService {
         }
 
         churchRepository.delete(church);
+
+        log.info("[교회 삭제] : {}", churchName);
 
         return new ResponseEntity(status);
     }

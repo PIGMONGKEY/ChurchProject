@@ -8,6 +8,7 @@ import com.pyunggang.churchproject.data.repository.EventRepository;
 import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.service.EventService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
@@ -54,8 +56,10 @@ public class EventServiceImpl implements EventService {
         // 이미 있는 종목이면 삽입하지 않음
         if (eventRepository.existsById(eventName))
             status = HttpStatus.BAD_REQUEST;
-        else
+        else {
             eventRepository.save(Event.builder().name(eventName).build());
+            log.info("[종목 추가] : {}", eventName);
+        }
 
         return new ResponseEntity(status);
     }
@@ -85,6 +89,8 @@ public class EventServiceImpl implements EventService {
         }
 
         eventRepository.delete(event);
+
+        log.info("[종목 삭제] : {}", eventName);
 
         return new ResponseEntity(status);
     }
