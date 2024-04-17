@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.List;
 
 @Service
@@ -233,7 +234,7 @@ public class AdminServiceImpl implements AdminService {
 
         // 컨텐츠 타입과 파일명 지정
         response.setContentType("ms-vnd/excel");
-        response.setHeader("Content-Disposition", "attachment;filename=example.xlsx");
+        response.setHeader("Content-Disposition", "attachment;filename=노회대회_참가자_신청_현황.xlsx");
 
         wb.write(response.getOutputStream());
         wb.close();
