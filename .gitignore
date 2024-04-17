@@ -267,3 +267,4 @@ $RECYCLE.BIN/
 
 # application.yml
 *.yml
+/src/main/resources/keystore.p12
