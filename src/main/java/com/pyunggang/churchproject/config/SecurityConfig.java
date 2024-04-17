@@ -2,21 +2,32 @@ package com.pyunggang.churchproject.config;
 
 import com.pyunggang.churchproject.jwt.JwtAuthenticationFilter;
 import com.pyunggang.churchproject.jwt.JwtTokenProvider;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
+
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -49,6 +60,22 @@ public class SecurityConfig {
                     authorizeRequest.requestMatchers("/css/*").permitAll();
                     // 나머지 모두 인증 필요
                     authorizeRequest.anyRequest().authenticated();
+                })
+                .exceptionHandling((configurer) -> {
+                    configurer.authenticationEntryPoint(new AuthenticationEntryPoint() {
+                        @Override
+                        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+                            log.info("[인증되지 않은 사용자 접근 시도] : {}", request.getRemoteAddr());
+                            response.sendRedirect("/login");
+                        }
+                    });
+
+                    configurer.accessDeniedHandler(new AccessDeniedHandler() {
+                        @Override
+                        public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+                            response.sendRedirect("/login");
+                        }
+                    });
                 })
                 // jwt 토큰 필터 적용
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
