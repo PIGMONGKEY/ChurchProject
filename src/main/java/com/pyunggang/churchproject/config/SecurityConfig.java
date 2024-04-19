@@ -58,24 +58,9 @@ public class SecurityConfig {
                     authorizeRequest.requestMatchers("/refresh").permitAll();
                     // static 파일 접근 허용
                     authorizeRequest.requestMatchers("/css/*").permitAll();
+                    authorizeRequest.requestMatchers("/").permitAll();
                     // 나머지 모두 인증 필요
                     authorizeRequest.anyRequest().authenticated();
-                })
-                .exceptionHandling((configurer) -> {
-                    configurer.authenticationEntryPoint(new AuthenticationEntryPoint() {
-                        @Override
-                        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-                            log.info("[인증되지 않은 사용자 접근 시도] : {}", request.getRemoteAddr());
-                            response.sendRedirect("/login");
-                        }
-                    });
-
-                    configurer.accessDeniedHandler(new AccessDeniedHandler() {
-                        @Override
-                        public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-                            response.sendRedirect("/login");
-                        }
-                    });
                 })
                 // jwt 토큰 필터 적용
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
