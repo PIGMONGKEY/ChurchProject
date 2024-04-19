@@ -71,7 +71,7 @@ input {
     width: 100%;
     border: 1px solid #dddddd !important;
     font-size: 1rem;
-    line-height: 1.45;
+    line-height: 2;
     letter-spacing: -0.04rem;
     border-radius: 8px;
     padding: 0.9rem;
@@ -108,12 +108,19 @@ button {
 #login-title {
     text-align: center;
     font-size: 2rem;
-    margin-left: 1.5rem;
-    margin-top: 100px;
-    line-height: 2.5rem;
+    line-height: 1;
+    /*margin: 0px;*/
 }
 
 #login-title_second {
     font-size: 1.3rem;
-    margin-top: 100px;
+    margin-top: -46px;
+}
+
+.title-wrapper {
+    margin-top: 150px;
+}
+
+.title-header {
+    margin-left: 1.5rem;
 }
