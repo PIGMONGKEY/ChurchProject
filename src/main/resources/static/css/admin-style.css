@@ -82,3 +82,19 @@ input {
 
     padding: 3rem;
 }
+
+.notification > .add {
+    display: flex;
+    flex-direction: column;
+}
+
+#noti_content {
+    width: 500px;
+    height: 250px;
+    resize: none;
+    padding: 0.5rem;
+}
+
+#noti_title {
+    width: 500px;
+}
