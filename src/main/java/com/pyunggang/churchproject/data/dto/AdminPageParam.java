@@ -18,4 +18,5 @@ public class AdminPageParam {
     private List<Church> churches;
     private List<Department> departments;
     private List<Event> events;
+    private NotificationParam notificationParam;
 }

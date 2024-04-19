@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
-@RequestMapping("/")
 @RequiredArgsConstructor
 public class AuthController {
     final private ChurchService churchService;
@@ -29,7 +28,7 @@ public class AuthController {
      * @param loginParam LoginParam 형태로 데이터를 받아서 비밀번호 확인 후 결과를 리턴함
      * @return
      */
-    @PostMapping("login")
+    @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<TokenInfoParam> login(@RequestBody LoginParam loginParam, HttpServletResponse response) {
         return authService.login(loginParam, response);
@@ -38,7 +37,7 @@ public class AuthController {
     /**
      * 로그인 페이지로 이동
      */
-    @GetMapping("login")
+    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
     public String loginPage(Model model) {
         model.addAttribute("churches", churchService.findAllChurchNames().getBody());
         model.addAttribute("loginParam", new LoginParam());

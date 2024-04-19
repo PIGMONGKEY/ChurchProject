@@ -1,6 +1,7 @@
 package com.pyunggang.churchproject.service.impl;
 
 import com.pyunggang.churchproject.data.dto.AdminPageParam;
+import com.pyunggang.churchproject.data.dto.NotificationParam;
 import com.pyunggang.churchproject.data.entity.*;
 import com.pyunggang.churchproject.data.repository.*;
 import com.pyunggang.churchproject.service.AdminService;
@@ -12,6 +13,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -28,18 +31,71 @@ public class AdminServiceImpl implements AdminService {
     final private DepartmentRepository departmentRepository;
     final private ApplymentRepository applymentRepository;
     final private ParticipantRepository participantRepository;
+    final private RedisTemplate<String, Object> redisTemplate;
 
     // 관리자 페이지 정보 리턴
     // 교회명, 부서명, 종목명 검색하여 리턴
     @Override
     public AdminPageParam getAdminPageInfo() {
+        String notificationTitle;
+        String notificationContent;
+        NotificationParam notificationParam;
+
+        try {
+            notificationTitle = redisTemplate.opsForValue().get("noti_title").toString();
+            notificationContent = redisTemplate.opsForValue().get("noti_content").toString();
+        } catch (NullPointerException e) {
+            notificationTitle = "저장된 공지사항이 없습니다.";
+            notificationContent = "저장된 공지사항이 없습니다.";
+        }
+
+        notificationParam = NotificationParam.builder().title(notificationTitle).content(notificationContent).build();
+
         AdminPageParam adminPageParam = AdminPageParam.builder()
                 .churches(churchRepository.findAll())
                 .departments(departmentRepository.findAll())
                 .events(eventRepository.findAll())
+                .notificationParam(notificationParam)
                 .build();
 
         return adminPageParam;
+    }
+
+    // 홈 화면에 띄울 공지사항 저장
+    // 기존 공지사항 삭제 후 새로 저장
+    @Override
+    public void setNotification(NotificationParam notification) {
+        redisTemplate.delete("noti_title");
+        redisTemplate.delete("noti_content");
+
+        redisTemplate.opsForValue().set("noti_title", notification.getTitle());
+        redisTemplate.opsForValue().set("noti_content", notification.getContent());
+    }
+
+    @Override
+    public ResponseEntity<NotificationParam> getNotification() {
+        String notificationTitle;
+        String notificationContent;
+
+        try {
+            notificationTitle = redisTemplate.opsForValue().get("noti_title").toString();
+            notificationContent = redisTemplate.opsForValue().get("noti_content").toString();
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        NotificationParam noti = NotificationParam.builder()
+                                            .title(notificationTitle)
+                                            .content(notificationContent)
+                                            .build();
+
+        return new ResponseEntity<>(noti, HttpStatus.OK);
+    }
+
+    @Override
+    public void deleteNotification() {
+        redisTemplate.delete("noti_title");
+        redisTemplate.delete("noti_content");
     }
 
     // DB 속 모든 정보를 excel로 다운로드

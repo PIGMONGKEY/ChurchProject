@@ -1,5 +1,6 @@
 package com.pyunggang.churchproject.controller;
 
+import com.pyunggang.churchproject.data.dto.NotificationParam;
 import com.pyunggang.churchproject.service.AdminService;
 import com.pyunggang.churchproject.service.ChurchService;
 import com.pyunggang.churchproject.service.DepartmentService;
@@ -106,5 +107,30 @@ public class AdminController {
     @ResponseBody
     public void download(HttpServletResponse response) throws IOException {
         adminService.getAllInfoAsExcel(response);
+    }
+
+    // 공지사항 불러오기
+    @GetMapping("notification")
+    @ResponseBody
+    public ResponseEntity<NotificationParam> getNotification() {
+        return adminService.getNotification();
+    }
+
+    // 공지사항 저장
+    @PostMapping("notification")
+    @ResponseBody
+    public ResponseEntity addNotification(@RequestBody NotificationParam notificationParam) {
+        adminService.setNotification(notificationParam);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    // 공지사항 삭제
+    @DeleteMapping("notification")
+    @ResponseBody
+    public ResponseEntity deleteNotification() {
+        adminService.deleteNotification();
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
