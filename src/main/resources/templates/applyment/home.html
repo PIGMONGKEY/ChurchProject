@@ -6,6 +6,13 @@
         <title></title>
     </head>
     <body>
+        <div class="popup-bg">
+            <div class="popup">
+                <h3 id="popup-title"></h3>
+                <textarea id="popup-content" readonly></textarea>
+                <button id="popup-close-btn" onclick="closePopup()">확인</button>
+            </div>
+        </div>
         <h1></h1>
         <div class="first-line-wrapper">
             <div class="first-line">
@@ -36,6 +43,7 @@
             $act = sessionStorage.getItem("accessToken")
             sessionStorage.removeItem("accessToken")
             getChurchName()
+            getNotification()
         }
 
         window.addEventListener("beforeunload", (event) => {
@@ -64,6 +72,35 @@
                     }
                 }
             })
+        }
+
+        function getNotification() {
+            $.ajax({
+                url: "/admin/notification",
+                type: "get",
+                headers: {"Authorization": getCookie("grantType") + " " + $act},
+                dataType: "json",
+                success: function (data) {
+                    $(".popup-bg").show()
+                    $("#popup-title").text(data.title)
+                    $("#popup-content").text(data.content)
+                    $(".popup").show()
+                    $(".list").hide()
+                },
+                error: function (jqXHR) {
+                    if (jqXHR.status == 403) {
+                        refresh(getNotification)
+                    } else if (jqXHR.status == 404) {
+
+                    }
+                }
+            })
+        }
+
+        function closePopup() {
+            $(".popup-bg").hide()
+            $(".popup").hide()
+            $(".list").show()
         }
 
         function getList() {
@@ -300,10 +337,6 @@
                     } else {
                         func(id)
                     }
-                },
-                error: function () {
-                    alert("권한이 없습니다.")
-                    location.replace("/login")
                 }
             })
         }
