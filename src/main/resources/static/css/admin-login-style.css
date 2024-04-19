@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+
+:root {
+    --button-color: #ffffff;
+    --button-bg-color: #bdbdbd;
+    --button-hover-bg-color: #6ae785;
+    --button-border-color: #c4c4c4;
+    --select--font--color: #525252;
+    --item-width: 20rem;
+}
+
+html {
+    height: 100%;
+
+    font-size: 16pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login {
+    width: var(--item-width);
+}
+
+.wrapped {
+    width: 100%;
+    position: relative;
+}
+
+label {
+    display: inline-block;
+    position: absolute;
+    top: -5px;
+    left: 14px;
+    padding: 10px;
+    background: white;
+    font-size: 1rem;
+    color: #888;
+    font-weight: bold;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    background-color: white;
+    color: black;
+
+    width: 100%;
+    border: 1px solid #dddddd !important;
+    font-size: 1rem;
+    line-height: 2;
+    border-radius: 8px;
+    padding: 0.9rem;
+    margin-top: 0.6rem;
+}
+
+input {
+    width: 100%;
+    border: 1px solid #dddddd !important;
+    font-size: 1rem;
+    line-height: 2;
+    letter-spacing: -0.04rem;
+    border-radius: 8px;
+    padding: 0.9rem;
+    margin-top: 0.6rem;
+    box-sizing: border-box;
+}
+
+button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    background: var(--button-bg-color);
+    color: var(--button-color);
+
+    width: 100%;
+    border: none;
+    border-radius: 0.5rem;
+
+    font-size: 1rem;
+    text-align: center;
+
+    padding: 0.9rem;
+    margin-top: 0.6rem;
+}
+
+.wrapped button:hover,
+.wrapped button:focus{
+    background: var(--button-hover-bg-color);
+
+    outline: none;
+}

@@ -27,6 +27,9 @@
             <p class="wrapped">
                 <button type="button" id="login">로그인</button>
             </p>
+            <p class="wrapped">
+                <button id="toAdmin" onclick="toAdminLogin()">관리자 로그인</button>
+            </p>
         </div>
     </body>
     <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -113,6 +116,10 @@
                     }
                 }
             })
+        }
+
+        function toAdminLogin() {
+            location.href = "/admin/login"
         }
     </script>
 </html>
