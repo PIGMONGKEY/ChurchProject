@@ -49,10 +49,17 @@ body {
     float: right;
 }
 
+#popup-title {
+    font-size: 25px;
+    margin: 10px;
+}
+
 #popup-content {
     width: 100%;
     height: 250px;
     resize: none;
+
+    font-size: 20px;
 
     border-left: none;
     border-right: none;

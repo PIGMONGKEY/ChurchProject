@@ -15,7 +15,7 @@ html {
     font-size: 16pt;
     display: flex;
     justify-content: center;
-    align-items: center;
+    /*align-items: center;*/
 }
 
 body {
@@ -45,7 +45,7 @@ label {
     left: 14px;
     padding: 10px;
     background: white;
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: #888;
     font-weight: bold;
 }
@@ -61,7 +61,7 @@ select {
     width: 100%;
     border: 1px solid #dddddd !important;
     font-size: 1rem;
-    line-height: 1.45;
+    line-height: 2;
     border-radius: 8px;
     padding: 0.9rem;
     margin-top: 0.6rem;
@@ -106,8 +106,14 @@ button {
 }
 
 #login-title {
-    text-align: left;
+    text-align: center;
     font-size: 2rem;
     margin-left: 1.5rem;
+    margin-top: 100px;
     line-height: 2.5rem;
+}
+
+#login-title_second {
+    font-size: 1.3rem;
+    margin-top: 100px;
 }
