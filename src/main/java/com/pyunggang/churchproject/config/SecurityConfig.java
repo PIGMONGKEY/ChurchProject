@@ -57,7 +57,7 @@ public class SecurityConfig {
                     // refresh
                     authorizeRequest.requestMatchers("/refresh").permitAll();
                     // static 파일 접근 허용
-                    authorizeRequest.requestMatchers("/css/*").permitAll();
+                    authorizeRequest.requestMatchers("/css/*", "/images/*").permitAll();
                     authorizeRequest.requestMatchers("/").permitAll();
                     // 나머지 모두 인증 필요
                     authorizeRequest.anyRequest().authenticated();
