@@ -15,13 +15,18 @@ html {
     font-size: 16pt;
     display: flex;
     justify-content: center;
-    align-items: center;
+    /*align-items: center;*/
 }
 
 body {
     display: flex;
     align-items: center;
     flex-direction: column;
+}
+
+.title-wrapper {
+    display: flex;
+    align-items: center;
 }
 
 .login {
@@ -98,4 +103,24 @@ button {
     background: var(--button-hover-bg-color);
 
     outline: none;
+}
+
+#login-title {
+    text-align: center;
+    font-size: 2rem;
+    line-height: 1;
+    /*margin: 0px;*/
+}
+
+#login-title_second {
+    font-size: 1.3rem;
+    margin-top: -46px;
+}
+
+.title-wrapper {
+    margin-top: 150px;
+}
+
+.title-header {
+    margin-left: 1.5rem;
 }

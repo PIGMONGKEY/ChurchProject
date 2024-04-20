@@ -131,6 +131,10 @@ h3[name="no-data-h3"] {
     border: 1px solid #ffffff;
 }
 
+.first-line input[type="submit"] {
+    margin-left: 10px;
+}
+
 .list {
     display: flex;
     flex-direction: column;

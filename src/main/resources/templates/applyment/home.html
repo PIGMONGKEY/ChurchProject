@@ -17,11 +17,12 @@
         <div class="first-line-wrapper">
             <div class="first-line">
                 <form th:action="@{/register/register}" method="get" name="form">
+                    <label>종목 선택 ></label>
                     <input type="text" name="churchName" readonly style="display: none">
                     <select name="eventName" onchange="getList()">
                         <option th:each="event : ${events}" th:value="${event}" th:utext="${event}"></option>
                     </select>
-                    <input type="submit" value="추가 신청">
+                    <input type="submit" value="참가 신청">
                 </form>
                 <button name="logout" onclick="logout()">로그아웃</button>
             </div>
