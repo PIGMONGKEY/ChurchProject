@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.pyunggang'
-version = '1.1.9'
+version = '1.2.0'
 
 java {
     sourceCompatibility = '17'

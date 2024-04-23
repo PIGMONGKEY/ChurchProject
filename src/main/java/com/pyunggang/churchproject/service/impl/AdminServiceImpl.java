@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Time;
 import java.util.List;
 
@@ -288,9 +290,12 @@ public class AdminServiceImpl implements AdminService {
             }
         }
 
+        String filename = "노회대회_신청정보.xlsx";
+        String encodedFileName = new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+
         // 컨텐츠 타입과 파일명 지정
         response.setContentType("ms-vnd/excel");
-        response.setHeader("Content-Disposition", "attachment;filename=노회대회_참가자_신청_현황.xlsx");
+        response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\";", encodedFileName));
 
         wb.write(response.getOutputStream());
         wb.close();
