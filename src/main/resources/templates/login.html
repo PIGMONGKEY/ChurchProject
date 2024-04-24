@@ -17,6 +17,7 @@
             <p class="wrapped">
                 <label>교회 선택</label>
                 <select th:field="*{churchName}">
+                    <option value="null">교회 선택</option>
                     <option th:each="church : ${churches}" th:value="${church}" th:utext="${church}"></option>
                 </select>
             </p>
@@ -48,6 +49,11 @@
         }
 
         $login.on("click", function () {
+            if ($churchName.val() === "null") {
+                alert("교회를 선택해주세요.")
+                return
+            }
+
             $.ajax({
                 url: "/login",
                 type: "post",
