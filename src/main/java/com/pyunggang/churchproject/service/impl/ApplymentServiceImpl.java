@@ -91,7 +91,7 @@ public class ApplymentServiceImpl implements ApplymentService {
                 break;
             }
 
-            log.info("[신청 정보 수정] : {}/{}/{}/{}/{}/{}/{}", param.getChurchName(),
+            log.info("[신청 정보 저장] : {}/{}/{}/{}/{}/{}/{}", param.getChurchName(),
                     param.getEventName(),
                     param.getName(),
                     param.getAge(),
