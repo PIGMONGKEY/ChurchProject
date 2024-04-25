@@ -67,8 +67,15 @@ public class AuthController {
     @ResponseBody
     public ResponseEntity<TokenInfoParam> refresh(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = null;
+        Cookie[] cookies;
 
-        for (Cookie cookie : request.getCookies()) {
+        try {
+            cookies = request.getCookies();
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        for (Cookie cookie : cookies) {
             if (cookie.getName().equals("refreshToken")) {
                 refreshToken = cookie.getValue();
                 break;

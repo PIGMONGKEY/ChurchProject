@@ -303,8 +303,8 @@
           }
         },
         error: function () {
-          alert("권한이 없습니다.")
-          location.replace("/admin/login")
+          alert("토큰이 만료되었습니다. 다시 로그인 하십시오.")
+          location.replace("/login")
         }
       })
     }
