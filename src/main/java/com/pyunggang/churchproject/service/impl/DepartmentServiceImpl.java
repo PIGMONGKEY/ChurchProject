@@ -62,4 +62,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @Override
+    public List<String> getAllDepartment() {
+        return departmentRepository.findAll().stream().map(department -> department.getName()).toList();
+    }
 }

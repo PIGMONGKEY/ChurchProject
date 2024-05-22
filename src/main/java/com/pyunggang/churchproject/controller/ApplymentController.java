@@ -5,6 +5,7 @@ import com.pyunggang.churchproject.data.dto.ApplymentParam;
 import com.pyunggang.churchproject.data.dto.RequestApplymentListParam;
 import com.pyunggang.churchproject.service.ApplymentService;
 import com.pyunggang.churchproject.service.ChurchService;
+import com.pyunggang.churchproject.service.DepartmentService;
 import com.pyunggang.churchproject.service.EventService;
 import com.pyunggang.churchproject.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class ApplymentController {
     final ChurchService churchService;
     final EventService eventService;
     final ApplymentService applymentService;
+    final DepartmentService departmentService;
 
     // 교회 홈
     @GetMapping("home")
@@ -52,7 +54,7 @@ public class ApplymentController {
     public String registerParticipant(@RequestParam("churchName") String churchName, @RequestParam("eventName") String eventName, Model model) {
         model.addAttribute("church", churchName);
         model.addAttribute("event", eventName);
-
+        model.addAttribute("departments", departmentService.getAllDepartment());
         return "applyment/register";
     }
 
@@ -102,5 +104,12 @@ public class ApplymentController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity modifyApplyment(@RequestBody ApplymentParam applymentParam) {
         return applymentService.updateApplyment(applymentParam);
+    }
+
+    @GetMapping("department")
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<String>> getDepartments() {
+        return new ResponseEntity<>(departmentService.getAllDepartment(), HttpStatus.OK);
     }
 }

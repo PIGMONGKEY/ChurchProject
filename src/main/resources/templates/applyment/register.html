@@ -47,11 +47,7 @@
                         </td>
                         <td>
                             <select name="department">
-                                <option value="유치부">유치부</option>
-                                <option value="유년부">유년부</option>
-                                <option value="초등부">초등부</option>
-                                <option value="중등부">중등부</option>
-                                <option value="고등부">고등부</option>
+                                <option th:each="department : ${departments}" th:value="${department}" th:utext="${department}"></option>
                             </select>
                         </td>
                         <td>
@@ -77,6 +73,7 @@
 <script th:inline="javascript">
     const $church = [[${church}]]
     const $event = [[${event}]]
+    const $departments = [[${departments}]]
     const $table = document.getElementById("participant_table_body")
     let $act
 
@@ -148,7 +145,7 @@
     }
 
     function newLine() {
-        $("tbody").append(
+        let $string =
             "<tr class=\"added\" >\n" +
             "                <td><input type=\"text\" value=\"" + $church + "\" readonly /></td>\n" +
             "                <td><input type=\"text\" value=\"" + $event + "\" readonly /></td>\n" +
@@ -165,12 +162,13 @@
             "                    </select>\n" +
             "                </td>\n" +
             "                <td>\n" +
-            "                    <select name=\"department\">\n" +
-            "                        <option value=\"유치부\">유치부</option>\n" +
-            "                        <option value=\"유년부\">유년부</option>\n" +
-            "                        <option value=\"초등부\">초등부</option>\n" +
-            "                        <option value=\"중등부\">중등부</option>\n" +
-            "                        <option value=\"고등부\">고등부</option>\n" +
+            "                    <select name=\"department\">\n";
+
+        $departments.forEach(function (department) {
+            $string += "<option value=\"" + department + "\">" + department + "</option>";
+        })
+
+        $string +=
             "                    </select>\n" +
             "                </td>\n" +
             "                <td>\n" +
@@ -179,8 +177,9 @@
             "                        <option value=\"여\">여</option>\n" +
             "                    </select>\n" +
             "                </td>\n" +
-            "            </tr>"
-        )
+            "            </tr>";
+
+        $("tbody").append($string)
 
         $(".focus_input:last").focus()
     }
