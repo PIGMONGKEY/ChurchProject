@@ -33,6 +33,7 @@ public class ApplymentController {
     @GetMapping("home")
     public String registerHome(Model model) {
         model.addAttribute("events", eventService.findAllEventNames().getBody());
+        model.addAttribute("departments", departmentService.getAllDepartment());
         return "applyment/home";
     }
 

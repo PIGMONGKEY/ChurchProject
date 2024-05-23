@@ -37,9 +37,10 @@
         </div>
     </body>
     <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
+    <script th:inline="javascript">
         let $act
         let $churchName
+        const $departments = [[${departments}]]
 
         window.onload = function () {
             $act = sessionStorage.getItem("accessToken")
@@ -134,6 +135,8 @@
         }
 
         function showList(datas) {
+            let $string = ""
+
             $(".inserted").remove()
             $("h3[name='no-data-h3']").text("")
 
@@ -152,7 +155,8 @@
             )
             for (const count in datas) {
                 const data = datas[count]
-                $("tbody").append(
+
+                $string +=
                     "<tr class=\"inserted\" name=\"list_" + data.id + "\">\n" +
                     "                <td><input name=\"churchName\" type=\"text\" value=\"" + data.churchName + "\" readonly /></td>\n" +
                     "                <td><input name=\"eventName\" type=\"text\" value=\"" + data.eventName + "\" readonly /></td>\n" +
@@ -169,12 +173,13 @@
                     "                    </select>\n" +
                     "                </td>\n" +
                     "                <td>\n" +
-                    "                    <select class=\"change-able\" name=\"department\" disabled>\n" +
-                    "                        <option value=\"유치부\">유치부</option>\n" +
-                    "                        <option value=\"유년부\">유년부</option>\n" +
-                    "                        <option value=\"초등부\">초등부</option>\n" +
-                    "                        <option value=\"중등부\">중등부</option>\n" +
-                    "                        <option value=\"고등부\">고등부</option>\n" +
+                    "                    <select class=\"change-able\" name=\"department\" disabled>\n"
+
+                $departments.forEach(function(department) {
+                    $string += "<option value=\"" + department + "\">" + department + "</option>"
+                })
+
+                $string +=
                     "                    </select>\n" +
                     "                </td>\n" +
                     "                <td>\n" +
@@ -192,7 +197,10 @@
                     "                    <button name=\"modify-cancel\" value=\"list_" + data.id + "\" onclick=\"modifyCancel(this.value)\" \" style=\"display: none\">취소</button>" +
                     "               </td>" +
                     "            </tr>"
-                )
+
+                $("tbody").append($string)
+                $string = ""
+
                 $("select[name='grade']").last().val(data.grade).prop("selected", true)
                 $("select[name='department']").last().val(data.department).prop("selected", true)
                 $("select[name='gender']").last().val(data.gender).prop("selected", true)
