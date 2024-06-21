@@ -26,3 +26,6 @@
 ## 성과
 - 2024년 상반기 글짓기 및 그림그리기 대회를 이 페이지를 통해 진행했으며 대회 종료 후 설문조사 결과 만족도 100% 달성 했습니다.
 - 2025년 상반기까지 모든 대회는 이 웹페이지를 통해 진행하기로 결정되었습니다.
+
+### ERD
+![church-ERD](https://github.com/PIGMONGKEY/FallDetectionSystem/assets/113700356/f8fda760-f751-435f-b9f2-0d12d8432bf8)
