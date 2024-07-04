@@ -81,6 +81,14 @@
       </div>
     </div>
 
+    <div class="serverState wrapper">
+      <h4>대회 참가 신청 가능 여부</h4>
+      <p>
+        현재 상태 : <b th:utext="${adminPageParam.getServerState()}"></b>
+      </p>
+      <input type="button" th:name="${adminPageParam.getServerState()}" value="변경" onclick="changeServerState()">
+    </div>
+
     <div class="excel wrapper">
       <h4>모든 정보 excel로 받기</h4>
       <input type="button" value="다운로드" onclick="getAllDataAsExcel()">
@@ -283,6 +291,22 @@
         error: function (jqXHR) {
           if (jqXHR.status == 403) {
             refresh(logout)
+          }
+        }
+      })
+    }
+
+    function changeServerState() {
+      $.ajax({
+        url: "/admin/serverState",
+        type: "post",
+        headers: {"Authorization": getCookie("grantType") + " " + $act},
+        success: function() {
+          location.reload();
+        },
+        error: function (jqXHR) {
+          if (jqXHR.status == 403) {
+            refresh(changeServerState)
           }
         }
       })
