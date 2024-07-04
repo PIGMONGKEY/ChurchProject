@@ -22,8 +22,7 @@
                     <select name="eventName" onchange="getList()">
                         <option th:each="event : ${events}" th:value="${event}" th:utext="${event}"></option>
                     </select>
-<!--                    <input type="submit" value="참가 신청">-->
-                    <input type="submit" value="참가 신청" disabled>
+                    <input id="register" type="submit" value="참가 신청">
                 </form>
                 <button name="logout" onclick="logout()">로그아웃</button>
             </div>
@@ -62,6 +61,13 @@
                 success: function (data) {
                     $churchName = data.churchName
                     $isServerOpen = data.serverState;
+
+                    // serverState가 OPEN인 경우
+                    if ($isServerOpen === "OPEN") {
+                        $("#register").attr("disabled", false)
+                    } else {
+                        $("#register").attr("disabled", true)
+                    }
 
                     document.title = $churchName
                     $("input[name='churchName']").val($churchName)
@@ -192,12 +198,10 @@
                     "                    </select>\n" +
                     "                </td>\n" +
                     "                <td>\n" +
-                    "                    <button name=\"modify\" value=\"list_" + data.id + "\" onclick=\"modifyClick(this.value)\" disabled>수정</button>" +
-                    "                    <button name=\"delete\" value=\"" + data.id + "\" onclick=\"deleteParticipant(this.value)\" disabled>삭제</button>" +
-                    // "                    <button name=\"modify\" value=\"list_" + data.id + "\" onclick=\"modifyClick(this.value)\">수정</button>" +
-                    // "                    <button name=\"delete\" value=\"" + data.id + "\" onclick=\"deleteParticipant(this.value)\">삭제</button>" +
-                    "                    <button name=\"modify-done\" value=\"" + data.id + "\" onclick=\"modifyDone(this.value)\" style=\"display: none\">수정 완료</button>" +
-                    "                    <button name=\"modify-cancel\" value=\"list_" + data.id + "\" onclick=\"modifyCancel(this.value)\" \" style=\"display: none\">취소</button>" +
+                    "                    <button class=\"depand-on-server-state\" name=\"modify\" value=\"list_" + data.id + "\" onclick=\"modifyClick(this.value)\">수정</button>" +
+                    "                    <button class=\"depand-on-server-state\" name=\"delete\" value=\"" + data.id + "\" onclick=\"deleteParticipant(this.value)\">삭제</button>" +
+                    "                    <button class=\"depand-on-server-state\" name=\"modify-done\" value=\"" + data.id + "\" onclick=\"modifyDone(this.value)\" style=\"display: none\">수정 완료</button>" +
+                    "                    <button class=\"depand-on-server-state\" name=\"modify-cancel\" value=\"list_" + data.id + "\" onclick=\"modifyCancel(this.value)\" \" style=\"display: none\">취소</button>" +
                     "               </td>" +
                     "            </tr>"
 
@@ -207,6 +211,13 @@
                 $("select[name='grade']").last().val(data.grade).prop("selected", true)
                 $("select[name='department']").last().val(data.department).prop("selected", true)
                 $("select[name='gender']").last().val(data.gender).prop("selected", true)
+            }
+
+
+            if ($isServerOpen === "OPEN") {
+                $(".depand-on-server-state").attr("disabled", false)
+            } else {
+                $(".depand-on-server-state").attr("disabled", true)
             }
         }
 
