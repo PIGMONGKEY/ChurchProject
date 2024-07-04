@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DeleteParam {
+public class DeleteApplymentParam {
     private String eventName;
     private int participantId;
 }

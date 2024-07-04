@@ -133,4 +133,11 @@ public class AdminController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    // 참가 신청 가능 여부 변경
+    @PostMapping("serverState")
+    @ResponseBody
+    public ResponseEntity changeServerState() {
+        return adminService.changeServerState();
+    }
 }

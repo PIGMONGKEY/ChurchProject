@@ -1,6 +1,6 @@
 package com.pyunggang.churchproject.controller;
 
-import com.pyunggang.churchproject.data.dto.DeleteParam;
+import com.pyunggang.churchproject.data.dto.DeleteApplymentParam;
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
 import com.pyunggang.churchproject.data.dto.GetChurchNameParam;
 import com.pyunggang.churchproject.service.ApplymentService;
@@ -11,7 +11,7 @@ import com.pyunggang.churchproject.utils.SecurityUtil;
 import com.pyunggang.churchproject.utils.ServerState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.Get;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +30,7 @@ public class ApplymentController {
     final EventService eventService;
     final ApplymentService applymentService;
     final DepartmentService departmentService;
+    final RedisTemplate<String, Object> redisTemplate;
 
     // 교회 홈
     @GetMapping("home")
@@ -46,8 +47,8 @@ public class ApplymentController {
     public ResponseEntity<GetChurchNameParam> getChurchName() {
         GetChurchNameParam churchNameParam = GetChurchNameParam.builder()
                 .churchName(SecurityUtil.getCurrentChurchName())
-                .serverState(ServerState.OPEN)
-                .build();   // TODO: Redis에서 읽어와서 넣어주기
+                .serverState(redisTemplate.opsForValue().get("server_state").toString().equals("OPEN") ? ServerState.OPEN : ServerState.CLOSE)
+                .build();
 
         return new ResponseEntity<>(churchNameParam, HttpStatus.OK);
     }
@@ -92,14 +93,14 @@ public class ApplymentController {
 
     /**
      * 신청 정보 삭제 API
-     * @param deleteParam eventName, participantId
+     * @param deleteApplymentParam eventName, participantId
      * @return
      */
     @DeleteMapping("applyment")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity deleteApplyment(@RequestBody DeleteParam deleteParam) {
-        return applymentService.deleteApplyment(deleteParam.getEventName(), deleteParam.getParticipantId());
+    public ResponseEntity deleteApplyment(@RequestBody DeleteApplymentParam deleteApplymentParam) {
+        return applymentService.deleteApplyment(deleteApplymentParam.getEventName(), deleteApplymentParam.getParticipantId());
     }
 
     /**
