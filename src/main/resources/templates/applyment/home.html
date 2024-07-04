@@ -40,6 +40,7 @@
     <script th:inline="javascript">
         let $act
         let $churchName
+        let $isServerOpen
         const $departments = [[${departments}]]
 
         window.onload = function () {
@@ -58,8 +59,10 @@
                 url: "/register/church",
                 type: "get",
                 headers: {"Authorization": getCookie("grantType") + " " + $act},
-                success: function (churchName) {
-                    $churchName = churchName
+                success: function (data) {
+                    $churchName = data.churchName
+                    $isServerOpen = data.serverState;
+
                     document.title = $churchName
                     $("input[name='churchName']").val($churchName)
                     $("h1").text($churchName + " 참가자 신청 목록")

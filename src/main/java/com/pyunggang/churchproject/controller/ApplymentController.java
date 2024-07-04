@@ -45,7 +45,7 @@ public class ApplymentController {
     public ResponseEntity<GetChurchNameParam> getChurchName() {
         GetChurchNameParam churchNameParam = GetChurchNameParam.builder()
                 .churchName(SecurityUtil.getCurrentChurchName())
-                .isServerOpen(true)
+                .serverState(GetChurchNameParam.ServerState.OPEN)
                 .build();   // TODO: Redis에서 읽어와서 넣어주기
 
         return new ResponseEntity<>(churchNameParam, HttpStatus.OK);
