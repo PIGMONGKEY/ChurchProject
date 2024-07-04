@@ -13,4 +13,5 @@ public interface AdminService {
     public ResponseEntity<NotificationParam> getNotification();
     public void deleteNotification();
     public void getAllInfoAsExcel(HttpServletResponse response) throws IOException;
+    public ResponseEntity changeServerState();
 }

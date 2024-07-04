@@ -52,6 +52,7 @@ public class AdminServiceImpl implements AdminService {
         } catch (NullPointerException e) {
             notificationTitle = "저장된 공지사항이 없습니다.";
             notificationContent = "저장된 공지사항이 없습니다.";
+            redisTemplate.opsForValue().set("server_state", "OPEN");
             serverState = "OPEN";
         }
 
@@ -304,5 +305,20 @@ public class AdminServiceImpl implements AdminService {
 
         wb.write(response.getOutputStream());
         wb.close();
+    }
+
+    @Override
+    public ResponseEntity changeServerState() {
+        String serverState;
+        try {
+            serverState = redisTemplate.opsForValue().get("server_state").toString();
+        } catch (NullPointerException e) {
+            serverState = "OPEN";
+            redisTemplate.opsForValue().set("server_state", "OPEN");
+        }
+
+        redisTemplate.opsForValue().set("server_state", serverState.equals("OPEN") ? "CLOSE" : "OPEN");
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
