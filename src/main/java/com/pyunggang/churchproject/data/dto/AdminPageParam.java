@@ -3,6 +3,7 @@ package com.pyunggang.churchproject.data.dto;
 import com.pyunggang.churchproject.data.entity.Church;
 import com.pyunggang.churchproject.data.entity.Department;
 import com.pyunggang.churchproject.data.entity.Event;
+import com.pyunggang.churchproject.utils.ServerState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class AdminPageParam {
     private List<Department> departments;
     private List<Event> events;
     private NotificationParam notificationParam;
+    private ServerState serverState;
 }
