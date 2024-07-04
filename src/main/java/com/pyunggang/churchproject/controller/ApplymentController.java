@@ -8,6 +8,7 @@ import com.pyunggang.churchproject.service.ChurchService;
 import com.pyunggang.churchproject.service.DepartmentService;
 import com.pyunggang.churchproject.service.EventService;
 import com.pyunggang.churchproject.utils.SecurityUtil;
+import com.pyunggang.churchproject.utils.ServerState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.Get;
@@ -45,7 +46,7 @@ public class ApplymentController {
     public ResponseEntity<GetChurchNameParam> getChurchName() {
         GetChurchNameParam churchNameParam = GetChurchNameParam.builder()
                 .churchName(SecurityUtil.getCurrentChurchName())
-                .serverState(GetChurchNameParam.ServerState.OPEN)
+                .serverState(ServerState.OPEN)
                 .build();   // TODO: Redis에서 읽어와서 넣어주기
 
         return new ResponseEntity<>(churchNameParam, HttpStatus.OK);
