@@ -11,5 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GetChurchNameParam {
     private String churchName;
-    private boolean isServerOpen;
+    private ServerState serverState;
+
+    public enum ServerState {
+        OPEN, CLOSE
+    }
 }
