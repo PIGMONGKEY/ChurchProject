@@ -5,6 +5,7 @@ import com.pyunggang.churchproject.data.dto.NotificationParam;
 import com.pyunggang.churchproject.data.entity.*;
 import com.pyunggang.churchproject.data.repository.*;
 import com.pyunggang.churchproject.service.AdminService;
+import com.pyunggang.churchproject.utils.ServerState;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,14 +42,17 @@ public class AdminServiceImpl implements AdminService {
     public AdminPageParam getAdminPageInfo() {
         String notificationTitle;
         String notificationContent;
+        String serverState;
         NotificationParam notificationParam;
 
         try {
             notificationTitle = redisTemplate.opsForValue().get("noti_title").toString();
             notificationContent = redisTemplate.opsForValue().get("noti_content").toString();
+            serverState = redisTemplate.opsForValue().get("server_state").toString();
         } catch (NullPointerException e) {
             notificationTitle = "저장된 공지사항이 없습니다.";
             notificationContent = "저장된 공지사항이 없습니다.";
+            serverState = "OPEN";
         }
 
         notificationParam = NotificationParam.builder().title(notificationTitle).content(notificationContent).build();
@@ -58,6 +62,7 @@ public class AdminServiceImpl implements AdminService {
                 .departments(departmentRepository.findAll())
                 .events(eventRepository.findAll())
                 .notificationParam(notificationParam)
+                .serverState(serverState.equals("OPEN") ? ServerState.OPEN : ServerState.CLOSE)
                 .build();
 
         return adminPageParam;
