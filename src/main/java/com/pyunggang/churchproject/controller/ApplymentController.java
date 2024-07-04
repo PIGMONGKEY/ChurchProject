@@ -2,7 +2,7 @@ package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.data.dto.DeleteParam;
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
-import com.pyunggang.churchproject.data.dto.RequestApplymentListParam;
+import com.pyunggang.churchproject.data.dto.GetChurchNameParam;
 import com.pyunggang.churchproject.service.ApplymentService;
 import com.pyunggang.churchproject.service.ChurchService;
 import com.pyunggang.churchproject.service.DepartmentService;
@@ -10,6 +10,7 @@ import com.pyunggang.churchproject.service.EventService;
 import com.pyunggang.churchproject.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.Get;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,8 +42,13 @@ public class ApplymentController {
     @GetMapping("church")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> getChurchName() {
-        return new ResponseEntity<>(SecurityUtil.getCurrentChurchName(), HttpStatus.OK);
+    public ResponseEntity<GetChurchNameParam> getChurchName() {
+        GetChurchNameParam churchNameParam = GetChurchNameParam.builder()
+                .churchName(SecurityUtil.getCurrentChurchName())
+                .isServerOpen(true)
+                .build();   // TODO: Redis에서 읽어와서 넣어주기
+
+        return new ResponseEntity<>(churchNameParam, HttpStatus.OK);
     }
 
     /**
