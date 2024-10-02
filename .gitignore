@@ -269,3 +269,4 @@ $RECYCLE.BIN/
 *.yml
 /src/main/resources/keystore.p12
 /src/main/resources/logback-spring.xml
+Dockerfile
