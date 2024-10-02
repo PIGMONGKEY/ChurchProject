@@ -115,6 +115,10 @@ public class ApplymentController {
         return applymentService.updateApplyment(applymentParam);
     }
 
+    /**
+     * 종목 정보 불러오기 API
+     * @return List<String> 형태로 종목 리스트 반환
+     */
     @GetMapping("department")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
