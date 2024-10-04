@@ -22,6 +22,9 @@ public class Event {
     @OneToMany(mappedBy = "event")
     private List<Applyment> participants = new ArrayList<>();
 
+    @OneToMany(mappedBy = "event")
+    private List<Category> categories = new ArrayList<>();
+
     @Builder
     public Event(String name) {
         this.name = name;

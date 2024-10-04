@@ -24,6 +24,10 @@ public class Applyment {
     @JoinColumn(name = "event_name", referencedColumnName = "name", nullable = false)
     private Event event;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "category_id", nullable = false)
+    private Category category;
+
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime createTime;
 
