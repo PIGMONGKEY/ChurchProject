@@ -53,4 +53,20 @@ public class CategoryServiceImpl implements CategoryService {
         else
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    /**
+     * 카테고리 삭제 메서드
+     * @param categoryParam
+     * 카테고리가 존재하는지 확인한 후 삭제
+     * @return 삭제 성공시 200
+     * @return 존재하지 않으면 404
+     */
+    @Override
+    public ResponseEntity removeCategory(CategoryParam categoryParam) {
+        if (categoryRepo.existsByNameAndEventName(categoryParam.getCategoryName(), categoryParam.getEventName())) {
+            categoryRepo.deleteByNameAndEventName(categoryParam.getCategoryName(), categoryParam.getEventName());
+            return new ResponseEntity(HttpStatus.OK);
+        } else
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
 }

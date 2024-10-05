@@ -5,4 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface CategoryService {
     ResponseEntity addCategory(CategoryParam categoryParam);
+    ResponseEntity removeCategory(CategoryParam categoryParam);
 }

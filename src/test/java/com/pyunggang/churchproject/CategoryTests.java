@@ -36,6 +36,16 @@ public class CategoryTests {
     @Test
     public void deleteTest() {
 //        categoryRepo.deleteById(2);
+//        categoryRepo.deleteByNameAndEventName("1,2학년", "그림그리기");
+
+//        // 존재하지 않음 테스트
+//        System.out.println(categoryService.removeCategory(new CategoryParam("1,2학년", "그림그리기")));
+
+//        // 성공 테스트
+//        System.out.println(categoryService.removeCategory(new CategoryParam("3,4학년", "그림그리기")).getStatusCode());
+
+//        // 없는 이벤트 테스트
+//        System.out.println(categoryService.removeCategory(new CategoryParam("3,4학년", "없는 종목")).getStatusCode());
     }
 
     @Test
