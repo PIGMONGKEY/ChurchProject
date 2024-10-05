@@ -54,7 +54,7 @@ public class ApplymentController {
 
     /**
      * 참가자 신청 페이지로 이동
-     * 교회명과 종목명을 넘겨줌
+     * 교회명, 종목명, 부서명, 부문명을 넘겨줌
      * @param churchName 교회 이름
      * @param eventName 종목 이름
      */
