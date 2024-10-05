@@ -17,4 +17,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Transactional
     void deleteByNameAndEventName(String categoryName, String eventName);
+    @Transactional
+    void deleteAllByEventName(String eventName);
 }

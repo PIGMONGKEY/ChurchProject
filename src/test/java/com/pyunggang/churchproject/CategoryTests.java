@@ -46,6 +46,8 @@ public class CategoryTests {
 
 //        // 없는 이벤트 테스트
 //        System.out.println(categoryService.removeCategory(new CategoryParam("3,4학년", "없는 종목")).getStatusCode());
+
+        categoryRepo.deleteAllByEventName("그림그리기");
     }
 
     @Test

@@ -2,8 +2,8 @@ package com.pyunggang.churchproject.service.impl;
 
 import com.pyunggang.churchproject.data.entity.Applyment;
 import com.pyunggang.churchproject.data.entity.Event;
-import com.pyunggang.churchproject.data.entity.Participant;
 import com.pyunggang.churchproject.data.repository.ApplymentRepository;
+import com.pyunggang.churchproject.data.repository.CategoryRepository;
 import com.pyunggang.churchproject.data.repository.EventRepository;
 import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.service.EventService;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,6 +24,7 @@ public class EventServiceImpl implements EventService {
     final private EventRepository eventRepository;
     final private ApplymentRepository applymentRepository;
     final private ParticipantRepository participantRepository;
+    final private CategoryRepository categoryRepository;
 
     /**
      * 모든 종목 이름 가져오기
@@ -73,9 +73,14 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public ResponseEntity removeEvent(String eventName) {
-        HttpStatus status = HttpStatus.OK;
-        Event event = eventRepository.findById(eventName).get();
+        Event event;
         List<Applyment> applyments = applymentRepository.findAllByEventName(eventName);
+
+        try {
+            event = eventRepository.findById(eventName).orElseThrow(() -> new IllegalArgumentException("event doesn't exist"));
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
 
         // 종목 신청 정보가 있다면 신청 정보 삭제
         if (!applyments.isEmpty()) {
@@ -88,10 +93,12 @@ public class EventServiceImpl implements EventService {
             }
         }
 
+        categoryRepository.deleteAllByEventName(eventName);
+
         eventRepository.delete(event);
 
         log.info("[종목 삭제] : {}", eventName);
 
-        return new ResponseEntity(status);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
