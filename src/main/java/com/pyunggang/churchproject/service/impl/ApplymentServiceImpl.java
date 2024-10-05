@@ -1,8 +1,7 @@
 package com.pyunggang.churchproject.service.impl;
 
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
-import com.pyunggang.churchproject.data.entity.Applyment;
-import com.pyunggang.churchproject.data.entity.Participant;
+import com.pyunggang.churchproject.data.entity.*;
 import com.pyunggang.churchproject.data.repository.*;
 import com.pyunggang.churchproject.service.ApplymentService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +24,7 @@ public class ApplymentServiceImpl implements ApplymentService {
     final private ChurchRepository churchRepo;
     final private DepartmentRepository departRepo;
     final private EventRepository eventRepo;
+    final private CategoryRepository categoryRepo;
 
     /**
      * 참가자 정보 리스트로 받아서 insert
@@ -36,19 +36,37 @@ public class ApplymentServiceImpl implements ApplymentService {
     public ResponseEntity<List<ApplymentParam>> saveApplyment(List<ApplymentParam> params) {
         Participant participant;
         Applyment applyment;
+        Event event;
+        Church church;
+        Department department;
+        Category category;
         List<ApplymentParam> ignoredApplyments = new LinkedList<>();
         HttpStatus status = HttpStatus.OK;
 
+        // event, church, department, category 중 DB에 없는 게 포함되어있다면 전체 반려
+        // 404 반환
+        try {
+            event = eventRepo.findEventByNameIs(params.get(0).getEventName()).orElseThrow(() -> new IllegalArgumentException("event doesn't exist"));
+            church = churchRepo.findById(params.get(0).getChurchName()).orElseThrow(() -> new IllegalArgumentException("church doesn't exist"));
+            department = departRepo.findById(params.get(0).getDepartment()).orElseThrow(() -> new IllegalArgumentException("department doesn't exist"));
+            category = categoryRepo.findByNameAndEventName(params.get(0).getCategoryName(),
+                    params.get(0).getEventName()).orElseThrow(() -> new IllegalArgumentException("category doesn't exist"));
+        } catch (IllegalArgumentException e) {
+            ignoredApplyments.addAll(params);
+            return new ResponseEntity<>(ignoredApplyments, HttpStatus.NOT_FOUND);
+        }
+
         for (ApplymentParam param : params) {
             // 빈 데이터가 있는 참가자 정보 건너뛰기
-            if (param.getName().equals("") || param.getGender().equals("") || param.getDepartment().equals("")
+            if (param.getName().isEmpty() || param.getGender().isEmpty() || param.getDepartment().isEmpty()
                     || param.getGrade() == 0 || param.getAge() == 0) {
                 continue;
             }
+
             // 새로운 참가자 객체 생성
             participant = Participant.builder()
-                    .department(departRepo.findDepartmentByNameIs(param.getDepartment()))
-                    .church(churchRepo.findById(param.getChurchName()).get())
+                    .department(department)
+                    .church(church)
                     .name(param.getName())
                     .age(param.getAge())
                     .gender(param.getGender())
@@ -79,8 +97,9 @@ public class ApplymentServiceImpl implements ApplymentService {
 
             // 신청 생성
             applyment = Applyment.builder()
-                    .event(eventRepo.findEventByNameIs(param.getEventName()))
+                    .event(event)
                     .participant(participant)
+                    .category(category)
                     .createTime(LocalDateTime.now())
                     .updateTime(LocalDateTime.now())
                     .build();
@@ -91,8 +110,9 @@ public class ApplymentServiceImpl implements ApplymentService {
                 break;
             }
 
-            log.info("[신청 정보 저장] : {}/{}/{}/{}/{}/{}/{}", param.getChurchName(),
+            log.info("[신청 정보 저장] : {}/{}/{}/{}/{}/{}/{}/{}", param.getChurchName(),
                     param.getEventName(),
+                    param.getCategoryName(),
                     param.getName(),
                     param.getAge(),
                     param.getGrade(),
@@ -100,7 +120,7 @@ public class ApplymentServiceImpl implements ApplymentService {
                     param.getGender());
         }
 
-        return new ResponseEntity(ignoredApplyments, status);
+        return new ResponseEntity<>(ignoredApplyments, status);
     }
 
     /**

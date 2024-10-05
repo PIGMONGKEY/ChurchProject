@@ -19,11 +19,12 @@ public class ApplymentParam {
     private String gender;
 
     @Builder
-    public ApplymentParam(int id, String churchName, String eventName, String department, String name, int age, int grade, String gender) {
+    public ApplymentParam(int id, String churchName, String eventName, String department, String categoryName, String name, int age, int grade, String gender) {
         this.id = id;
         this.churchName = churchName;
         this.eventName = eventName;
         this.department = department;
+        this.categoryName = categoryName;
         this.name = name;
         this.age = age;
         this.grade = grade;

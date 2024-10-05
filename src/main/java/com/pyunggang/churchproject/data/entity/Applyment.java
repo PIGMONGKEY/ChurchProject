@@ -35,9 +35,10 @@ public class Applyment {
     private LocalDateTime updateTime;
 
     @Builder
-    public Applyment(Participant participant, Event event, LocalDateTime createTime, LocalDateTime updateTime) {
+    public Applyment(Participant participant, Event event, Category category, LocalDateTime createTime, LocalDateTime updateTime) {
         this.participant = participant;
         this.event = event;
+        this.category = category;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
