@@ -52,4 +52,9 @@ public class CategoryTests {
     public void existsTest() {
 //        System.out.println(categoryRepo.existsByNameAndEventName("1, 2학년", "글짓기"));
     }
+
+    @Test
+    public void findTest() {
+        categoryRepo.findNameByEventName("그림그리기").forEach(onlyCategoryName -> {System.out.println(onlyCategoryName.getName());});
+    }
 }

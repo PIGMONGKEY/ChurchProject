@@ -3,10 +3,8 @@ package com.pyunggang.churchproject.controller;
 import com.pyunggang.churchproject.data.dto.DeleteApplymentParam;
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
 import com.pyunggang.churchproject.data.dto.GetChurchNameParam;
-import com.pyunggang.churchproject.service.ApplymentService;
-import com.pyunggang.churchproject.service.ChurchService;
-import com.pyunggang.churchproject.service.DepartmentService;
-import com.pyunggang.churchproject.service.EventService;
+import com.pyunggang.churchproject.data.repository.CategoryRepository;
+import com.pyunggang.churchproject.service.*;
 import com.pyunggang.churchproject.utils.SecurityUtil;
 import com.pyunggang.churchproject.utils.ServerState;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,7 @@ public class ApplymentController {
     final EventService eventService;
     final ApplymentService applymentService;
     final DepartmentService departmentService;
+    final CategoryRepository categoryRepo;
     final RedisTemplate<String, Object> redisTemplate;
 
     // 교회 홈
@@ -64,6 +63,8 @@ public class ApplymentController {
         model.addAttribute("church", churchName);
         model.addAttribute("event", eventName);
         model.addAttribute("departments", departmentService.getAllDepartment());
+        // TODO: Category 넘겨주기
+        model.addAttribute("categorys", categoryRepo.findNameByEventName(eventName));
         return "applyment/register";
     }
 
