@@ -12,6 +12,7 @@ public class ApplymentParam {
     private String churchName;
     private String eventName;
     private String department;
+    private String categoryName;
     private String name;
     private int age;
     private int grade;
@@ -34,6 +35,7 @@ public class ApplymentParam {
         this.churchName = applyment.getParticipant().getChurch().getName();
         this.eventName = applyment.getEvent().getName();
         this.department = applyment.getParticipant().getDepartment().getName();
+        this.categoryName = applyment.getCategory().getName();
         this.name = applyment.getParticipant().getName();
         this.age = applyment.getParticipant().getAge();
         this.grade = applyment.getParticipant().getGrade();
