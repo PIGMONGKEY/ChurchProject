@@ -27,4 +27,9 @@ public class CategoryTests {
     public void deleteTest() {
         categoryRepo.deleteById(2);
     }
+
+    @Test
+    public void existsTest() {
+        System.out.println(categoryRepo.existsByNameAndEventName("1, 2학년", "글짓기"));
+    }
 }
