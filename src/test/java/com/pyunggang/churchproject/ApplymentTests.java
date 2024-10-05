@@ -42,29 +42,17 @@ public class ApplymentTests {
 
     @Test
     public void findAllTest() {
-        applymentService.findApplymentList("평강교회", "글짓기");
+        System.out.println(applymentService.findApplymentList("평강교회", "그림그리기").toString());
     }
 
     @Test
     public void deleteTest() {
-        applymentService.deleteApplyment("글짓기", 2);
+        applymentService.deleteApplyment("그림그리기", 4);
     }
 
     @Test
     public void saveTest() {
         // 성공 데이터
-//        ApplymentParam applyment = ApplymentParam.builder()
-//                .name("테스트이름")
-//                .age(20)
-//                .grade(3)
-//                .gender("male")
-//                .department("중등부")
-//                .eventName("그림그리기")
-//                .churchName("평강교회")
-//                .categoryName("1,2학년")
-//                .build();
-
-        // 실패데이터 (부문 없음)
         ApplymentParam applyment = ApplymentParam.builder()
                 .name("테스트이름")
                 .age(20)
@@ -73,12 +61,41 @@ public class ApplymentTests {
                 .department("중등부")
                 .eventName("그림그리기")
                 .churchName("평강교회")
-                .categoryName("없는 부문")
+                .categoryName("1,2학년")
                 .build();
+
+        // 실패데이터 (부문 없음)
+//        ApplymentParam applyment = ApplymentParam.builder()
+//                .name("테스트이름")
+//                .age(20)
+//                .grade(3)
+//                .gender("male")
+//                .department("중등부")
+//                .eventName("그림그리기")
+//                .churchName("평강교회")
+//                .categoryName("없는 부문")
+//                .build();
 
         List<ApplymentParam> applymentParams = new ArrayList<>();
         applymentParams.add(applyment);
 
         System.out.println((applymentService.saveApplyment(applymentParams)).getStatusCode());
+    }
+
+    @Test
+    public void updateTest() {
+        ApplymentParam applyment = ApplymentParam.builder()
+                .id(5)
+                .name("수정본")
+                .age(20)
+                .grade(3)
+                .gender("male")
+                .department("중등부")
+                .eventName("그림그리기")
+                .churchName("평강교회")
+                .categoryName("1,2학년")
+                .build();
+
+        applymentService.updateApplyment(applyment);
     }
 }

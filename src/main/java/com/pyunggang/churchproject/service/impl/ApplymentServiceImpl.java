@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -141,9 +142,10 @@ public class ApplymentServiceImpl implements ApplymentService {
         if (applyments.isEmpty())
             status = HttpStatus.NOT_FOUND;
         else {
-            for (Applyment applyment : applyments) {
+            for (Applyment applyment : applyments)
                 params.add(new ApplymentParam(applyment));
-            }
+            // 카테고리명으로 정렬
+            params.sort((Comparator.comparing(ApplymentParam::getCategoryName)));
         }
 
         log.info("[신청 정보 조회] : {}/{}", churchName, eventName);
@@ -157,14 +159,26 @@ public class ApplymentServiceImpl implements ApplymentService {
     @Transactional
     public ResponseEntity updateApplyment(ApplymentParam applymentParam) {
         HttpStatus status = HttpStatus.CREATED;
-        Participant participant = partiRepo.findById(applymentParam.getId()).get();
+        Participant participant;
+        Department department;
+        Church church;
+
+        try {
+            participant = partiRepo.findById(applymentParam.getId()).orElseThrow(() -> new IllegalArgumentException("participant doesn't"));
+            department = departRepo.findById(applymentParam.getDepartment()).orElseThrow(() -> new IllegalArgumentException("department doesn't exist"));
+            church = churchRepo.findById(applymentParam.getChurchName()).orElseThrow(() -> new IllegalArgumentException("church doesn't exist"));
+        } catch (RuntimeException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        // TODO: 수정후 중복이 발생할 경우를 확인하는 로직임 - 이후 처리에 대한 연구 고민 필요
         Participant newParticipant = Participant.builder()
                 .name(applymentParam.getName())
                 .age(applymentParam.getAge())
                 .gender(applymentParam.getGender())
                 .grade(applymentParam.getGrade())
-                .department(departRepo.findDepartmentByNameIs(applymentParam.getDepartment()))
-                .church(churchRepo.findById(applymentParam.getChurchName()).get())
+                .department(department)
+                .church(church)
                 .build();
 
         newParticipant = partiRepo.findParticipantByParticipant(newParticipant);
@@ -176,7 +190,7 @@ public class ApplymentServiceImpl implements ApplymentService {
             participant.setName(applymentParam.getName());
             participant.setGender(applymentParam.getGender());
             participant.setGrade(applymentParam.getGrade());
-            participant.setDepartment(departRepo.findDepartmentByNameIs(applymentParam.getDepartment()));
+            participant.setDepartment(department);
 
             if (partiRepo.save(participant).getParticipantId() != participant.getParticipantId())
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
