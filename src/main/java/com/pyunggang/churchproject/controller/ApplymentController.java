@@ -4,6 +4,7 @@ import com.pyunggang.churchproject.data.dto.DeleteApplymentParam;
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
 import com.pyunggang.churchproject.data.dto.GetChurchNameParam;
 import com.pyunggang.churchproject.data.repository.CategoryRepository;
+import com.pyunggang.churchproject.data.repository.column.OnlyCategoryName;
 import com.pyunggang.churchproject.service.*;
 import com.pyunggang.churchproject.utils.SecurityUtil;
 import com.pyunggang.churchproject.utils.ServerState;
@@ -29,6 +30,7 @@ public class ApplymentController {
     final ApplymentService applymentService;
     final DepartmentService departmentService;
     final CategoryRepository categoryRepo;
+    final CategoryService categoryService;
     final RedisTemplate<String, Object> redisTemplate;
 
     // 교회 홈
@@ -50,6 +52,14 @@ public class ApplymentController {
                 .build();
 
         return new ResponseEntity<>(churchNameParam, HttpStatus.OK);
+    }
+
+    // 종목에 대한 부문 조회 API
+    @GetMapping("category")
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<OnlyCategoryName>> getCategories(@RequestParam("eventName") String eventName) {
+        return categoryService.findAllCategoryByEvent(eventName);
     }
 
     /**

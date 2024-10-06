@@ -5,11 +5,14 @@ import com.pyunggang.churchproject.data.entity.Category;
 import com.pyunggang.churchproject.data.entity.Event;
 import com.pyunggang.churchproject.data.repository.CategoryRepository;
 import com.pyunggang.churchproject.data.repository.EventRepository;
+import com.pyunggang.churchproject.data.repository.column.OnlyCategoryName;
 import com.pyunggang.churchproject.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -68,5 +71,15 @@ public class CategoryServiceImpl implements CategoryService {
             return new ResponseEntity(HttpStatus.OK);
         } else
             return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * 이벤트명으로 해당 카테고리 모두 조회 메서드
+     * @param eventName
+     * @return 200 + 카테고리 리스트
+     */
+    @Override
+    public ResponseEntity<List<OnlyCategoryName>> findAllCategoryByEvent(String eventName) {
+        return new ResponseEntity<>(categoryRepo.findNameByEventName(eventName), HttpStatus.OK);
     }
 }

@@ -40,6 +40,7 @@
         let $act
         let $churchName
         let $isServerOpen
+        let $category
         const $departments = [[${departments}]]
 
         window.onload = function () {
@@ -119,6 +120,19 @@
             const $eventName = $("select[name='eventName']").val()
             const $churchName = $("input[name='churchName']").val()
 
+            // 부문 정보 가져오기
+            $.ajax({
+                url: "/register/category",
+                type: "get",
+                headers: {"Authorization": getCookie("grantType") + " " + $act},
+                contentType: "application/json; charset=utf-8",
+                data: {eventName: $eventName},
+                success: function (response) {
+                    $category = response
+                }
+            })
+
+            // 참가자 정보 가져오기
             $.ajax({
                 url: "/register/applyment",
                 type: "get",
@@ -153,6 +167,7 @@
                 "<tr class=\"inserted\">\n" +
                 "                <td>교회</td>\n" +
                 "                <td>종목</td>\n" +
+                "                <td>부문</td>\n" +
                 "                <td>이름</td>\n" +
                 "                <td>나이</td>\n" +
                 "                <td>학년</td>\n" +
@@ -165,10 +180,21 @@
             for (const count in datas) {
                 const data = datas[count]
 
+                // 교회 | 종목 | 부문 | 이름 | 나이 | 학년 | 부서 | 성별
                 $string +=
                     "<tr class=\"inserted\" name=\"list_" + data.id + "\">\n" +
                     "                <td><input name=\"churchName\" type=\"text\" value=\"" + data.churchName + "\" readonly /></td>\n" +
                     "                <td><input name=\"eventName\" type=\"text\" value=\"" + data.eventName + "\" readonly /></td>\n" +
+                    "                <td>\n" +
+                    "                    <select class=\"change-able\" name=\"category\" disabled>\n"
+
+                $category.forEach(function(data) {
+                    $string += "<option value=\"" + data.name + "\">" + data.name + "</option>"
+                })
+
+                $string +=
+                    "                    </select>\n" +
+                    "                </td>\n" +
                     "                <td><input class=\"focus_input change-able\" type=\"text\" name=\"name\" value=\"" + data.name + "\" readonly/></td>\n" +
                     "                <td><input class=\"change-able\" type=\"number\" name=\"age\" value=\"" + data.age + "\" readonly/></td>\n" +
                     "                <td>\n" +
@@ -208,6 +234,8 @@
                 $("tbody").append($string)
                 $string = ""
 
+
+                $("select[name='category']").last().val(data.categoryName).prop("selected", true)
                 $("select[name='grade']").last().val(data.grade).prop("selected", true)
                 $("select[name='department']").last().val(data.department).prop("selected", true)
                 $("select[name='gender']").last().val(data.gender).prop("selected", true)
