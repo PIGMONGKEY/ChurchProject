@@ -27,7 +27,7 @@ public class CategoryTests {
 //        categoryRepo.save(category);
 
 //        // 성공, 중복 테스트
-//        System.out.println(categoryService.addCategory(new CategoryParam("3,4학년", "그림그리기")).getStatusCode());
+//        System.out.println(categoryService.addCategory(new CategoryParam("1,2학년", "그림그리기")).getStatusCode());
 
 //        // 이벤트 없음 테스트
 //        System.out.println(categoryService.addCategory(new CategoryParam("3,4학년", "없는종목")).getStatusCode());
