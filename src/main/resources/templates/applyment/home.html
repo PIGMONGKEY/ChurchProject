@@ -186,7 +186,7 @@
                     "                <td><input name=\"churchName\" type=\"text\" value=\"" + data.churchName + "\" readonly /></td>\n" +
                     "                <td><input name=\"eventName\" type=\"text\" value=\"" + data.eventName + "\" readonly /></td>\n" +
                     "                <td>\n" +
-                    "                    <select class=\"change-able\" name=\"category\" disabled>\n"
+                    "                    <select class=\"change-able\" name=\"categoryName\" disabled>\n"
 
                 $category.forEach(function(data) {
                     $string += "<option value=\"" + data.name + "\">" + data.name + "</option>"
@@ -234,8 +234,7 @@
                 $("tbody").append($string)
                 $string = ""
 
-
-                $("select[name='category']").last().val(data.categoryName).prop("selected", true)
+                $("select[name='categoryName']").last().val(data.categoryName).prop("selected", true)
                 $("select[name='grade']").last().val(data.grade).prop("selected", true)
                 $("select[name='department']").last().val(data.department).prop("selected", true)
                 $("select[name='gender']").last().val(data.gender).prop("selected", true)
@@ -267,6 +266,7 @@
             $tr.find(".focus_input").focus()
         }
 
+        // TODO: 수정 취소 했을때 이전 데이터로 돌리는 로직 필요
         function modifyCancel(name) {
             const $tr = $("tr[name=" + name + "]")
             $tr.find("input.change-able").each(function () {
@@ -290,7 +290,7 @@
 
             data["id"] = Number(id)
 
-            for (let i=0; i<7; i++) {
+            for (let i=0; i<8; i++) {
                 let $temp = $tr.cells.item(i).firstElementChild
                 data[$temp.name] = $temp.value
             }

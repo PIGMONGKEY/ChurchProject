@@ -162,11 +162,15 @@ public class ApplymentServiceImpl implements ApplymentService {
         Participant participant;
         Department department;
         Church church;
+        Applyment applyment;
+        Category category;
 
         try {
             participant = partiRepo.findById(applymentParam.getId()).orElseThrow(() -> new IllegalArgumentException("participant doesn't"));
             department = departRepo.findById(applymentParam.getDepartment()).orElseThrow(() -> new IllegalArgumentException("department doesn't exist"));
             church = churchRepo.findById(applymentParam.getChurchName()).orElseThrow(() -> new IllegalArgumentException("church doesn't exist"));
+            applyment = applyRepo.findByParticipantAndEventName(participant, applymentParam.getEventName());
+            category = categoryRepo.findByNameAndEventName(applymentParam.getCategoryName(), applymentParam.getEventName()).orElseThrow(() -> new IllegalArgumentException("category doesn't exist"));
         } catch (RuntimeException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
@@ -191,6 +195,11 @@ public class ApplymentServiceImpl implements ApplymentService {
             participant.setGender(applymentParam.getGender());
             participant.setGrade(applymentParam.getGrade());
             participant.setDepartment(department);
+
+            if (!applyment.getCategory().getName().equals(applymentParam.getCategoryName())) {
+                applyment.setCategory(category);
+                applyRepo.save(applyment);
+            }
 
             if (partiRepo.save(participant).getParticipantId() != participant.getParticipantId())
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
