@@ -74,7 +74,7 @@ public class ApplymentController {
         model.addAttribute("event", eventName);
         model.addAttribute("departments", departmentService.getAllDepartment());
         // TODO: Category 넘겨주기
-        model.addAttribute("categorys", categoryRepo.findNameByEventName(eventName));
+        model.addAttribute("categories", categoryRepo.findNameByEventName(eventName));
         return "applyment/register";
     }
 
