@@ -42,7 +42,8 @@ public class ApplymentTests {
 
     @Test
     public void findAllTest() {
-        System.out.println(applymentService.findApplymentList("평강교회", "그림그리기").toString());
+//        System.out.println(applymentService.findApplymentList("평강교회", "그림그리기").toString());
+        System.out.println(applymentRepository.findAllByCategoryNameAndEventName("1,2학년", "그림그리기"));
     }
 
     @Test

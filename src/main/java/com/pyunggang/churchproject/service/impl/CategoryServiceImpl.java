@@ -1,9 +1,13 @@
 package com.pyunggang.churchproject.service.impl;
 
+import com.pyunggang.churchproject.data.entity.Applyment;
 import com.pyunggang.churchproject.data.entity.Category;
 import com.pyunggang.churchproject.data.entity.Event;
+import com.pyunggang.churchproject.data.entity.Participant;
+import com.pyunggang.churchproject.data.repository.ApplymentRepository;
 import com.pyunggang.churchproject.data.repository.CategoryRepository;
 import com.pyunggang.churchproject.data.repository.EventRepository;
+import com.pyunggang.churchproject.data.repository.ParticipantRepository;
 import com.pyunggang.churchproject.data.repository.column.OnlyCategoryName;
 import com.pyunggang.churchproject.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepo;
     private final EventRepository eventRepo;
+    private final ApplymentRepository applymentRepo;
+    private final ParticipantRepository participantRepo;
 
     /**
      * 카테고리 추가
@@ -67,11 +73,24 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public ResponseEntity removeCategory(String categoryName, String eventName) {
-        if (categoryRepo.existsByNameAndEventName(categoryName, eventName)) {
-            categoryRepo.deleteByNameAndEventName(categoryName, eventName);
-            return new ResponseEntity(HttpStatus.OK);
-        } else
+        // TODO: 부문 삭제 시 해당 참여 정보 삭제 로직 추가
+        List<Applyment> applyments;
+
+        if (!categoryRepo.existsByNameAndEventName(categoryName, eventName))
             return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        applyments = applymentRepo.findAllByCategoryNameAndEventName(categoryName, eventName);
+
+        if (!applyments.isEmpty()) {
+            applymentRepo.deleteAll(applyments);
+            for (Applyment applyment : applyments) {
+                if (!applymentRepo.existsByParticipant(applyment.getParticipant()))
+                    participantRepo.delete(applyment.getParticipant());
+            }
+        }
+
+        categoryRepo.deleteByNameAndEventName(categoryName, eventName);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**

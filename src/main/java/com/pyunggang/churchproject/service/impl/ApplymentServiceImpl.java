@@ -49,9 +49,6 @@ public class ApplymentServiceImpl implements ApplymentService {
         try {
             event = eventRepo.findEventByNameIs(params.get(0).getEventName()).orElseThrow(() -> new IllegalArgumentException("event doesn't exist"));
             church = churchRepo.findById(params.get(0).getChurchName()).orElseThrow(() -> new IllegalArgumentException("church doesn't exist"));
-            department = departRepo.findById(params.get(0).getDepartment()).orElseThrow(() -> new IllegalArgumentException("department doesn't exist"));
-            category = categoryRepo.findByNameAndEventName(params.get(0).getCategoryName(),
-                    params.get(0).getEventName()).orElseThrow(() -> new IllegalArgumentException("category doesn't exist"));
         } catch (IllegalArgumentException e) {
             ignoredApplyments.addAll(params);
             return new ResponseEntity<>(ignoredApplyments, HttpStatus.NOT_FOUND);
@@ -61,6 +58,15 @@ public class ApplymentServiceImpl implements ApplymentService {
             // 빈 데이터가 있는 참가자 정보 건너뛰기
             if (param.getName().isEmpty() || param.getGender().isEmpty() || param.getDepartment().isEmpty()
                     || param.getGrade() == 0 || param.getAge() == 0) {
+                continue;
+            }
+
+            try {
+                department = departRepo.findById(param.getDepartment()).orElseThrow(() -> new IllegalArgumentException("department doesn't exist"));
+                category = categoryRepo.findByNameAndEventName(param.getCategoryName(),
+                        param.getEventName()).orElseThrow(() -> new IllegalArgumentException("category doesn't exist"));
+            } catch (IllegalArgumentException e) {
+                ignoredApplyments.add(param);
                 continue;
             }
 

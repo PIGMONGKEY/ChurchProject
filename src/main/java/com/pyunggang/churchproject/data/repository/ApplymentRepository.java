@@ -61,6 +61,9 @@ public interface ApplymentRepository extends JpaRepository<Applyment, Integer> {
     // 종목명으로 신청 내역 조회
     List<Applyment> findAllByEventName(String eventName);
 
+    // 부문으로 신청 내역 조회
+    List<Applyment> findAllByCategoryNameAndEventName(String categoryName, String eventName);
+
     // 참가자 정보로 신청 내역 조회
     List<Applyment> findAllByParticipant(Participant participant);
 }
