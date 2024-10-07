@@ -110,23 +110,21 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void getAllInfoAsExcel(HttpServletResponse response) throws IOException {
         final String[] cellNames = {"종목", "교회", "이름", "나이", "학년", "부서", "성별"};
+        final String[] cellNamesWithCategory = {"종목", "부문", "교회", "이름", "나이", "학년", "부서", "성별"};
 
         List<Event> events = eventRepository.findAll();
         List<Church> churches = churchRepository.findAll();
         List<Department> departments = departmentRepository.findAll();
         List<Applyment> applyments;
-        List<Participant> participants;
+        List<Participant> participants = participantRepository.findAll();
         Workbook wb = new XSSFWorkbook();
         Row row = null;
         Cell cell = null;
-        int rowNum = 0;
         Sheet sheet;
+        int rowNum = 0;
+        StringBuilder eventNames = new StringBuilder();
 
-        // 전체 Sheet
-        participants = participantRepository.findAll();
-
-        rowNum = 0;
-        // 전체 챀가자 Sheet 생성
+        // 전체 참가자 Sheet 생성
         sheet = wb.createSheet("전체 참가자");
         row = sheet.createRow(rowNum++);
         for (int i=0; i<cellNames.length; i++) {
@@ -137,14 +135,21 @@ public class AdminServiceImpl implements AdminService {
         // 데이터 삽입
         for (Participant participant : participants) {
             row = sheet.createRow(rowNum++);
-            String eventNames = "";
-            // 참여하는 모든 종목 문자열로 연결
-            for (Applyment applyment : participant.getEvents())
-                eventNames += ", " + applyment.getEvent().getName();
-            eventNames = eventNames.substring(2);
+            // StringBuilder 초기화
+            eventNames.delete(0, eventNames.length());
+            // 참여하는 모든 종목과 부문 문자열로 연결
+            // ex) 그림그리기:1,2학년, 글짓기:1,2학년
+            for (Applyment applyment : participant.getEvents()) {
+                eventNames.append(", ");
+                eventNames.append(applyment.getEvent().getName());
+                eventNames.append(":");
+                eventNames.append(applyment.getCategory().getName());
+            }
+            // 시작 부분에 ", " 제거함
+            eventNames.delete(0, 2);
             // 종목명
             cell = row.createCell(0);
-            cell.setCellValue(eventNames);
+            cell.setCellValue(eventNames.toString());
             // 교회명
             cell = row.createCell(1);
             cell.setCellValue(participant.getChurch().getName());
@@ -174,9 +179,9 @@ public class AdminServiceImpl implements AdminService {
             // 제목 줄 생성
             row = sheet.createRow(rowNum++);
             // 제목 값 입력 - 종목 제외
-            for (int i=0; i<cellNames.length; i++) {
+            for (int i=0; i<cellNamesWithCategory.length; i++) {
                 cell = row.createCell(i);
-                cell.setCellValue(cellNames[i]);
+                cell.setCellValue(cellNamesWithCategory[i]);
             }
 
             // 데이터 삽입
@@ -185,23 +190,26 @@ public class AdminServiceImpl implements AdminService {
                 // 종목명
                 cell = row.createCell(0);
                 cell.setCellValue(applyment.getEvent().getName());
-                // 교회명
+                // 부문
                 cell = row.createCell(1);
+                cell.setCellValue(applyment.getCategory().getName());
+                // 교회명
+                cell = row.createCell(2);
                 cell.setCellValue(applyment.getParticipant().getChurch().getName());
                 // 이름
-                cell = row.createCell(2);
+                cell = row.createCell(3);
                 cell.setCellValue(applyment.getParticipant().getName());
                 // 나이
-                cell = row.createCell(3);
+                cell = row.createCell(4);
                 cell.setCellValue(applyment.getParticipant().getAge());
                 // 학년
-                cell = row.createCell(4);
+                cell = row.createCell(5);
                 cell.setCellValue(applyment.getParticipant().getGrade() + "학년");
                 // 부서
-                cell = row.createCell(5);
+                cell = row.createCell(6);
                 cell.setCellValue(applyment.getParticipant().getDepartment().getName());
                 // 성별
-                cell = row.createCell(6);
+                cell = row.createCell(7);
                 cell.setCellValue(applyment.getParticipant().getGender());
             }
         }
@@ -222,14 +230,21 @@ public class AdminServiceImpl implements AdminService {
             // 데이터 삽입
             for (Participant participant : participants) {
                 row = sheet.createRow(rowNum++);
-                String eventNames = "";
-                // 참여하는 모든 종목 문자열로 연결
-                for (Applyment applyment : participant.getEvents())
-                    eventNames += ", " + applyment.getEvent().getName();
-                eventNames = eventNames.substring(2);
+                // StringBuilder 초기화
+                eventNames.delete(0, eventNames.length());
+                // 참여하는 모든 종목과 부문 문자열로 연결
+                // ex) 그림그리기:1,2학년, 글짓기:1,2학년
+                for (Applyment applyment : participant.getEvents()) {
+                    eventNames.append(", ");
+                    eventNames.append(applyment.getEvent().getName());
+                    eventNames.append(":");
+                    eventNames.append(applyment.getCategory().getName());
+                }
+                // 시작 부분에 ", " 제거함
+                eventNames.delete(0, 2);
                 // 종목명
                 cell = row.createCell(0);
-                cell.setCellValue(eventNames);
+                cell.setCellValue(eventNames.toString());
                 // 교회명
                 cell = row.createCell(1);
                 cell.setCellValue(participant.getChurch().getName());
@@ -267,14 +282,21 @@ public class AdminServiceImpl implements AdminService {
             // 데이터 삽입
             for (Participant participant : participants) {
                 row = sheet.createRow(rowNum++);
-                String eventNames = "";
-                // 참여하는 모든 종목 문자열로 연결
-                for (Applyment applyment : participant.getEvents())
-                    eventNames += ", " + applyment.getEvent().getName();
-                eventNames = eventNames.substring(2);
+                // StringBuilder 초기화
+                eventNames.delete(0, eventNames.length());
+                // 참여하는 모든 종목과 부문 문자열로 연결
+                // ex) 그림그리기:1,2학년, 글짓기:1,2학년
+                for (Applyment applyment : participant.getEvents()) {
+                    eventNames.append(", ");
+                    eventNames.append(applyment.getEvent().getName());
+                    eventNames.append(":");
+                    eventNames.append(applyment.getCategory().getName());
+                }
+                // 시작 부분에 ", " 제거함
+                eventNames.delete(0, 2);
                 // 종목명
                 cell = row.createCell(0);
-                cell.setCellValue(eventNames);
+                cell.setCellValue(eventNames.toString());
                 // 교회명
                 cell = row.createCell(1);
                 cell.setCellValue(participant.getChurch().getName());

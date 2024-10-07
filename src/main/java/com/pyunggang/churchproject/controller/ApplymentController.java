@@ -3,10 +3,9 @@ package com.pyunggang.churchproject.controller;
 import com.pyunggang.churchproject.data.dto.DeleteApplymentParam;
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
 import com.pyunggang.churchproject.data.dto.GetChurchNameParam;
-import com.pyunggang.churchproject.service.ApplymentService;
-import com.pyunggang.churchproject.service.ChurchService;
-import com.pyunggang.churchproject.service.DepartmentService;
-import com.pyunggang.churchproject.service.EventService;
+import com.pyunggang.churchproject.data.repository.CategoryRepository;
+import com.pyunggang.churchproject.data.repository.column.OnlyCategoryName;
+import com.pyunggang.churchproject.service.*;
 import com.pyunggang.churchproject.utils.SecurityUtil;
 import com.pyunggang.churchproject.utils.ServerState;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +29,8 @@ public class ApplymentController {
     final EventService eventService;
     final ApplymentService applymentService;
     final DepartmentService departmentService;
+    final CategoryRepository categoryRepo;
+    final CategoryService categoryService;
     final RedisTemplate<String, Object> redisTemplate;
 
     // 교회 홈
@@ -53,9 +54,17 @@ public class ApplymentController {
         return new ResponseEntity<>(churchNameParam, HttpStatus.OK);
     }
 
+    // 종목에 대한 부문 조회 API
+    @GetMapping("category")
+    @ResponseBody
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<List<OnlyCategoryName>> getCategories(@RequestParam("eventName") String eventName) {
+        return categoryService.findAllCategoryByEvent(eventName);
+    }
+
     /**
      * 참가자 신청 페이지로 이동
-     * 교회명과 종목명을 넘겨줌
+     * 교회명, 종목명, 부서명, 부문명을 넘겨줌
      * @param churchName 교회 이름
      * @param eventName 종목 이름
      */
@@ -64,6 +73,8 @@ public class ApplymentController {
         model.addAttribute("church", churchName);
         model.addAttribute("event", eventName);
         model.addAttribute("departments", departmentService.getAllDepartment());
+        // TODO: Category 넘겨주기
+        model.addAttribute("categories", categoryRepo.findNameByEventName(eventName));
         return "applyment/register";
     }
 

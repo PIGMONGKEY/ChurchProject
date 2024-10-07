@@ -65,6 +65,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<String> getAllDepartment() {
-        return departmentRepository.findAll().stream().map(department -> department.getName()).toList();
+        return departmentRepository.findAll().stream().map(Department::getName).toList();
     }
 }

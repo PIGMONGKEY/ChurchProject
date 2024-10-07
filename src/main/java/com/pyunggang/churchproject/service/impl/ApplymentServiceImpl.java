@@ -1,8 +1,7 @@
 package com.pyunggang.churchproject.service.impl;
 
 import com.pyunggang.churchproject.data.dto.ApplymentParam;
-import com.pyunggang.churchproject.data.entity.Applyment;
-import com.pyunggang.churchproject.data.entity.Participant;
+import com.pyunggang.churchproject.data.entity.*;
 import com.pyunggang.churchproject.data.repository.*;
 import com.pyunggang.churchproject.service.ApplymentService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,6 +25,7 @@ public class ApplymentServiceImpl implements ApplymentService {
     final private ChurchRepository churchRepo;
     final private DepartmentRepository departRepo;
     final private EventRepository eventRepo;
+    final private CategoryRepository categoryRepo;
 
     /**
      * 참가자 정보 리스트로 받아서 insert
@@ -36,19 +37,43 @@ public class ApplymentServiceImpl implements ApplymentService {
     public ResponseEntity<List<ApplymentParam>> saveApplyment(List<ApplymentParam> params) {
         Participant participant;
         Applyment applyment;
+        Event event;
+        Church church;
+        Department department;
+        Category category;
         List<ApplymentParam> ignoredApplyments = new LinkedList<>();
         HttpStatus status = HttpStatus.OK;
 
+        // event, church, department, category 중 DB에 없는 게 포함되어있다면 전체 반려
+        // 404 반환
+        try {
+            event = eventRepo.findEventByNameIs(params.get(0).getEventName()).orElseThrow(() -> new IllegalArgumentException("event doesn't exist"));
+            church = churchRepo.findById(params.get(0).getChurchName()).orElseThrow(() -> new IllegalArgumentException("church doesn't exist"));
+        } catch (IllegalArgumentException e) {
+            ignoredApplyments.addAll(params);
+            return new ResponseEntity<>(ignoredApplyments, HttpStatus.NOT_FOUND);
+        }
+
         for (ApplymentParam param : params) {
             // 빈 데이터가 있는 참가자 정보 건너뛰기
-            if (param.getName().equals("") || param.getGender().equals("") || param.getDepartment().equals("")
+            if (param.getName().isEmpty() || param.getGender().isEmpty() || param.getDepartment().isEmpty()
                     || param.getGrade() == 0 || param.getAge() == 0) {
                 continue;
             }
+
+            try {
+                department = departRepo.findById(param.getDepartment()).orElseThrow(() -> new IllegalArgumentException("department doesn't exist"));
+                category = categoryRepo.findByNameAndEventName(param.getCategoryName(),
+                        param.getEventName()).orElseThrow(() -> new IllegalArgumentException("category doesn't exist"));
+            } catch (IllegalArgumentException e) {
+                ignoredApplyments.add(param);
+                continue;
+            }
+
             // 새로운 참가자 객체 생성
             participant = Participant.builder()
-                    .department(departRepo.findDepartmentByNameIs(param.getDepartment()))
-                    .church(churchRepo.findById(param.getChurchName()).get())
+                    .department(department)
+                    .church(church)
                     .name(param.getName())
                     .age(param.getAge())
                     .gender(param.getGender())
@@ -79,8 +104,9 @@ public class ApplymentServiceImpl implements ApplymentService {
 
             // 신청 생성
             applyment = Applyment.builder()
-                    .event(eventRepo.findEventByNameIs(param.getEventName()))
+                    .event(event)
                     .participant(participant)
+                    .category(category)
                     .createTime(LocalDateTime.now())
                     .updateTime(LocalDateTime.now())
                     .build();
@@ -91,8 +117,9 @@ public class ApplymentServiceImpl implements ApplymentService {
                 break;
             }
 
-            log.info("[신청 정보 저장] : {}/{}/{}/{}/{}/{}/{}", param.getChurchName(),
+            log.info("[신청 정보 저장] : {}/{}/{}/{}/{}/{}/{}/{}", param.getChurchName(),
                     param.getEventName(),
+                    param.getCategoryName(),
                     param.getName(),
                     param.getAge(),
                     param.getGrade(),
@@ -100,7 +127,7 @@ public class ApplymentServiceImpl implements ApplymentService {
                     param.getGender());
         }
 
-        return new ResponseEntity(ignoredApplyments, status);
+        return new ResponseEntity<>(ignoredApplyments, status);
     }
 
     /**
@@ -121,9 +148,10 @@ public class ApplymentServiceImpl implements ApplymentService {
         if (applyments.isEmpty())
             status = HttpStatus.NOT_FOUND;
         else {
-            for (Applyment applyment : applyments) {
+            for (Applyment applyment : applyments)
                 params.add(new ApplymentParam(applyment));
-            }
+            // 카테고리명으로 정렬
+            params.sort((Comparator.comparing(ApplymentParam::getCategoryName)));
         }
 
         log.info("[신청 정보 조회] : {}/{}", churchName, eventName);
@@ -137,14 +165,30 @@ public class ApplymentServiceImpl implements ApplymentService {
     @Transactional
     public ResponseEntity updateApplyment(ApplymentParam applymentParam) {
         HttpStatus status = HttpStatus.CREATED;
-        Participant participant = partiRepo.findById(applymentParam.getId()).get();
+        Participant participant;
+        Department department;
+        Church church;
+        Applyment applyment;
+        Category category;
+
+        try {
+            participant = partiRepo.findById(applymentParam.getId()).orElseThrow(() -> new IllegalArgumentException("participant doesn't"));
+            department = departRepo.findById(applymentParam.getDepartment()).orElseThrow(() -> new IllegalArgumentException("department doesn't exist"));
+            church = churchRepo.findById(applymentParam.getChurchName()).orElseThrow(() -> new IllegalArgumentException("church doesn't exist"));
+            applyment = applyRepo.findByParticipantAndEventName(participant, applymentParam.getEventName());
+            category = categoryRepo.findByNameAndEventName(applymentParam.getCategoryName(), applymentParam.getEventName()).orElseThrow(() -> new IllegalArgumentException("category doesn't exist"));
+        } catch (RuntimeException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        // TODO: 수정후 중복이 발생할 경우를 확인하는 로직임 - 이후 처리에 대한 연구 고민 필요
         Participant newParticipant = Participant.builder()
                 .name(applymentParam.getName())
                 .age(applymentParam.getAge())
                 .gender(applymentParam.getGender())
                 .grade(applymentParam.getGrade())
-                .department(departRepo.findDepartmentByNameIs(applymentParam.getDepartment()))
-                .church(churchRepo.findById(applymentParam.getChurchName()).get())
+                .department(department)
+                .church(church)
                 .build();
 
         newParticipant = partiRepo.findParticipantByParticipant(newParticipant);
@@ -156,7 +200,12 @@ public class ApplymentServiceImpl implements ApplymentService {
             participant.setName(applymentParam.getName());
             participant.setGender(applymentParam.getGender());
             participant.setGrade(applymentParam.getGrade());
-            participant.setDepartment(departRepo.findDepartmentByNameIs(applymentParam.getDepartment()));
+            participant.setDepartment(department);
+
+            if (!applyment.getCategory().getName().equals(applymentParam.getCategoryName())) {
+                applyment.setCategory(category);
+                applyRepo.save(applyment);
+            }
 
             if (partiRepo.save(participant).getParticipantId() != participant.getParticipantId())
                 status = HttpStatus.INTERNAL_SERVER_ERROR;

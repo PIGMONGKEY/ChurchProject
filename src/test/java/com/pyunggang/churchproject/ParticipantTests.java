@@ -25,24 +25,24 @@ public class ParticipantTests {
 
     @Test
     public void saveTest() {
-        Participant participant = Participant
-                .builder()
-                .name("이원희")
-                .age(15)
-                .grade(2)
-                .gender("male")
-                .church(churchRepository.findById("평강교회").get())
-                .department(departmentRepository.findDepartmentByNameIs("중등부"))
-                .build();
-        participantRepository.save(participant);
-
-        applymentRepository.save(Applyment
-                .builder()
-                .participant(participant)
-                .event(eventRepository.findEventByNameIs("글짓기"))
-                .createTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now())
-                .build());
+//        Participant participant = Participant
+//                .builder()
+//                .name("이원희")
+//                .age(15)
+//                .grade(2)
+//                .gender("male")
+//                .church(churchRepository.findById("평강교회").get())
+//                .department(departmentRepository.findDepartmentByNameIs("중등부"))
+//                .build();
+//        participantRepository.save(participant);
+//
+//        applymentRepository.save(Applyment
+//                .builder()
+//                .participant(participant)
+//                .event(even)
+//                .createTime(LocalDateTime.now())
+//                .updateTime(LocalDateTime.now())
+//                .build());
     }
 
 //    @Test

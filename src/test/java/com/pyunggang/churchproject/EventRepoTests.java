@@ -23,4 +23,9 @@ public class EventRepoTests {
             eventRepository.save(Event.builder().name(event).build());
         }
     }
+
+    @Test
+    public void findTest() {
+        System.out.println(eventRepository.findEventByNameIs("없는교회"));
+    }
 }

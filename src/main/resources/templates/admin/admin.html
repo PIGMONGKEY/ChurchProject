@@ -52,6 +52,26 @@
       </div>
     </div>
 
+    <div class="category wrapper">
+      <div class="add">
+        <h4>부문 추가</h4>
+        <select id="eventForAddCategory">
+          <option th:each="event : ${adminPageParam.getEvents()}" th:value="${event.getName()}" th:utext="${event.getName()}"></option>
+        </select>
+        <input name="category" type="text">
+        <button name="category" onclick="add(this.name)">추가</button>
+      </div>
+
+      <div class="remove">
+        <h4>부문 삭제</h4>
+        <select id="eventForRemoveCategory" onchange="getCategories(this.value)">
+          <option th:each="event : ${adminPageParam.getEvents()}" th:value="${event.getName()}" th:utext="${event.getName()}" ></option>
+        </select>
+        <select id="categories" name="category"></select>
+        <button name="category" onclick="remove(this.name)">삭제</button>
+      </div>
+    </div>
+
     <div class="department wrapper">
       <div class="add">
         <h4>부서 추가</h4>
@@ -106,6 +126,7 @@
     window.onload = function () {
       $act = sessionStorage.getItem("accessToken")
       sessionStorage.removeItem("accessToken")
+      getCategories(document.getElementById("eventForRemoveCategory").value);
     }
 
     window.addEventListener("beforeunload", (event) => {
@@ -188,10 +209,42 @@
       })
     }
 
+    function getCategories(eventName) {
+      $string = ""
+      $.ajax({
+        url: "/register/category",
+        type: "get",
+        data: {eventName : eventName},
+        headers: {"Authorization": getCookie("grantType") + " " + $act},
+        success: function(response) {
+          $(".category-option").remove()
+          response.forEach(function(category) {
+            $string += "<option class=\"category-option\" value=\"" + category.name + "\">" + category.name + "</option>"
+          })
+          $("#categories").append($string)
+        },
+        error: function (jqXHR) {
+          if (jqXHR.status == 403) {
+            refresh(getCategories, eventName)
+          } else {
+            alert("문제가 발생했습니다.\n" +
+                    "새로고침 혹은 다시 로그인 후 다시 시도해주세요.\n" +
+                    "그래도 같은 문제가 발생한다면, 관리자에게 연락부탁드립니다.")
+            location.reload();
+          }
+        }
+      })
+    }
+
     function add(name) {
-      const $value = $("input[name=" + name + "]").val()
+      let $value = $("input[name=" + name + "]").val()
       const $data = {}
       $data[name] = $value
+
+      if (name === "category") {
+        $value = $("#eventForAddCategory").val()
+        $data["event"] = $value;
+      }
 
       $.ajax({
         url: "/admin/" + name,
@@ -219,12 +272,17 @@
     }
 
     function remove(name) {
-      const $value = $("select[name=" + name + "]").val()
+      let $value = $("select[name=" + name + "]").val()
       const $data = {}
       $data[name] = $value
 
       if (confirm("정말 " + $value + "의 모든 정보를 삭제할까요? 신청된 참가자 정보도 같이 삭제됩니다.") == false) {
         return
+      }
+
+      if (name === "category") {
+        $value = $("#eventForRemoveCategory").val()
+        $data["event"] = $value;
       }
 
       $.ajax({

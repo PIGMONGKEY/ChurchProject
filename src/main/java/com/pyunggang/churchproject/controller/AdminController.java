@@ -1,10 +1,7 @@
 package com.pyunggang.churchproject.controller;
 
 import com.pyunggang.churchproject.data.dto.NotificationParam;
-import com.pyunggang.churchproject.service.AdminService;
-import com.pyunggang.churchproject.service.ChurchService;
-import com.pyunggang.churchproject.service.DepartmentService;
-import com.pyunggang.churchproject.service.EventService;
+import com.pyunggang.churchproject.service.*;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +21,7 @@ public class AdminController {
     final private ChurchService churchService;
     final private EventService eventService;
     final private DepartmentService departmentService;
+    final private CategoryService categoryService;
 
     // 관리자 로그인 페이지 접근
     @GetMapping("login")
@@ -77,6 +75,22 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteEvent(@RequestParam("event") String eventName) {
         return eventService.removeEvent(eventName);
+    }
+
+    // 부문 추가 API
+    @PostMapping("category")
+    @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity addNewCategory(@RequestParam("event") String eventName, @RequestParam("category") String categoryName) {
+        return categoryService.addCategory(categoryName, eventName);
+    }
+
+    // 부문 삭제 API
+    @DeleteMapping("category")
+    @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity deleteCategory(@RequestParam("event") String eventName, @RequestParam("category") String categoryName) {
+        return categoryService.removeCategory(categoryName, eventName);
     }
 
     // 새로운 부서 추가 API
