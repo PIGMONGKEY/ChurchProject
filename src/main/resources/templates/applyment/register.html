@@ -35,11 +35,11 @@
                         <td><input type="text" th:value="${church}" readonly /></td>
                         <td><input type="text" th:value="${event}" readonly /></td>
                         <td>
-                            <select name="categoryName">
+                            <select class="focus_input" name="categoryName">
                                 <option th:each="category : ${categories}" th:value="${category.getName()}" th:utext="${category.getName()}"></option>
                             </select>
                         </td>
-                        <td><input class="input focus_input" type="text" name="name" /></td>
+                        <td><input class="input" type="text" name="name" /></td>
                         <td><input class="input" type="number" name="age"/></td>
                         <td>
                             <select name="grade">
@@ -159,7 +159,7 @@
             "                <td><input type=\"text\" value=\"" + $church + "\" readonly /></td>\n" +
             "                <td><input type=\"text\" value=\"" + $event + "\" readonly /></td>\n" +
             "                <td>\n" +
-            "                    <select name=\"categoryName\">\n";
+            "                    <select class=\"focus_input\" name=\"categoryName\">\n";
 
         $categories.forEach(function (category) {
             $string += "<option value=\"" + category.name + "\">" + category.name + "</option>";
@@ -168,7 +168,7 @@
        $string +=
             "                    </select>\n" +
             "                </td>\n" +
-            "                <td><input class=\"input focus_input\" type=\"text\" name=\"name\" /></td>\n" +
+            "                <td><input class=\"input\" type=\"text\" name=\"name\" /></td>\n" +
             "                <td><input class=\"input\" type=\"number\" name=\"age\"/></td>\n" +
             "                <td>\n" +
             "                    <select name=\"grade\">\n" +
