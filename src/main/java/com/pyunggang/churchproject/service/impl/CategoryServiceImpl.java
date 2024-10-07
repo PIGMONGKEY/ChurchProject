@@ -1,6 +1,5 @@
 package com.pyunggang.churchproject.service.impl;
 
-import com.pyunggang.churchproject.data.dto.CategoryParam;
 import com.pyunggang.churchproject.data.entity.Category;
 import com.pyunggang.churchproject.data.entity.Event;
 import com.pyunggang.churchproject.data.repository.CategoryRepository;
@@ -23,26 +22,27 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 카테고리 추가
-     * @param categoryParam 카테코리명과 종목명을 파라미터로 받아 새로운 카테고리를 저장한다.
+     * @param categoryName 카테코리명과 종목명을 파라미터로 받아 새로운 카테고리를 저장한다.
+     * @param eventName
      * @return 이미 존재한다면 409
      * @return 이벤트가 존재하지 않는 이벤트면 404
      * @return 저장에 실패하면 500
      * @return 저장에 성공하면 200
      */
     @Override
-    public ResponseEntity addCategory(CategoryParam categoryParam) {
+    public ResponseEntity addCategory(String categoryName, String eventName) {
         Event event;
         Category category;
 
         // 동일한 카테고리명과 종목명을 가진 데이터가 있다면 409 반환
-        if (categoryRepo.existsByNameAndEventName(categoryParam.getCategoryName(), categoryParam.getEventName()))
+        if (categoryRepo.existsByNameAndEventName(categoryName, eventName))
             return new ResponseEntity(HttpStatus.CONFLICT);
 
         // 파라미터로 받은 이벤트가 존재하지 않는다면 404 반환
         try {
-            event = eventRepo.findById(categoryParam.getEventName()).orElseThrow(() -> new IllegalArgumentException("event dosen't exist"));
+            event = eventRepo.findById(eventName).orElseThrow(() -> new IllegalArgumentException("event dosen't exist"));
             category = Category.builder()
-                    .name(categoryParam.getCategoryName())
+                    .name(categoryName)
                     .event(event)
                     .build();
 
@@ -59,15 +59,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 카테고리 삭제 메서드
-     * @param categoryParam
+     * @param categoryName
+     * @param eventName
      * 카테고리가 존재하는지 확인한 후 삭제
      * @return 삭제 성공시 200
      * @return 존재하지 않으면 404
      */
     @Override
-    public ResponseEntity removeCategory(CategoryParam categoryParam) {
-        if (categoryRepo.existsByNameAndEventName(categoryParam.getCategoryName(), categoryParam.getEventName())) {
-            categoryRepo.deleteByNameAndEventName(categoryParam.getCategoryName(), categoryParam.getEventName());
+    public ResponseEntity removeCategory(String categoryName, String eventName) {
+        if (categoryRepo.existsByNameAndEventName(categoryName, eventName)) {
+            categoryRepo.deleteByNameAndEventName(categoryName, eventName);
             return new ResponseEntity(HttpStatus.OK);
         } else
             return new ResponseEntity(HttpStatus.NOT_FOUND);

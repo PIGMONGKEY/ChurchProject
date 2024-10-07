@@ -1,6 +1,5 @@
 package com.pyunggang.churchproject;
 
-import com.pyunggang.churchproject.data.dto.CategoryParam;
 import com.pyunggang.churchproject.data.entity.Category;
 import com.pyunggang.churchproject.data.entity.Event;
 import com.pyunggang.churchproject.data.repository.CategoryRepository;
