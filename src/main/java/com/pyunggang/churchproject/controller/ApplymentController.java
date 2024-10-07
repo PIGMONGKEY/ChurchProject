@@ -57,7 +57,7 @@ public class ApplymentController {
     // 종목에 대한 부문 조회 API
     @GetMapping("category")
     @ResponseBody
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<OnlyCategoryName>> getCategories(@RequestParam("eventName") String eventName) {
         return categoryService.findAllCategoryByEvent(eventName);
     }
