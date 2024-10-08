@@ -227,7 +227,7 @@
                     "                    <button class=\"depand-on-server-state\" name=\"modify\" value=\"list_" + data.id + "\" onclick=\"modifyClick(this.value)\">수정</button>" +
                     "                    <button class=\"depand-on-server-state\" name=\"delete\" value=\"" + data.id + "\" onclick=\"deleteParticipant(this.value)\">삭제</button>" +
                     "                    <button class=\"depand-on-server-state\" name=\"modify-done\" value=\"" + data.id + "\" onclick=\"modifyDone(this.value)\" style=\"display: none\">수정 완료</button>" +
-                    "                    <button class=\"depand-on-server-state\" name=\"modify-cancel\" value=\"list_" + data.id + "\" onclick=\"modifyCancel(this.value)\" \" style=\"display: none\">취소</button>" +
+                    "                    <button class=\"depand-on-server-state\" name=\"modify-cancel\" value=\"list_" + data.id + "\" onclick=\"getList()\" \" style=\"display: none\">취소</button>" +
                     "               </td>" +
                     "            </tr>"
 
@@ -267,21 +267,22 @@
         }
 
         // TODO: 수정 취소 했을때 이전 데이터로 돌리는 로직 필요
-        function modifyCancel(name) {
-            const $tr = $("tr[name=" + name + "]")
-            $tr.find("input.change-able").each(function () {
-                $(this).attr("readonly", true)
-            })
+        // getList() 함수로 대신함
+<!--        function modifyCancel(name) {-->
+<!--            const $tr = $("tr[name=" + name + "]")-->
+<!--            $tr.find("input.change-able").each(function () {-->
+<!--                $(this).attr("readonly", true)-->
+<!--            })-->
 
-            $tr.find("select.change-able").each(function () {
-                $(this).attr("disabled", true)
-            })
+<!--            $tr.find("select.change-able").each(function () {-->
+<!--                $(this).attr("disabled", true)-->
+<!--            })-->
 
-            $tr.find("button[name='modify']").show()
-            $tr.find("button[name='delete']").show()
-            $tr.find("button[name='modify-done']").hide()
-            $tr.find("button[name='modify-cancel']").hide()
-        }
+<!--            $tr.find("button[name='modify']").show()-->
+<!--            $tr.find("button[name='delete']").show()-->
+<!--            $tr.find("button[name='modify-done']").hide()-->
+<!--            $tr.find("button[name='modify-cancel']").hide()-->
+<!--        }-->
 
         function modifyDone(id) {
             const $tr = $("tr[name='list_" + id + "']")[0]
