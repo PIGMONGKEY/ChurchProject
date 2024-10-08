@@ -56,10 +56,9 @@ public class ApplymentServiceImpl implements ApplymentService {
 
         for (ApplymentParam param : params) {
             // 빈 데이터가 있는 참가자 정보 건너뛰기
-            if (param.getName().isEmpty() || param.getGender().isEmpty() || param.getDepartment().isEmpty()
-                    || param.getGrade() == 0 || param.getAge() == 0) {
+            // select는 빈 데이터가 올 수 없으므로, input으로 입력받는 이름, 나이 그리고 혹시 모르니 교회, 종목까지 검사함
+            if (param.getName().isEmpty() || param.getChurchName().isEmpty() || param.getEventName().isEmpty() || param.getAge() == 0)
                 continue;
-            }
 
             try {
                 department = departRepo.findById(param.getDepartment()).orElseThrow(() -> new IllegalArgumentException("department doesn't exist"));
