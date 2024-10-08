@@ -99,7 +99,7 @@ h3[name="no-data-h3"] {
     display: flex;
     justify-content: space-between;
 
-    width: 900px;
+    width: 1200px;
 
     border-bottom: 1px solid var(--dividing-border-color);
 
@@ -144,7 +144,7 @@ h3[name="no-data-h3"] {
 
 table {
     border-spacing: 0px;
-    width: 900px;
+    width: 1200px;
 }
 
 thead {
@@ -158,6 +158,8 @@ thead td {
 
 tbody td {
     border-top: 1rem solid white;
+    text-align: center; /* 수평 가운데 정렬 */
+    vertical-align: middle; /* 수직 가운데 정렬 */
 }
 
 tbody input,
@@ -178,7 +180,8 @@ tbody select {
     border-left: none;
     border-right: none;
 
-    text-align: center;
+    text-align: center; /* 수평 가운데 정렬 */
+    vertical-align: middle; /* 수직 가운데 정렬 */
 }
 
 tbody input::-webkit-outer-spin-button,

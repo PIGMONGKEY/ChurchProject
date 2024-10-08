@@ -24,7 +24,7 @@ body {
     justify-content: start;
     align-items: center;
 
-    width: 800px;
+    width: 1200px;
 
     border-bottom: 1px solid var(--dividing-border-color);
 
@@ -66,7 +66,7 @@ input[type="submit"]:hover {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    width: 800px;
+    width: 1200px;
 }
 
 .list p {
@@ -89,6 +89,9 @@ thead td {
 
 tbody td {
     border-top: 1rem solid white;
+
+    text-align: center; /* 수평 가운데 정렬 */
+    vertical-align: middle; /* 수직 가운데 정렬 */
 }
 
 tbody input,
@@ -109,7 +112,8 @@ tbody select {
     border-left: none;
     border-right: none;
 
-    text-align: center;
+    text-align: center; /* 수평 가운데 정렬 */
+    vertical-align: middle; /* 수직 가운데 정렬 */
 }
 
 tbody input:focus,
