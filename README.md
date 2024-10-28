@@ -28,4 +28,4 @@
 - 2025년 상반기까지 모든 대회는 이 웹페이지를 통해 진행하기로 결정되었습니다.
 
 ### ERD
-![church-ERD](https://github.com/PIGMONGKEY/FallDetectionSystem/assets/113700356/f8fda760-f751-435f-b9f2-0d12d8432bf8)
+![church-ERD](https://github.com/user-attachments/assets/b09df7ae-b6b3-4c55-91ca-c97b3632dde9)
