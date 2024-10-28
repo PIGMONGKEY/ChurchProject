@@ -308,7 +308,7 @@ public class AdminServiceImpl implements AdminService {
                 cell.setCellValue(participant.getAge());
                 // 학년
                 cell = row.createCell(4);
-                cell.setCellValue(participant.getGrade() + "학년");
+                cell.setCellValue(participant.getGrade() != 0 ? participant.getGrade() + "학년" : "학년 없음");
                 // 부서
                 cell = row.createCell(5);
                 cell.setCellValue(participant.getDepartment().getName());
